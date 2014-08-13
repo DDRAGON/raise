@@ -1,0 +1,15 @@
+doctype html
+html
+	head
+		block title
+			if title
+				title= title
+		block css
+			link(rel='stylesheet', href='/stylesheets/style.css')
+
+		block scripts
+			script(type='text/javascript', src='/assets/jquery-2.0.2.js')
+	body
+		block headContents
+		block content
+		block afterScripts

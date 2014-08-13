@@ -1,0 +1,86 @@
+extends layout
+
+block append css
+
+block append headContents
+	script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+	ins(class="adsbygoogle" style="display:inline-block;width:468px;height:60px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="3165558863")
+	script.
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	br
+
+block content
+	button(class="largeButton" onClick="sendImage('start')")
+		text start
+	button(class="largeButton" onClick="sendImage('preFlop')")
+		text pre flop
+	button(class="largeButton" onClick="sendImage('nextGame')")
+		text next Game
+	div(id="id_sound" style="position:absolute; visibility:hidden")
+
+	br(style="clear: left;")
+	button(class="leftButton" id="s" onClick="markClick('s')" style="color:#000000")
+		text ♠
+	button(class="leftButton" id="h" onClick="markClick('h')" style="color:#FF0000")
+		text ♥
+	button(class="leftButton" id="d" onClick="markClick('d')" style="color:#0000FF")
+		text ♦
+	button(class="leftButton" id="c" onClick="markClick('c')" style="color:#00bb00")
+		text ♣
+
+	br(style="clear: left;")
+	button(class="leftButton" id="2" onClick="numClick('2')")
+		text 2
+	button(class="leftButton" id="3" onClick="numClick('3')")
+		text 3
+	button(class="leftButton" id="4" onClick="numClick('4')")
+		text 4
+	button(class="leftButton" id="5" onClick="numClick('5')")
+		text 5
+	br(style="clear: left;")
+	button(class="leftButton" id="6" onClick="numClick('6')")
+		text 6
+	button(class="leftButton" id="7" onClick="numClick('7')")
+		text 7
+	button(class="leftButton" id="8" onClick="numClick('8')")
+		text 8
+	button(class="leftButton" id="9" onClick="numClick('9')")
+		text 9
+
+	br(style="clear: left;")
+	button(class="leftButton" id="T" onClick="numClick('T')")
+		text T
+	button(class="leftButton" id="J" onClick="numClick('J')")
+		text J
+	button(class="leftButton" id="Q" onClick="numClick('Q')")
+		text Q
+	button(class="leftButton" id="K" onClick="numClick('K')")
+		text K
+	button(class="leftButton" id="A" onClick="numClick('A')")
+		text A
+
+	br(style="clear: left;")
+	div(id='image' width='300' style="float:left;")
+		div(id='sentImage' width='300' style="float:left;")
+			div(style="clear:both;")
+
+	br
+	input(type='text' onkeyDown="keyDown();" id="inputArea")
+	br
+	button(class="largeButton" onClick="sendCard()")
+		text send
+	br
+	span(style="color:#ff0000;font-size:22px;" id="message")
+	br
+	div(id='b')
+
+	script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+	ins(class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="9670142068")
+	script.
+		(adsbygoogle = window.adsbygoogle || []).push({});
+
+	script.
+		var hostAddress = "#{hostAddress}";
+
+block append afterScripts
+	script(src="/javascripts/oddsSystem/ugly.min.js")
