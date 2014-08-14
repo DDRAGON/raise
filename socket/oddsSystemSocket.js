@@ -1,16 +1,14 @@
-var dealerBot = require('../modules/dealerBot/dealerBot.js');
+var oddsSystem = require('../modules/oddsSystem.js');
 
 var createOddsSystemSocket = function(io) {
 	var oddsSystemSocket = io.of('/oddsSystem').on('connection', function (socket) {
 
-		dealerBot.connect(socket.id, function(outPutText){
-			socket.emit('outPutText', outPutText);
+		oddsSystem.connect(socket.id, function(){
+			console.log('A NEW USER ENTERED THE RING.');
 		});
 
-		socket.on('call', function(data) {
-			dealerBot.call(socket.id, function(outPutText){
-				socket.emit('outPutText', outPutText);
-			});
+		socket.on('imageSend', function(image) {
+			console.log(image);
 		});
 
 		socket.on('allin', function(data) {

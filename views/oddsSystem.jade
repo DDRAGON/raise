@@ -3,11 +3,6 @@ extends layout
 block append css
 
 block append headContents
-	script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
-	ins(class="adsbygoogle" style="display:inline-block;width:468px;height:60px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="3165558863")
-	script.
-		(adsbygoogle = window.adsbygoogle || []).push({});
-	br
 
 block content
 	button(class="largeButton" onClick="sendImage('start')")
@@ -60,8 +55,8 @@ block content
 		text A
 
 	br(style="clear: left;")
-	div(id='image' width='300' style="float:left;")
-		div(id='sentImage' width='300' style="float:left;")
+	div(id='image' width='300')
+		div(id='sentImage' width='300')
 			div(style="clear:both;")
 
 	br
@@ -83,4 +78,5 @@ block content
 		var hostAddress = "#{hostAddress}";
 
 block append afterScripts
+	script(type='text/javascript', src='/socket.io/socket.io.js')
 	script(src="/javascripts/oddsSystem/ugly.min.js")

@@ -1,5 +1,4 @@
 var socket = io.connect('http://'+hostAddress+'/oddsSystem');
-
 var url = 'http://157.7.200.224:3000/';
 var url = 'http://localhost:3000/';
 var easyMode = true;
@@ -18,11 +17,8 @@ function numClick(num) {
 }
 
 function sendImage(image) {
-	$.ajax({
-		type: "POST",
-		url: url,
-		data: { 'image': image }
-	}).always(function(data){$('#message').html('send '+image);});
+	socket.emit('imageSend', image);
+	$('#message').html('send '+image);
 	this.mark = '';
 	this.num  = '　';
 	drawImage();
