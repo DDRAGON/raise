@@ -5,6 +5,21 @@ block append css
 block append headContents
 
 block content
+	div(style="float:left")
+		canvas(id='canvas' width='640' height='360')
+	div(style="float:left")
+		for seatId, key in [0,1,2,3,4,5,6,7,8,9]
+			div(style="float:left")
+				input(type='text' onkeyup="keyUpPlayer(#{seatId});" id="inputPlayer#{seatId}")
+			div(style="float:left")
+				button(onClick="deletePlayer(#{seatId})")
+					text delete
+			br(style="clear: left;")
+		button(onClick="moveDealerButton()")
+			text move dealer button
+
+	br(style="clear: left;")
+
 	button(class="largeButton" onClick="sendImage('start')")
 		text start
 	button(class="largeButton" onClick="sendImage('preFlop')")
@@ -68,11 +83,6 @@ block content
 	span(style="color:#ff0000;font-size:22px;" id="message")
 	br
 	div(id='b')
-
-	script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
-	ins(class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="9670142068")
-	script.
-		(adsbygoogle = window.adsbygoogle || []).push({});
 
 	script.
 		var hostAddress = "#{hostAddress}";
