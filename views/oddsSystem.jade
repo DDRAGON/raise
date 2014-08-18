@@ -21,22 +21,10 @@ block content
 	br(style="clear: left;")
 
 	button(class="largeButton" onClick="sendImage('start')")
-		text start
-	button(class="largeButton" onClick="sendImage('preFlop')")
-		text pre flop
+		text all clear
 	button(class="largeButton" onClick="sendImage('nextGame')")
 		text next Game
 	div(id="id_sound" style="position:absolute; visibility:hidden")
-
-	br(style="clear: left;")
-	button(class="leftButton" id="s" onClick="markClick('s')" style="color:#000000")
-		text ♠
-	button(class="leftButton" id="h" onClick="markClick('h')" style="color:#FF0000")
-		text ♥
-	button(class="leftButton" id="d" onClick="markClick('d')" style="color:#0000FF")
-		text ♦
-	button(class="leftButton" id="c" onClick="markClick('c')" style="color:#00bb00")
-		text ♣
 
 	br(style="clear: left;")
 	button(class="leftButton" id="2" onClick="numClick('2')")
@@ -47,7 +35,6 @@ block content
 		text 4
 	button(class="leftButton" id="5" onClick="numClick('5')")
 		text 5
-	br(style="clear: left;")
 	button(class="leftButton" id="6" onClick="numClick('6')")
 		text 6
 	button(class="leftButton" id="7" onClick="numClick('7')")
@@ -68,6 +55,16 @@ block content
 		text K
 	button(class="leftButton" id="A" onClick="numClick('A')")
 		text A
+
+	br(style="clear: left;")
+	button(class="leftButton" id="s" onClick="markClick('s')" style="color:#000000")
+		text ♠
+	button(class="leftButton" id="h" onClick="markClick('h')" style="color:#FF0000")
+		text ♥
+	button(class="leftButton" id="d" onClick="markClick('d')" style="color:#0000FF")
+		text ♦
+	button(class="leftButton" id="c" onClick="markClick('c')" style="color:#00bb00")
+		text ♣
 
 	br(style="clear: left;")
 	div(id='image' width='300')

@@ -23,7 +23,9 @@ var createOddsSystemSocket = function(io) {
 			});
 		});
 
-
+		socket.on('disconnect', function() {
+			oddsSystem.disconnect(socket.id);
+		});
 	});
 
 	return oddsSystemSocket;

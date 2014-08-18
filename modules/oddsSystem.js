@@ -42,13 +42,17 @@ function getTableInfo(socketId, callback)
 	callback(clients[socketId].frontObj);
 }
 
+function disconnect(socketId) {
+	delete clients[socketId];
+}
+
 module.exports = {
 	connect: connect,
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
 	moveDealerButton: moveDealerButton,
-	getTableInfo: getTableInfo
-
+	getTableInfo: getTableInfo,
+	disconnect: disconnect
 };
 
 // 以下エクスポートしない関数
@@ -96,7 +100,7 @@ function gotNextGame(socketId) {
 	moveDealerButton(socketId); // ディーラーボタンの移動
 	clients[socketId].gotCards = [];
 	for (var key in clients[socketId].frontObj.players) {
-		var player = clients[socketId].frontObj.players[this.key];
+		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
 		var seatId = player.seatId;
 		clients[socketId].frontObj.players[seatId].hand = [];
@@ -119,6 +123,7 @@ function gotCard(socketId, card) {
 
 function gotCardInStart(socketId, card) {
 	var checkingSeatId = clients[socketId].frontObj.button;
+	var lastSeatId = null;
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
@@ -128,6 +133,7 @@ function gotCardInStart(socketId, card) {
 			clients[socketId].frontObj.players[checkingSeatId].isActive = true;
 			return;
 		}
+		lastSeatId = checkingSeatId;
 	}
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
@@ -135,6 +141,9 @@ function gotCardInStart(socketId, card) {
 		checkingSeatId = findNextDealerButton(socketId, checkingSeatId);
 		if (!clients[socketId].frontObj.players[checkingSeatId].hand[1]) {
 			clients[socketId].frontObj.players[checkingSeatId].hand[1] = card;
+			if (lastSeatId == checkingSeatId) { // 最後の一人を配り終えたら
+				gotPreFlop(socketId); // プリフロップ開始だと分かる。
+			}
 			return;
 		}
 	}

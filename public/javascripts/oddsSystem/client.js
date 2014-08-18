@@ -60,6 +60,11 @@ function sendImage(image) {
 	this.num  = '　';
 	drawImage();
 	drawSentImage(image)
+	if (image == 'start') {
+		for (var seatId=0; seatId<10; seatId++) {
+			$('#inputPlayer'+seatId).val('');
+		}
+	}
 }
 
 function sendCard() {
@@ -69,7 +74,7 @@ function sendCard() {
 	}
 	if (this.num != '2' && this.num != '3' && this.num != '4' && this.num != '5' && this.num != '6' &&
 		this.num != '7' && this.num != '8' && this.num != '9' && this.num != 'T' && this.num != 'J' &&
-		this.num != 'a' && this.num != 'K' && this.num != 'A') {
+		this.num != 'Q' && this.num != 'K' && this.num != 'A') {
 		$('#message').html('number is invalid!');
 		return;
 	}
