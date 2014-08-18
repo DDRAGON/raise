@@ -1,4 +1,6 @@
 var async = require('async');
+var request = require('request');
+Config = require('../config');
 
 var clients = {};
 
@@ -87,7 +89,7 @@ function gotPreFlop(socketId) {
 			clients[socketId].frontObj.players[seatId].win = null;
 			clients[socketId].frontObj.players[seatId].tie = null;
 		}
-		winPerApiMock(clients[socketId].frontObj.players);
+		getWinPerFromAPI(clients[socketId].frontObj);
 	}
 }
 
@@ -164,7 +166,7 @@ function gotCardInPreFlop(socketId, card) {
 	clients[socketId].frontObj.board.push(card);
 	if (clients[socketId].frontObj.board.length == 3) { // フロップに３枚が来たのを確認
 		clients[socketId].frontObj.state = 'flop'; // フロップになったことを認識
-		winPerApiMock(clients[socketId].frontObj.players);
+		getWinPerFromAPI(clients[socketId].frontObj);
 	}
 }
 // フロップでカード情報を受け取った時の処理。
@@ -181,7 +183,7 @@ function gotCardInFlop(socketId, card) {
 	// 同じカードがない場合
 	clients[socketId].frontObj.board.push(card);
 	clients[socketId].frontObj.state = 'turn'; // ターンになったことを認識
-	winPerApiMock(clients[socketId].frontObj.players);
+	getWinPerFromAPI(clients[socketId].frontObj);
 }
 // ターンでカード情報を受け取った時の処理。
 function gotCardInTurn(socketId, card) {
@@ -197,7 +199,7 @@ function gotCardInTurn(socketId, card) {
 	// 同じカードがない場合
 	clients[socketId].frontObj.board.push(card);
 	clients[socketId].frontObj.state = 'river'; // リバーになったことを認識
-	winPerApiMock(clients[socketId].frontObj.players);
+	getWinPerFromAPI(clients[socketId].frontObj);
 }
 // リバーでカード情報を受け取った時の処理。
 function gotCardInRiver(socketId, card) {
@@ -233,7 +235,46 @@ function foldedAndRecalculation(socketId, seatId) {
 	clients[socketId].frontObj.players[seatId].win = 0;
 	clients[socketId].frontObj.players[seatId].tie = 0;
 	clients[socketId].frontObj.playingPlayersNum -= 1;
-	winPerApiMock(clients[socketId].frontObj.players);
+	getWinPerFromAPI(clients[socketId].frontObj);
+}
+
+function getWinPerFromAPI(frontObj) {
+	var playerForSend = [];
+	var count = 0;
+	for (var key in frontObj.players) {
+		var player = frontObj.players[key];
+		if(!player) continue;
+		playerForSend[count] = player;
+		playerForSend[count].id = player.seatId;
+		count += 1;
+	}
+	var sendJson = {
+		"board": frontObj.board,
+		"players": playerForSend
+	};
+	var url = 'http://'+Config.getWinAPIHostAddress()+':9000/odds';
+	var options = {
+		url: url,
+		headers: { 'Content-Type': 'application/json' },
+		json: true,
+		body: JSON.stringify(sendJson)
+	};
+	request.post(options, function(error, response, body){
+		if (!error && response.statusCode == 200) {
+			// var gotPlayers = JSON.parse(body);
+			var players = body['players'];
+			console.log(players);
+			for (var key in players) {
+				var player = players[key];
+				if (frontObj.players[Number(player.id)].isActive == true) {
+					frontObj.players[Number(player.id)].win = player.win;
+					frontObj.players[Number(player.id)].tie = player.tie;
+				}
+			}
+		} else {
+			console.log('error: '+ response.statusCode);
+		}
+	});
 }
 
 function winPerApiMock(players) {
