@@ -246,13 +246,20 @@ function foldedAndRecalculation(socketId, seatId) {
 function getWinPerFromAPI(socketId, frontObj) {
 	var playerForSend = [];
 	var count = 0;
+	var ActiveCount = 0;
 	for (var key in frontObj.players) {
 		var player = frontObj.players[key];
 		if(!player) continue;
 		playerForSend[count] = player;
 		playerForSend[count].id = player.seatId;
+		if (player.isActive == true) ActiveCount += 1;
 		count += 1;
 	}
+	if (ActiveCount == 1) { // アクティブプレイヤーが一人だけのときはモックで勝率100%にする。
+		winPerApiMock(socketId, frontObj.players);
+		return;
+	}
+
 	var sendJson = {
 		"board": frontObj.board,
 		"players": playerForSend
@@ -283,13 +290,14 @@ function getWinPerFromAPI(socketId, frontObj) {
 	});
 }
 
-function winPerApiMock(players) {
+function winPerApiMock(socketId, players) {
 	for (var key in players) {
 		var player = players[key];
 		if (!player) continue;
 		if (player.isActive == true) {
-			player.win = '10%';
-			player.tie = '0.3%';
+			player.win = '100%';
+			player.tie = '0.0%';
 		}
 	}
+	sendTableInfo(socketId);
 }
