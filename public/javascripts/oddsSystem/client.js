@@ -1,6 +1,4 @@
 var socket = io.connect('http://'+hostAddress+'/oddsSystem');
-var url = 'http://157.7.200.224:3000/';
-var url = 'http://localhost:3000/';
 var easyMode = true;
 var mark = '';
 var num  = '　'
@@ -161,9 +159,6 @@ function sound() {
 $(function(){
 	var canvas = $('#canvas').get(0);
 	config.ctx = canvas.getContext("2d");
-	setInterval(function(){
-		socket.emit('tableInfo', {});
-	}, 500);
 });
 
 socket.on('tableInfo', function(tableInfo) {

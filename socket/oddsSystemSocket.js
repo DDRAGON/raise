@@ -3,7 +3,7 @@ var oddsSystem = require('../modules/oddsSystem.js');
 var createOddsSystemSocket = function(io) {
 	var oddsSystemSocket = io.of('/oddsSystem').on('connection', function (socket) {
 
-		oddsSystem.connect(socket.id);
+		oddsSystem.connect(socket);
 
 		socket.on('imageSend', function(image) {
 			oddsSystem.gotImage(socket.id, image);
@@ -15,12 +15,6 @@ var createOddsSystemSocket = function(io) {
 
 		socket.on('moveDealerButton', function(data) {
 			oddsSystem.moveDealerButton(socket.id);
-		});
-
-		socket.on('tableInfo', function(data) {
-			oddsSystem.getTableInfo(socket.id, function(tableInfo){
-				socket.emit('tableInfo', tableInfo);
-			});
 		});
 
 		socket.on('disconnect', function() {

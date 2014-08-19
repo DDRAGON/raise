@@ -5,9 +5,13 @@ Config = require('../config');
 var clients = {};
 
 
-function connect(socketId)
+function connect(socket)
 {
+	var socketId = socket.id;
 	if (!clients[socketId]) {
+		clients[socketId] = {
+			socket: socket
+		}
 		gotStart(socketId);
 	}
 }
@@ -20,6 +24,7 @@ function gotImage(socketId, image)
 		case 'nextGame': gotNextGame(socketId); break;
 		default : gotCard(socketId, image); break;
 	}
+	sendTableInfo(socketId);
 }
 
 function updatePlayerName(socketId, seatId, name) {
@@ -33,10 +38,12 @@ function updatePlayerName(socketId, seatId, name) {
 	if (name == "") {
 		delete clients[socketId].frontObj.players[seatId];
 	}
+	sendTableInfo(socketId);
 }
 
 function moveDealerButton(socketId) {
 	clients[socketId].frontObj.button = findNextDealerButton(socketId, clients[socketId].frontObj.button);
+	sendTableInfo(socketId);
 }
 
 function getTableInfo(socketId, callback)
@@ -62,17 +69,16 @@ module.exports = {
 // 初期化
 // スタートカードを受け取った時の処理。
 function gotStart(socketId) {
-	clients[socketId] = {
-		frontObj: {
-			state: 'start',
-			allPlayersNum: 0,
-			playingPlayersNum: 0,
-			button: 0,
-			board: [],
-			players: []
-		},
-		gotCards: []
+	clients[socketId].frontObj = {
+		state: 'start',
+		allPlayersNum: 0,
+		playingPlayersNum: 0,
+		button: 0,
+		board: [],
+		players: []
 	};
+	clients[socketId].gotCards = [];
+	sendTableInfo(socketId);
 }
 
 // プリフロップカードを受け取った時の処理。
@@ -212,6 +218,10 @@ function gotCardInRiver(socketId, card) {
 			return;
 		}
 	}
+}
+
+function sendTableInfo(socketId) {
+	clients[socketId].socket.emit('tableInfo', clients[socketId].frontObj);
 }
 
 function findNextDealerButton(socketId, button) {

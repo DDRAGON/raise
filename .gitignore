@@ -8,3 +8,4 @@ SMDSOnline.iml
 module/*.iml
 *.iml
 src/
+config.js
