@@ -24,7 +24,6 @@ function gotImage(socketId, image)
 		case 'nextGame': gotNextGame(socketId); break;
 		default : gotCard(socketId, image); break;
 	}
-	sendTableInfo(socketId);
 }
 
 function updatePlayerName(socketId, seatId, name) {
@@ -46,11 +45,6 @@ function moveDealerButton(socketId) {
 	sendTableInfo(socketId);
 }
 
-function getTableInfo(socketId, callback)
-{
-	callback(clients[socketId].frontObj);
-}
-
 function disconnect(socketId) {
 	delete clients[socketId];
 }
@@ -60,7 +54,6 @@ module.exports = {
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
 	moveDealerButton: moveDealerButton,
-	getTableInfo: getTableInfo,
 	disconnect: disconnect
 };
 
@@ -95,7 +88,7 @@ function gotPreFlop(socketId) {
 			clients[socketId].frontObj.players[seatId].win = null;
 			clients[socketId].frontObj.players[seatId].tie = null;
 		}
-		getWinPerFromAPI(clients[socketId].frontObj);
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
 	}
 }
 
@@ -116,6 +109,7 @@ function gotNextGame(socketId) {
 		clients[socketId].frontObj.players[seatId].win = null;
 		clients[socketId].frontObj.players[seatId].tie = null;
 	}
+	sendTableInfo(socketId);
 }
 
 // トランプのカードを受け取った時の処理。
@@ -127,6 +121,7 @@ function gotCard(socketId, card) {
 		case 'turn': gotCardInTurn(socketId, card); break;
 		case 'river': gotCardInRiver(socketId, card); break;
 	}
+	sendTableInfo(socketId);
 }
 
 function gotCardInStart(socketId, card) {
@@ -172,7 +167,7 @@ function gotCardInPreFlop(socketId, card) {
 	clients[socketId].frontObj.board.push(card);
 	if (clients[socketId].frontObj.board.length == 3) { // フロップに３枚が来たのを確認
 		clients[socketId].frontObj.state = 'flop'; // フロップになったことを認識
-		getWinPerFromAPI(clients[socketId].frontObj);
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
 	}
 }
 // フロップでカード情報を受け取った時の処理。
@@ -189,7 +184,7 @@ function gotCardInFlop(socketId, card) {
 	// 同じカードがない場合
 	clients[socketId].frontObj.board.push(card);
 	clients[socketId].frontObj.state = 'turn'; // ターンになったことを認識
-	getWinPerFromAPI(clients[socketId].frontObj);
+	getWinPerFromAPI(socketId, clients[socketId].frontObj);
 }
 // ターンでカード情報を受け取った時の処理。
 function gotCardInTurn(socketId, card) {
@@ -205,7 +200,7 @@ function gotCardInTurn(socketId, card) {
 	// 同じカードがない場合
 	clients[socketId].frontObj.board.push(card);
 	clients[socketId].frontObj.state = 'river'; // リバーになったことを認識
-	getWinPerFromAPI(clients[socketId].frontObj);
+	getWinPerFromAPI(socketId, clients[socketId].frontObj);
 }
 // リバーでカード情報を受け取った時の処理。
 function gotCardInRiver(socketId, card) {
@@ -245,10 +240,10 @@ function foldedAndRecalculation(socketId, seatId) {
 	clients[socketId].frontObj.players[seatId].win = 0;
 	clients[socketId].frontObj.players[seatId].tie = 0;
 	clients[socketId].frontObj.playingPlayersNum -= 1;
-	getWinPerFromAPI(clients[socketId].frontObj);
+	getWinPerFromAPI(socketId, clients[socketId].frontObj);
 }
 
-function getWinPerFromAPI(frontObj) {
+function getWinPerFromAPI(socketId, frontObj) {
 	var playerForSend = [];
 	var count = 0;
 	for (var key in frontObj.players) {
@@ -281,6 +276,7 @@ function getWinPerFromAPI(frontObj) {
 					frontObj.players[Number(player.id)].tie = player.tie;
 				}
 			}
+			sendTableInfo(socketId);
 		} else {
 			console.log('error: '+ response.statusCode);
 		}
