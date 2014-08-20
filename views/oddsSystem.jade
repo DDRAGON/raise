@@ -3,83 +3,107 @@ extends layout
 block append css
 
 block append headContents
+	link(href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/cerulean/bootstrap.min.css")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/journal/bootstrap.min.css")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css")
+	link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/spacelab/bootstrap.min.css")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/united/bootstrap.min.css")
+	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css")
 
 block content
-	div(style="float:left")
-		canvas(id='canvas' width='640' height='360')
-	div(style="float:left")
-		for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-			div(style="float:left")
-				input(type='text' onkeyup="keyUpPlayer(#{seatId});" id="inputPlayer#{seatId}")
-			div(style="float:left")
-				button(onClick="deletePlayer(#{seatId})")
-					text delete
-			br(style="clear: left;")
-		button(onClick="moveDealerButton()")
-			text move dealer button
 
-	br(style="clear: left;")
+	div(class="container" style="background-color: #00000")
 
-	button(class="largeButton" onClick="sendImage('start')")
-		text all clear
-	button(class="largeButton" onClick="sendImage('nextGame')")
-		text next Game
-	div(id="id_sound" style="position:absolute; visibility:hidden")
+		// header
+		div(class="navbar-wrapper")
+			div(class="navbar navbar-inverse navbar-static-top" role="navigation")
+				div(class="navbar-header")
+					a(class="navbar-brand" href="#")
+						text Poker Live!
+		// header
 
-	br(style="clear: left;")
-	button(class="leftButton" id="2" onClick="numClick('2')")
-		text 2
-	button(class="leftButton" id="3" onClick="numClick('3')")
-		text 3
-	button(class="leftButton" id="4" onClick="numClick('4')")
-		text 4
-	button(class="leftButton" id="5" onClick="numClick('5')")
-		text 5
-	button(class="leftButton" id="6" onClick="numClick('6')")
-		text 6
-	button(class="leftButton" id="7" onClick="numClick('7')")
-		text 7
-	button(class="leftButton" id="8" onClick="numClick('8')")
-		text 8
-	button(class="leftButton" id="9" onClick="numClick('9')")
-		text 9
+		// player entrance
+		div(id="players")
+			ul(class="nav nav-list col-xs-3")
+				li(class="list-group-item")
+					h4
+						span(class="glyphicon glyphicon-user") PLAYERS
+				for seatId, key in [0,1,2,3,4,5,6,7,8,9]
+					li(class="list-group-item")
+						div(class="input-group")
+							input(type="text" onkeyup="keyUpPlayer(#{seatId});" id="inputPlayer#{seatId}" class="form-control" placeholder="Player #{seatId+1}")
+							span(class="input-group-btn")
+								button(class="btn" onClick="deletePlayer(#{seatId})") ×
+		// player entrance
 
-	br(style="clear: left;")
-	button(class="leftButton" id="T" onClick="numClick('T')")
-		text T
-	button(class="leftButton" id="J" onClick="numClick('J')")
-		text J
-	button(class="leftButton" id="Q" onClick="numClick('Q')")
-		text Q
-	button(class="leftButton" id="K" onClick="numClick('K')")
-		text K
-	button(class="leftButton" id="A" onClick="numClick('A')")
-		text A
+		div(id="center_pane" style="float:left;")
 
-	br(style="clear: left;")
-	button(class="leftButton" id="s" onClick="markClick('s')" style="color:#000000")
-		text ♠
-	button(class="leftButton" id="h" onClick="markClick('h')" style="color:#FF0000")
-		text ♥
-	button(class="leftButton" id="d" onClick="markClick('d')" style="color:#0000FF")
-		text ♦
-	button(class="leftButton" id="c" onClick="markClick('c')" style="color:#00bb00")
-		text ♣
+			// canvas
+			div
+				canvas(id="canvas" width="640" height="360" style="background-color:#bb9;")
+			// canvas
 
-	br(style="clear: left;")
-	div(id='image' width='300')
-		div(id='sentImage' width='300')
+			hr(class="featurette-divider")
+			
+			<!-- card selections -->
+			div(id="card_selector" style="float: left;")
+				div(id="suit_selector" class="btn-group" style="float: left;margin-right: 10px;")
+					a(id="s" onclick="markClick('s')" style="color:#222" class="btn btn-default btn-lg mark") &#9824;
+					a(id="h" onclick="markClick('h')" style="color:#F44" class="btn btn-default btn-lg mark") &#9829;
+					a(id="d" onclick="markClick('d')" style="color:#55F" class="btn btn-default btn-lg mark") &#9830;
+					a(id="c" onclick="markClick('c')" style="color:#393" class="btn btn-default btn-lg mark") &#9827;
+				div(id="num_selector" style="float: left;")
+					div(id="num_low_selector" class="btn-group")
+						for num, key in [2,3,4,5,6,7,8,9]
+							a(id="#{num}" onclick="numClick(#{num})" class="btn btn-default btn-lg num") #{num}
+				div
+					div(id="num_high_selector" class="btn-group")
+						for num, key in ['T','J','Q','K','A']
+							a(id="#{num}" onclick="numClick('#{num}')" class="btn btn-default btn-lg num") #{num}
+
 			div(style="clear:both;")
+				div(id="image" width="300")
+					span(style="color:#000;font-size:64px;")
+						text 　
+				div(class="col-xs-3")
+					input(type="text" onkeydown="keyDown();" id="inputArea" class="form-control")
+					p(class="text-danger" id="message" style="font-size:18px;")
+				a(onclick="sendCard()" class="btn btn-success btn-lg pull-right") Card Send
+			// card selections
 
-	br
-	input(type='text' onkeyDown="keyDown();" id="inputArea")
-	br
-	button(class="largeButton" onClick="sendCard()")
-		text send
-	br
-	span(style="color:#ff0000;font-size:22px;" id="message")
-	br
-	div(id='b')
+		// game progression
+		div(style="float:left; padding-left:10px;")
+			div
+				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="moveDealerButton()")
+					span(class="glyphicon glyphicon-circle-arrow-right")
+					text Slide Button
+			div
+				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('start')")
+					span(class="glyphicon glyphicon-remove-circle")
+					text Clear
+			div
+				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
+					span(class="glyphicon glyphicon-chevron-right")
+					text Next Game</a></div>
+
+			div(id="id_sound" style="position:absolute; visibility:hidden")
+				embed(id="id_sound" src="/music/cursor6.wav" autostart="true" hidden="true")
+		// game progression
+		
+		// footer
+		div(style="clear:both;")
+			footer
+				hr(class="featurette-divider")
+				p(class="pull-right")
+					a(href="#") Back to top
+				p &copy; 2014 DWPC Tech. &middot;
+					a(href="#") Privacy
+					&middot;
+					a(href="#") Terms
+		// footer
+
 
 	script.
 		var hostAddress = "#{hostAddress}";

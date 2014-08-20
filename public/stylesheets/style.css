@@ -5,41 +5,10 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-button.leftButton {
-  font-family: "fantasy", sans-serif;
-  font-size: 1.4em;
-  font-weight: bold;
-  padding: 2px 30px;
-  color: #000;
-  border-style: none;
-  box-shadow: 2px 2px 3px 1px #666;
-  -moz-box-shadow: 2px 2px 3px 1px #666;
-  -webkit-box-shadow: 2px 2px 3px 1px #666;
-  text-shadow: 1px 1px 2px #000;
-  background: -moz-linear-gradient(bottom, #aaa, #eee 50%, #aaa);
-  background: -webkit-gradient(linear, left bottom, left top, from(#ccc), color-stop(0.5, #eee), to(#ccc));
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  margin: 5px 5px 5px 5px;
+a.num {
+  width: 45px;
 }
-button:hover {
-  opacity: 0.5;
-}
-button.largeButton {
-  font-family: "fantasy", fantasy;
-  font-size: 1.2em;
-  padding: 5px 50px;
-  color: #000;
-  border-style: none;
-  box-shadow: 2px 2px 3px 1px #666;
-  -moz-box-shadow: 2px 2px 3px 1px #666;
-  -webkit-box-shadow: 2px 2px 3px 1px #666;
-  text-shadow: 1px 1px 2px #000;
-  background: -moz-linear-gradient(bottom, #aaa, #eee 50%, #aaa);
-  background: -webkit-gradient(linear, left bottom, left top, from(#ddd), color-stop(0, #fff), to(#ddd));
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  margin: 5px 5px 5px 5px;
+a.mark {
+  width: 65px;
+  font-size: 50px;
 }
