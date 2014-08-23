@@ -1,10 +1,10 @@
 var socket = io.connect('http://'+hostAddress+'/oddsSystem');
-var easyMode = true;
+var easyMode = false;
 var mark = '';
 var num  = '　'
 var config = {
 	canvasWidth:  640,
-	canvasHeight: 320,
+	canvasHeight: 360,
 	originalCardWidth:  48,
 	originalCardHeight: 64,
 	displayCardWidth:  36,
@@ -57,7 +57,7 @@ function sendImage(image) {
 	this.mark = '';
 	this.num  = '　';
 	drawImage();
-	drawSentImage(image)
+	drawSentImage(image);
 	if (image == 'start') {
 		for (var seatId=0; seatId<10; seatId++) {
 			$('#inputPlayer'+seatId).val('');
@@ -146,6 +146,14 @@ function deletePlayer(seatId) {
 function moveDealerButton() {
 	socket.emit('moveDealerButton', {});
 }
+
+$("#changeInputMode").change( function(){
+	if ($(this).val() == 'easy') {
+		easyMode = true;
+	} else {
+		easyMode = false;
+	}
+});
 
 function sound() {
 	var str = "";
