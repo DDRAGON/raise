@@ -63,11 +63,7 @@ block content
 						for num, key in ['T','J','Q','K','A']
 							a(id="#{num}" onclick="numClick('#{num}')" class="btn btn-default btn-lg num") #{num}
 
-			div(style="clear:both;")
-				div(id="image" width="300")
-					span(style="color:#000;font-size:64px;")
-						text 　
-
+			br
 			div(style="float: left;")
 				text input mode
 				br
@@ -77,9 +73,19 @@ block content
 
 			div(class="col-xs-3")
 				input(type="text" onkeydown="keyDown();" id="inputArea" class="form-control")
+			div(style="float: left;")
 				p(class="text-danger" id="message" style="font-size:18px;")
 			a(onclick="sendCard()" class="btn btn-success btn-lg pull-right") Card Send
+
+			div(style="clear:both;")
+				div(id="image" width="300")
+					span(style="color:#000;font-size:64px;")
+						text 　
 			// card selections
+
+		// video
+		video(id="myVideo" width="200" height="200" autoplay="1" style="background-color:#ffc;")
+		// video
 
 		// game progression
 		div(style="float:left; padding-left:10px;")
@@ -95,11 +101,8 @@ block content
 				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
 					span(class="glyphicon glyphicon-chevron-right")
 					text Next Game</a></div>
-
-			div(id="id_sound" style="position:absolute; visibility:hidden")
-				embed(id="id_sound" src="/music/cursor6.wav" autostart="true" hidden="true")
 		// game progression
-		
+
 		// footer
 		div(style="clear:both;")
 			footer
@@ -111,6 +114,11 @@ block content
 					&middot;
 					a(href="#") Terms
 		// footer
+		
+		// sound
+		div(id="id_sound" style="position:absolute; visibility:hidden")
+			embed(id="id_sound" src="/music/cursor6.wav" autostart="true" hidden="true")
+		// sound
 
 
 	script.
@@ -118,4 +126,5 @@ block content
 
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
-	script(src="/javascripts/oddsSystem/ugly.min.js")
+	script(src="/javascripts/oddsSystem/client.js")
+	script(src="/javascripts/oddsSystem/video.js")
