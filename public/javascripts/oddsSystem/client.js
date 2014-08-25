@@ -192,6 +192,7 @@ socket.on('tableInfo', function(tableInfo) {
 function drawBackGround() {
 	setColorAndFont('yellow', 0);
 	config.ctx.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
+	// config.ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
 }
 
 function drawBox(seatId) {
