@@ -191,7 +191,7 @@ socket.on('tableInfo', function(tableInfo) {
 });
 
 setInterval(function(){
-	config.ctxForVideo.drawImage(video, 0, 0, 640, 380);
+	config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
 }, 50);
 
 // ここからフロント表示部分の関数
