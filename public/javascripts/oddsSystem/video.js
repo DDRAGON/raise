@@ -6,6 +6,7 @@ var localStream = null;
 navigator.getUserMedia({video: true, audio: false},
 	function(stream) { // for success case
 		video1.src = window.URL.createObjectURL(stream);
+		console.log(video1.videoWidth);
 	},
 	function(err) { // for error case
 		console.log(err);

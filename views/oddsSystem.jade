@@ -40,9 +40,14 @@ block content
 
 		div(id="center_pane" style="float:left;")
 
-			// canvas
-			canvas(id="canvas" width="640" height="360" style="background-color:#bb9;")
-			// canvas
+			div(style="position:absolute")
+				// video
+				video(id="myVideo" width="640" height="360" autoplay="1")
+				// video
+			div(style="position:relative")
+				// canvas
+				canvas(id="canvas" width="640" height="360")
+				// canvas
 
 			hr(class="featurette-divider")
 			
@@ -81,10 +86,6 @@ block content
 					span(style="color:#000;font-size:64px;")
 						text 　
 			// card selections
-
-		// video
-		video(id="myVideo" width="200" height="200" autoplay="1" style="background-color:#ffc;")
-		// video
 
 		// game progression
 		div(style="float:left; padding-left:10px;")
