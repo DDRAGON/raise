@@ -41,10 +41,9 @@ block content
 		div(id="center_pane" style="float:left;")
 
 			div(style="position:absolute;")
-				// video
+				// video canvas
 				canvas(id="canvasForVideo" width="640" height="360" style="float:left;")
-				video(id="myVideo" height="360" style="visibility:hidden" autoplay="1")
-				// video
+				// video canvas
 			div(style="position:relative")
 				// canvas
 				canvas(id="canvas" width="640" height="360" style="float:left;")
@@ -120,6 +119,9 @@ block content
 		div(id="id_sound" style="position:absolute; visibility:hidden")
 			embed(id="id_sound" src="/music/cursor6.wav" autostart="true" hidden="true")
 		// sound
+		// video
+		video(id="myVideo" height="360" style="visibility:hidden" autoplay="1")
+		// video
 
 
 	script.
