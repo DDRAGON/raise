@@ -42,7 +42,8 @@ block content
 
 			div(style="position:absolute")
 				// video
-				video(id="myVideo" width="640" height="360" autoplay="1")
+				canvas(id="canvasForVideo" width="640" height="360")
+				video(id="myVideo" height="360" style="visibility:hidden" autoplay="1")
 				// video
 			div(style="position:relative")
 				// canvas
@@ -126,5 +127,5 @@ block content
 
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
-	script(src="/javascripts/oddsSystem/client.js")
 	script(src="/javascripts/oddsSystem/video.js")
+	script(src="/javascripts/oddsSystem/client.js")

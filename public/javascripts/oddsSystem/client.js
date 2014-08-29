@@ -165,7 +165,9 @@ function sound() {
 }
 
 $(function(){
+	var canvasForVideo = $('#canvasForVideo').get(0);
 	var canvas = $('#canvas').get(0);
+	config.ctxForVideo = canvasForVideo.getContext("2d");
 	config.ctx = canvas.getContext("2d");
 });
 
@@ -187,6 +189,10 @@ socket.on('tableInfo', function(tableInfo) {
 	}
 	drawDealerButton(tableInfo.button);
 });
+
+setInterval(function(){
+	config.ctxForVideo.drawImage(video, 0, 0, 640, 380);
+}, 50);
 
 // ここからフロント表示部分の関数
 function drawBackGround() {
