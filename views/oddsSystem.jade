@@ -88,19 +88,10 @@ block content
 			// card selections
 
 		// game progression
-		div(style="float:left; padding-left:10px;")
-			div
-				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="moveDealerButton()")
-					span(class="glyphicon glyphicon-circle-arrow-right")
-					text Slide Button
-			div
-				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('start')")
-					span(class="glyphicon glyphicon-remove-circle")
-					text Clear
-			div
-				a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
-					span(class="glyphicon glyphicon-chevron-right")
-					text Next Game</a></div>
+		div(class="btn-group-vertical")
+			a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
+				span(class="glyphicon glyphicon-chevron-right")
+				text Next Game
 		// game progression
 
 		// footer
