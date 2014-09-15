@@ -190,8 +190,20 @@ socket.on('tableInfo', function(tableInfo) {
 	drawDealerButton(tableInfo.button);
 });
 
+// ビデオの描画
 setInterval(function(){
 	config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
+	var imageData = config.ctxForVideo.getImageData(0, 0, config.canvasWidth, config.canvasHeight);
+	try{
+		var reader = new com.google.zxing.qrcode.QRCodeReader();
+		var source = new RGBLuminanceSource(imageData.data, imageData.width, imageData.height);
+		var bitmap = new com.google.zxing.BinaryBitmap(new com.google.zxing.common.HybridBinarizer(source));
+		var result = reader.decode1(bitmap);
+		var message = result.get_text();
+		console.log(message);
+	}catch( e ){
+		// nice catch!
+	}
 }, 50);
 
 // ここからフロント表示部分の関数

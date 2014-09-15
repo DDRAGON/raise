@@ -2,6 +2,7 @@
 var express = require('express')
 	, routes = require('./routes')
 	, oddsSystem = require('./routes/oddsSystem')
+	, qrCodeReader = require('./routes/qrCodeReader')
 	, justGet = require('./routes/justGet')
 	, http = require('http')
 	, path = require('path');
@@ -27,6 +28,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/oddsSystem', oddsSystem.oddsSystem);
+app.get('/qrCodeReader', qrCodeReader.qrCodeReader);
 app.get('/howToUse', justGet.justGet);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
