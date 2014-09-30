@@ -74,8 +74,9 @@ block content
 				select(id="changeInputMode")
 					option(value="normal") normal
 					option(value="easy") easy
+					option(value="qrCode") QR code
 
-			div(class="col-xs-3")
+			div(class="col-xs-4" id="inputArea")
 				input(type="text" onkeydown="keyDown();" id="inputArea" class="form-control")
 			div(style="float: left;")
 				p(class="text-danger" id="message" style="font-size:18px;")
@@ -120,7 +121,5 @@ block content
 
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
-	script(src="/assets/mscorlib.js")
-	script(src="/assets/ZXingQR.js")
 	script(src="/javascripts/oddsSystem/video.js")
 	script(src="/javascripts/oddsSystem/client.js")

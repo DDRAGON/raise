@@ -7,18 +7,11 @@ var lastCard = '';
 var lastCardPassedTimeSec = 0.0;
 
 function sendImage(image) {
-	socket.emit('imageSend', image);
-	sound();
-	$('#message').html('send '+image);
-	this.mark = '';
-	this.num  = '　';
-	drawImage();
-	drawSentImage(image);
-	if (image == 'start') {
-		for (var seatId=0; seatId<10; seatId++) {
-			$('#inputPlayer'+seatId).val('');
-		}
-	}
+	if (image == 'ng') image = 'nextGame';
+	socket.emit('imageSendWithPassWord', {
+		image: image,
+		passWord: $('#inputArea').val()
+	});
 }
 
 function drawSentImage(sentImage) {
@@ -70,6 +63,7 @@ setInterval(function(){
 			setLastCard(message);
 			lastCardPassedTimeSec = 0.0;
 			sound();
+			sendImage(message);
 		} else if (lastCard === message) {
 			lastCardPassedTimeSec = 0.0;
 		}

@@ -38,3 +38,5 @@ var io = require('socket.io').listen(server);
 
 var createOddsSystemSocket = require("./socket/oddsSystemSocket");
 new createOddsSystemSocket(io);
+var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
+new createQrCodeReaderSocket(io);
