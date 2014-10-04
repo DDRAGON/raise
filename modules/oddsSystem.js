@@ -95,6 +95,7 @@ function gotPreFlop(socketId) {
 
 // ネクストゲームカードを受け取った時の処理。
 function gotNextGame(socketId) {
+	if (!clients[socketId]) return;
 	clients[socketId].frontObj.state = 'start';
 	clients[socketId].frontObj.allPlayersNum = 0;
 	clients[socketId].frontObj.playingPlayersNum = 0;
