@@ -30,6 +30,7 @@ app.get('/', routes.index);
 app.get('/oddsSystem', oddsSystem.oddsSystem);
 app.get('/qrCodeReader', qrCodeReader.qrCodeReader);
 app.get('/howToUse', justGet.justGet);
+app.get('/qrSheet', justGet.justGet);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
