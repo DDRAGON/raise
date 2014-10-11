@@ -5,6 +5,7 @@ var config = {
 };
 var lastCard = '';
 var lastCardPassedTimeSec = 0.0;
+var readQRCodeIntervalTimeMSec = 50;
 
 function sendImage(image) {
 	if (image == 'ng') image = 'nextGame';
@@ -14,20 +15,6 @@ function sendImage(image) {
 	});
 }
 
-function drawSentImage(sentImage) {
-	switch (sentImage[1]) {
-		case 's':
-			$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'♠</span>'); break;
-		case 'h':
-			$('#sentImage').html('<span style="color:#ff0000;font-size:64px;">'+sentImage[0]+'♥</span>'); break;
-		case 'd':
-			$('#sentImage').html('<span style="color:#0000ff;font-size:64px;">'+sentImage[0]+'♦</span>'); break;
-		case 'c':
-			$('#sentImage').html('<span style="color:#00bb00;font-size:64px;">'+sentImage[0]+'♣</span>'); break;
-		default:
-			$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'</span>'); break;
-	}
-}
 
 function sound() {
 	var str = "";
@@ -41,13 +28,15 @@ function sound() {
 $(function(){
 	var canvasForVideo = $('#canvasForVideo').get(0);
 	config.ctxForVideo = canvasForVideo.getContext("2d");
+	RewriteAndRead();
 });
 
-// ビデオの描画
-setInterval(function(){
+// ビデオの描画とQRコード読み取り
+function RewriteAndRead() {
 	config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
 	var imageData = config.ctxForVideo.getImageData(0, 0, config.canvasWidth, config.canvasHeight);
-	lastCardPassedTimeSec += 0.1;
+	lastCardPassedTimeSec += readQRCodeIntervalTimeMSec * 0.001;
+	console.log('lastCardPassedTimeSec = ' + lastCardPassedTimeSec);
 	if (lastCardPassedTimeSec >= 1) {
 		lastCardPassedTimeSec = 0.0;
 		setLastCard('');
@@ -70,7 +59,12 @@ setInterval(function(){
 	}catch( e ){
 		// nice catch!
 	}
-}, 100);
+	setTimeout("RewriteAndRead()", readQRCodeIntervalTimeMSec);
+}
+
+$("#changeReadQRCodeIntervalTimeMSec").change(function(){
+	readQRCodeIntervalTimeMSec = $(this).val();
+});
 
 function setLastCard(message)
 {

@@ -16,10 +16,20 @@ block content
 		div(id='result')
 		// result
 
-	div(id="center_pane" style="float:left;")
-		text password
+	div(style="float:left;")
+		text 　webカメラからの画像切り抜き頻度（ミリ秒）：
+		select(id="changeReadQRCodeIntervalTimeMSec")
+			for num, key in [1, 2, 5, 10, 20, 50, 100, 200, 500]
+				if num === 100
+					option(value="#{num}" selected) #{num}
+				else
+					option(value="#{num}") #{num}
 		br
-		input(type="password" id="inputArea")
+
+		div(id="center_pane")
+			text password
+			br
+			input(type="password" id="inputArea")
 
 	// sound
 	div(id="id_sound" style="position:absolute; visibility:hidden")
