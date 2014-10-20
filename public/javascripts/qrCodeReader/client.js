@@ -36,7 +36,6 @@ function RewriteAndRead() {
 	config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
 	var imageData = config.ctxForVideo.getImageData(0, 0, config.canvasWidth, config.canvasHeight);
 	lastCardPassedTimeSec += readQRCodeIntervalTimeMSec * 0.001;
-	console.log('lastCardPassedTimeSec = ' + lastCardPassedTimeSec);
 	if (lastCardPassedTimeSec >= 1) {
 		lastCardPassedTimeSec = 0.0;
 		setLastCard('');

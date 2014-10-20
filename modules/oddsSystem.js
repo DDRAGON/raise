@@ -140,6 +140,9 @@ function gotCardInStart(socketId, card) {
 			clients[socketId].frontObj.players[checkingSeatId].isActive = true;
 			return;
 		}
+		if (clients[socketId].frontObj.players[checkingSeatId].hand[0] == card) {
+			return; // 入力カードを持っているプレイヤーがいたら無視する。
+		}
 		lastSeatId = checkingSeatId;
 	}
 	for (var key in clients[socketId].frontObj.players) {
@@ -152,6 +155,9 @@ function gotCardInStart(socketId, card) {
 				gotPreFlop(socketId); // プリフロップ開始だと分かる。
 			}
 			return;
+		}
+		if (clients[socketId].frontObj.players[checkingSeatId].hand[0] == card) {
+			return; // 入力カードを持っているプレイヤーがいたら無視する。
 		}
 	}
 }
@@ -168,7 +174,7 @@ function gotCardInPreFlop(socketId, card) {
 		}
 	}
 	// 同じカードがない場合
-	clients[socketId].frontObj.board.push(card);
+	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 3) { // フロップに３枚が来たのを確認
 		clients[socketId].frontObj.state = 'flop'; // フロップになったことを認識
 		getWinPerFromAPI(socketId, clients[socketId].frontObj);
@@ -186,9 +192,11 @@ function gotCardInFlop(socketId, card) {
 		}
 	}
 	// 同じカードがない場合
-	clients[socketId].frontObj.board.push(card);
-	clients[socketId].frontObj.state = 'turn'; // ターンになったことを認識
-	getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	addCardToBoard(socketId, card);
+	if (clients[socketId].frontObj.board.length == 4) { // ターンになったことを認識
+		clients[socketId].frontObj.state = 'turn';
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	}
 }
 // ターンでカード情報を受け取った時の処理。
 function gotCardInTurn(socketId, card) {
@@ -202,9 +210,11 @@ function gotCardInTurn(socketId, card) {
 		}
 	}
 	// 同じカードがない場合
-	clients[socketId].frontObj.board.push(card);
-	clients[socketId].frontObj.state = 'river'; // リバーになったことを認識
-	getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	addCardToBoard(socketId, card);
+	if (clients[socketId].frontObj.board.length == 5) { // リバーになったことを認識
+		clients[socketId].frontObj.state = 'river';
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	}
 }
 // リバーでカード情報を受け取った時の処理。
 function gotCardInRiver(socketId, card) {
@@ -217,6 +227,15 @@ function gotCardInRiver(socketId, card) {
 			return;
 		}
 	}
+}
+
+// ボードにカードを追加する関数。
+function addCardToBoard(socketId, card) {
+	var indexNum = clients[socketId].frontObj.board.indexOf(card);
+	if (indexNum != -1) { // 同じカードがみつかった場合は無視する。
+		return;
+	}
+	clients[socketId].frontObj.board.push(card);
 }
 
 function sendTableInfo(socketId) {
