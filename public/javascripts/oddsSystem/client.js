@@ -26,6 +26,7 @@ config.boxHeight   = config.displayHeight-config.displayCardHeight-config.space;
 config.boardWidth  = config.displayCardWidth*5 + config.boardWidthSpace*2;
 config.boardHeight = config.cardFontSize + config.boardHeightSpace*2;
 config.fontSize  = Number(config.boxHeight/2);
+config.tieFontSize  = config.fontSize - 4;
 
 var cards = [
 	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
@@ -189,7 +190,7 @@ socket.on('tableInfo', function(tableInfo) {
 		if (player.isActive == true) {
 			drawPlayerHands(player.seatId, player.hand);
 		}
-		drawPlayerWinperAndName(player.seatId, player.win, player.name, player.isActive);
+		drawPlayerWinperAndName(player.seatId, player.win, player.tie, player.name, player.isActive);
 		if (board && board.length > 0) {
 			drawBoard(board)
 		}
@@ -253,7 +254,7 @@ function drawPlayerHands(playerId, playerHands) {
 	}
 }
 
-function drawPlayerWinperAndName(seatId, winPer, playerName, isActive) {
+function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 	setColorAndFont('white', config.fontSize);
 	var drawX = Math.floor(seatId/5)*(config.canvasWidth - config.boxWidth) + 3;
 	var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + config.fontSize - 2;
@@ -268,7 +269,16 @@ function drawPlayerWinperAndName(seatId, winPer, playerName, isActive) {
 		return;
 	}
 	if (winPer) {
-		config.ctx.fillText(winPer, drawX, drawY);
+		var win = Math.round(Number(winPer.slice(0, -1)) * 10 ) / 10;
+		var drawPercent = win + '％';
+		if (tiePer) {
+			var tie = Math.round(Number(tiePer.slice(0, -1)) * 10 ) / 10;
+			if (tie >= 5) {
+				drawPercent += '(' + tie +'％)';
+				setColorAndFont('black', config.tieFontSize);
+			}
+		}
+		config.ctx.fillText(drawPercent, drawX, drawY);
 	}
 }
 
