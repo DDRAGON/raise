@@ -3,6 +3,7 @@ var easyMode = false;
 var mark = '';
 var num  = '　'
 var passWord = '';
+var backgroundColor = 'camera';
 var config = {
 	canvasWidth:  640,
 	canvasHeight: 360,
@@ -163,6 +164,10 @@ $("#changeInputMode").change(function(){
 		'<input type="text" onkeydown="keyDown();" id="inputArea" class="form-control">';
 });
 
+$("#changeBackground").change(function(){
+	backgroundColor = $(this).val();
+});
+
 function sound() {
 	var str = "";
 	str = str + "<EMBED id = 'id_sound'";
@@ -204,13 +209,16 @@ socket.on('passWord', function(getPassWord) {
 
 // ビデオの描画
 setInterval(function(){
-	config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
+	if (backgroundColor === 'camera') {
+		config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
+		return;
+	}
+	config.ctxForVideo.fillStyle = backgroundColor;
+	config.ctxForVideo.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
 }, 50);
 
 // ここからフロント表示部分の関数
 function drawBackGround() {
-	//setColorAndFont('yellow', 0);
-	//config.ctx.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
 	config.ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
 }
 

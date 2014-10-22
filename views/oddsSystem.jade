@@ -97,6 +97,15 @@ block content
 				text Next Game
 		// game progression
 
+		// 背景色
+		div
+			text back ground color
+			br
+			select(id="changeBackground")
+				for num, key in ['camera','rgb(255, 255, 0)','rgb(255, 0, 255)','rgb(0, 255, 255)']
+					option(value="#{num}") #{num}
+		// 背景色
+
 		// footer
 		div(style="clear:both;")
 			footer
