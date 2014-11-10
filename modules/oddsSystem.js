@@ -23,6 +23,7 @@ function gotImage(socketId, image)
 		case 'start': gotStart(socketId); break;
 		case 'preFlop': gotPreFlop(socketId); break;
 		case 'nextGame': gotNextGame(socketId); break;
+		case 'resetGame': gotResetGame(socketId); break;
 		default : gotCard(socketId, image); break;
 	}
 }
@@ -93,14 +94,13 @@ function gotPreFlop(socketId) {
 	}
 }
 
-// ネクストゲームカードを受け取った時の処理。
-function gotNextGame(socketId) {
+// リセットゲームカードを受け取った時の処理。
+function gotResetGame(socketId) {
 	if (!clients[socketId]) return;
 	clients[socketId].frontObj.state = 'start';
 	clients[socketId].frontObj.allPlayersNum = 0;
 	clients[socketId].frontObj.playingPlayersNum = 0;
 	clients[socketId].frontObj.board = [];
-	moveDealerButton(socketId); // ディーラーボタンの移動
 	clients[socketId].gotCards = [];
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
@@ -112,6 +112,13 @@ function gotNextGame(socketId) {
 		clients[socketId].frontObj.players[seatId].tie = null;
 	}
 	sendTableInfo(socketId);
+}
+
+// ネクストゲームカードを受け取った時の処理。
+function gotNextGame(socketId) {
+	if (!clients[socketId]) return;
+	moveDealerButton(socketId); // ディーラーボタンの移動
+	gotResetGame(socketId);
 }
 
 // トランプのカードを受け取った時の処理。
