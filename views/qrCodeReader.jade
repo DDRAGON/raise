@@ -17,7 +17,7 @@ block content
 		// result
 
 	div(style="float:left;")
-		text 　webカメラからの画像切り抜き頻度（ミリ秒）：
+		text 　webカメラからの画像切り抜き速度：
 		select(id="changeReadQRCodeIntervalTimeMSec")
 			for num, key in ['標準', '高速']
 				option(value="#{num}") #{num}
@@ -29,8 +29,8 @@ block content
 			input(type="password" id="inputArea")
 
 	// sound
-	div(id="id_sound" style="position:absolute; visibility:hidden")
-		embed(id="id_sound" src="/music/cursor6.wav" autostart="true" hidden="true")
+	audio(id="sound-file" preload="auto")
+		source(src="/music/cursor6.wav")
 	// sound
 	// video
 	video(id="myVideo" style="visibility:hidden" autoplay="1")

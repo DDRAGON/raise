@@ -123,7 +123,6 @@ function gotNextGame(socketId) {
 
 // トランプのカードを受け取った時の処理。
 function gotCard(socketId, card) {
-	console.log('socketId = ' + socketId);
 	if (!clients[socketId]) return;
 	switch (clients[socketId].frontObj.state) {
 		case 'start': gotCardInStart(socketId, card); break;

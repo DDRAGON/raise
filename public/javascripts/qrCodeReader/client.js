@@ -18,12 +18,7 @@ function sendImage(image) {
 
 
 function sound() {
-	var str = "";
-	str = str + "<EMBED id = 'id_sound'";
-	str = str + " SRC=/music/cursor6.wav";
-	str = str + " AUTOSTART='true'";
-	str = str + " HIDDEN='true'>";
-	document.getElementById("id_sound").innerHTML = str;
+	$("#sound-file").get(0).play();
 }
 
 $(function(){
