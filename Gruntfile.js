@@ -9,7 +9,12 @@ module.exports = function(grunt){
 			min : {
 				files: {
 					"public/javascripts/oddsSystem/ugly.min.js" : [
+						"public/javascripts/oddsSystem/video.js",
 						"public/javascripts/oddsSystem/client.js"
+					],
+					"public/javascripts/qrCodeReader/ugly.min.js" : [
+						"public/javascripts/qrCodeReader/video.js",
+						"public/javascripts/qrCodeReader/client.js"
 					]
 				}
 			}
