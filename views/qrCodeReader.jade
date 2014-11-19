@@ -19,11 +19,8 @@ block content
 	div(style="float:left;")
 		text 　webカメラからの画像切り抜き頻度（ミリ秒）：
 		select(id="changeReadQRCodeIntervalTimeMSec")
-			for num, key in [1, 2, 5, 10, 20, 50, 100, 200, 500]
-				if num === 100
-					option(value="#{num}" selected) #{num}
-				else
-					option(value="#{num}") #{num}
+			for num, key in ['標準', '高速']
+				option(value="#{num}") #{num}
 		br
 
 		div(id="center_pane")

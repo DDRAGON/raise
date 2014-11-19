@@ -63,7 +63,14 @@ function RewriteAndRead() {
 }
 
 $("#changeReadQRCodeIntervalTimeMSec").change(function(){
-	readQRCodeIntervalTimeMSec = $(this).val();
+	switch ($(this).val()){
+	case '標準':
+		readQRCodeIntervalTimeMSec = 100;
+		return;
+	case '高速':
+		readQRCodeIntervalTimeMSec = 50;
+		return;
+	}
 });
 
 function setLastCard(message)
