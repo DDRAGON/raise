@@ -14,20 +14,80 @@ var config = {
 	space: 8,
 	boardWidthSpace:  6,
 	boardHeightSpace: 6,
-	cardFontSize: 30,
-	markFontSize: 30,
-	markAdjust: 20
+	cardFontSize: 26,
+	fontSize: 12
 };
+config.markFontSize = config.cardFontSize - 4;
+config.markAdjust   = config.cardFontSize - parseInt(config.cardFontSize/3);
 config.displayCardWidth  = config.cardFontSize*2-11;
 config.displayCardHeight = config.cardFontSize;
-config.displayWidth = config.displayCardWidth*2;
-config.displayHeight = Number(config.canvasHeight/5);
-config.boxWidth    = config.displayWidth;
-config.boxHeight   = config.displayHeight-config.displayCardHeight-config.space;
+config.displayWidth  = config.displayCardWidth*2;
+config.nameWinPerBoxWidth  = config.displayWidth;
+config.nameWinPerBoxHeight = (config.fontSize + 4) * 2;
+config.displayHeight = config.displayCardHeight + config.nameWinPerBoxHeight;
+config.boxWidth  = config.displayWidth;
+config.boxHeight = config.displayHeight;
 config.boardWidth  = config.displayCardWidth*5 + config.boardWidthSpace*2;
 config.boardHeight = config.cardFontSize + config.boardHeightSpace*2;
-config.fontSize  = Number(config.boxHeight/2);
-config.tieFontSize  = config.fontSize - 4;
+config.tieFontSize = config.fontSize - 4;
+config.dealerButtonRadius = parseInt(config.nameWinPerBoxHeight/2);
+
+var ringWidth  = config.canvasWidth  - config.displayCardWidth*2;
+var ringHeight = config.canvasHeight - (config.displayCardHeight + config.nameWinPerBoxHeight);
+config.PlayersXY = [];
+// 端座標
+config.PlayersXY[0] = {x:parseInt(ringWidth*0/5), y:parseInt(ringHeight*2/4)};
+config.PlayersXY[1] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*1/4)};
+config.PlayersXY[2] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*0/4)};
+config.PlayersXY[3] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*0/4)};
+config.PlayersXY[4] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*1/4)};
+config.PlayersXY[5] = {x:parseInt(ringWidth*5/5), y:parseInt(ringHeight*2/4)};
+config.PlayersXY[6] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*3/4)};
+config.PlayersXY[7] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*4/4)};
+config.PlayersXY[8] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*4/4)};
+config.PlayersXY[9] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*3/4)};
+// 一部の箇所だけ特殊処理
+config.PlayersXY[1].x -= config.dealerButtonRadius;
+config.PlayersXY[1].y -= config.dealerButtonRadius;
+config.PlayersXY[4].x += config.dealerButtonRadius;
+config.PlayersXY[4].y -= config.dealerButtonRadius;
+config.PlayersXY[6].x += config.dealerButtonRadius;
+config.PlayersXY[6].y += config.dealerButtonRadius;
+config.PlayersXY[9].x -= config.dealerButtonRadius;
+config.PlayersXY[9].y += config.dealerButtonRadius;
+// ハンド座標と名前座標の計算
+for (var i=0; i<10; i++) {
+	config.PlayersXY[i].x += config.displayCardWidth;
+	config.PlayersXY[i].y += parseInt((config.displayCardHeight + config.nameWinPerBoxHeight) / 2) - 3;
+	config.PlayersXY[i].handsX  = config.PlayersXY[i].x - config.displayCardWidth;
+	config.PlayersXY[i].handsY  = config.PlayersXY[i].y - config.displayCardHeight;
+	config.PlayersXY[i].nameX   = config.PlayersXY[i].x - config.displayCardWidth;
+	config.PlayersXY[i].nameY   = config.PlayersXY[i].y + config.fontSize - 2;
+	config.PlayersXY[i].winPerX = config.PlayersXY[i].x - config.displayCardWidth;
+	config.PlayersXY[i].winPerY = config.PlayersXY[i].y + config.nameWinPerBoxHeight - 2;
+}
+// ディーラーボタンの左上座標
+config.PlayersXY[0].dealerButtonX = config.PlayersXY[0].x + config.displayCardWidth + config.dealerButtonRadius;
+config.PlayersXY[0].dealerButtonY = config.PlayersXY[0].y;
+config.PlayersXY[1].dealerButtonX = config.PlayersXY[1].x + config.dealerButtonRadius*2;
+config.PlayersXY[1].dealerButtonY = config.PlayersXY[1].y + config.nameWinPerBoxHeight;
+config.PlayersXY[2].dealerButtonX = config.PlayersXY[2].x;
+config.PlayersXY[2].dealerButtonY = config.PlayersXY[2].y + config.nameWinPerBoxHeight;
+config.PlayersXY[3].dealerButtonX = config.PlayersXY[3].x;
+config.PlayersXY[3].dealerButtonY = config.PlayersXY[3].y + config.nameWinPerBoxHeight;
+config.PlayersXY[4].dealerButtonX = config.PlayersXY[4].x - config.dealerButtonRadius*2;
+config.PlayersXY[4].dealerButtonY = config.PlayersXY[4].y + config.nameWinPerBoxHeight;
+config.PlayersXY[5].dealerButtonX = config.PlayersXY[5].x - config.displayCardWidth - config.dealerButtonRadius;
+config.PlayersXY[5].dealerButtonY = config.PlayersXY[5].y;
+config.PlayersXY[6].dealerButtonX = config.PlayersXY[6].x - config.dealerButtonRadius*2;
+config.PlayersXY[6].dealerButtonY = config.PlayersXY[6].y - config.displayCardHeight - config.dealerButtonRadius*2;
+config.PlayersXY[7].dealerButtonX = config.PlayersXY[7].x;
+config.PlayersXY[7].dealerButtonY = config.PlayersXY[7].y - config.displayCardHeight - config.dealerButtonRadius*2;
+config.PlayersXY[8].dealerButtonX = config.PlayersXY[8].x;
+config.PlayersXY[8].dealerButtonY = config.PlayersXY[8].y - config.displayCardHeight - config.dealerButtonRadius*2;
+config.PlayersXY[9].dealerButtonX = config.PlayersXY[9].x + config.dealerButtonRadius*2;
+config.PlayersXY[9].dealerButtonY = config.PlayersXY[9].y - config.displayCardHeight - config.dealerButtonRadius*2;
+
 
 var cards = [
 	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
@@ -223,16 +283,27 @@ function drawBackGround() {
 }
 
 function drawBox(seatId) {
-	var drawX = Math.floor(seatId/5)*(config.canvasWidth-config.boxWidth);
-	var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight;
-	var halfBoxHeight = Math.floor(config.boxHeight/2);
+	// var drawX = Math.floor(seatId/5)*(config.canvasWidth-config.boxWidth);
+	// var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight;
+	// var halfBoxHeight = Math.floor(config.boxHeight/2);
 	setColorAndFont('black', 0);
-	config.ctx.fillRect(drawX, drawY, config.boxWidth, halfBoxHeight);
+	config.ctx.fillRect(
+		config.PlayersXY[seatId].nameX,
+		config.PlayersXY[seatId].y,
+		config.boxWidth,
+		parseInt(config.nameWinPerBoxHeight/2)
+	);
 	setColorAndFont('white', 0);
-	drawY += halfBoxHeight;
-	config.ctx.fillRect(drawX, drawY, config.boxWidth, halfBoxHeight);
+	// drawY += halfBoxHeight;
+	config.ctx.fillRect(
+		config.PlayersXY[seatId].winPerX,
+		config.PlayersXY[seatId].y + parseInt(config.nameWinPerBoxHeight/2),
+		config.boxWidth,
+		parseInt(config.nameWinPerBoxHeight/2)
+	);
 }
 function drawDealerButton(seatId) {
+	/*
 	var radius = Math.floor(config.boxHeight/2);
 	var drawX = Math.floor(seatId/5)*(config.canvasWidth-config.boxWidth);
 	var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + radius;
@@ -241,39 +312,51 @@ function drawDealerButton(seatId) {
 	} else {
 		drawX -= radius;
 	}
+	*/
 	setColorAndFont('white', 0);
 	config.ctx.beginPath();
-	config.ctx.arc(drawX, drawY, radius, 0, Math.PI*2, false);
+	config.ctx.arc(
+		config.PlayersXY[seatId].dealerButtonX,
+		config.PlayersXY[seatId].dealerButtonY + config.dealerButtonRadius,
+		config.dealerButtonRadius,
+		0,
+		Math.PI*2,
+		false
+	);
 	config.ctx.fill();
-	setColorAndFont('green', config.fontSize+5);
-	drawX -= radius/2; drawY += radius/2;
-	config.ctx.fillText('D', drawX, drawY);
+	setColorAndFont('green', config.fontSize+8);
+	//drawX -= radius/2; drawY += radius/2;
+	config.ctx.fillText(
+		'D',
+		config.PlayersXY[seatId].dealerButtonX - parseInt(config.dealerButtonRadius/2),
+		config.PlayersXY[seatId].dealerButtonY + parseInt(config.dealerButtonRadius*3/2)
+	);
 }
 
 function drawPlayerHands(playerId, playerHands) {
-	var drawX = Math.floor(playerId/5)*(config.canvasWidth-config.boxWidth);
-	var drawY = Math.floor(playerId%5)*config.displayHeight;
+	//var drawX = Math.floor(playerId/5)*(config.canvasWidth-config.boxWidth);
+	//var drawY = Math.floor(playerId%5)*config.displayHeight;
 	if (playerHands && playerHands[0]) {
-		drawCard(playerHands[0], drawX, drawY);
+		drawCard(playerHands[0], config.PlayersXY[playerId].handsX, config.PlayersXY[playerId].handsY);
 	}
 	if (playerHands && playerHands[1]) {
-		drawX += config.displayCardWidth;
-		drawCard(playerHands[1], drawX, drawY);
+		//drawX += config.displayCardWidth;
+		drawCard(playerHands[1], config.PlayersXY[playerId].handsX + config.displayCardWidth, config.PlayersXY[playerId].handsY);
 	}
 }
 
 function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 	setColorAndFont('white', config.fontSize);
-	var drawX = Math.floor(seatId/5)*(config.canvasWidth - config.boxWidth) + 3;
-	var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + config.fontSize - 2;
+	//var drawX = Math.floor(seatId/5)*(config.canvasWidth - config.boxWidth) + 3;
+	//var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + config.fontSize - 2;
 	if (playerName) {
-		config.ctx.fillText(playerName, drawX, drawY);
+		config.ctx.fillText(playerName, config.PlayersXY[seatId].nameX, config.PlayersXY[seatId].nameY);
 	}
-	drawY += config.fontSize;
+	//drawY += config.fontSize;
 	if (typeof isActive == 'undefined') return;
 	setColorAndFont('black', config.fontSize);
 	if (isActive == false) {
-		config.ctx.fillText('Fold', drawX, drawY);
+		config.ctx.fillText('Fold', config.PlayersXY[seatId].winPerX, config.PlayersXY[seatId].winPerY);
 		return;
 	}
 	if (winPer) {
@@ -286,14 +369,14 @@ function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 				setColorAndFont('black', config.tieFontSize);
 			}
 		}
-		config.ctx.fillText(drawPercent, drawX, drawY);
+		config.ctx.fillText(drawPercent, config.PlayersXY[seatId].winPerX, config.PlayersXY[seatId].winPerY);
 	}
 }
 
 function drawBoard(board) {
 	setColorAndFont('green', 0);
 	var drawX = Number(config.canvasWidth/2)-Number(config.boardWidth/2);
-	var drawY = config.canvasHeight - config.boardHeight;
+	var drawY = config.canvasHeight - config.boxHeight - config.boardHeight;
 	config.ctx.fillRect(drawX, drawY, config.boardWidth, config.boardHeight);
 	drawX += config.boardWidthSpace;
 	drawY += config.boardHeightSpace;
