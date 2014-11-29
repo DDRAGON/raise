@@ -101,6 +101,15 @@ block content
 				text Reset Game
 		// game progression
 
+		// 配置設定
+		div
+			text 配置設定
+			br
+			select(id="changeArrangement")
+				for num, key in ['上下','左右']
+					option(value="#{num}") #{num}
+		// 配置設定
+
 		// 背景色
 		div
 			text back ground color

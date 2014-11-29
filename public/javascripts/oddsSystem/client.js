@@ -4,6 +4,7 @@ var mark = '';
 var num  = '　'
 var passWord = '';
 var backgroundColor = 'camera';
+var tableInfo = {};
 var config = {
 	canvasWidth:  640,
 	canvasHeight: 360,
@@ -15,15 +16,18 @@ var config = {
 	boardWidthSpace:  6,
 	boardHeightSpace: 6,
 	cardFontSize: 26,
-	fontSize: 12
+	fontSize: 12,
+	PlayersXY: [],
+	nameFontMargin: 3
 };
 config.markFontSize = config.cardFontSize - 4;
 config.markAdjust   = config.cardFontSize - parseInt(config.cardFontSize/3);
 config.displayCardWidth  = config.cardFontSize*2-11;
 config.displayCardHeight = config.cardFontSize;
 config.displayWidth  = config.displayCardWidth*2;
+config.nameBoxHeight = config.fontSize + config.nameFontMargin*2;
 config.nameWinPerBoxWidth  = config.displayWidth;
-config.nameWinPerBoxHeight = (config.fontSize + 4) * 2;
+config.nameWinPerBoxHeight = (config.fontSize + config.nameFontMargin*2) * 2;
 config.displayHeight = config.displayCardHeight + config.nameWinPerBoxHeight;
 config.boxWidth  = config.displayWidth;
 config.boxHeight = config.displayHeight;
@@ -31,63 +35,6 @@ config.boardWidth  = config.displayCardWidth*5 + config.boardWidthSpace*2;
 config.boardHeight = config.cardFontSize + config.boardHeightSpace*2;
 config.tieFontSize = config.fontSize - 4;
 config.dealerButtonRadius = parseInt(config.nameWinPerBoxHeight/2);
-
-var ringWidth  = config.canvasWidth  - config.displayCardWidth*2;
-var ringHeight = config.canvasHeight - (config.displayCardHeight + config.nameWinPerBoxHeight);
-config.PlayersXY = [];
-// 端座標
-config.PlayersXY[0] = {x:parseInt(ringWidth*0/5), y:parseInt(ringHeight*2/4)};
-config.PlayersXY[1] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*1/4)};
-config.PlayersXY[2] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*0/4)};
-config.PlayersXY[3] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*0/4)};
-config.PlayersXY[4] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*1/4)};
-config.PlayersXY[5] = {x:parseInt(ringWidth*5/5), y:parseInt(ringHeight*2/4)};
-config.PlayersXY[6] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*3/4)};
-config.PlayersXY[7] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*4/4)};
-config.PlayersXY[8] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*4/4)};
-config.PlayersXY[9] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*3/4)};
-// 一部の箇所だけ特殊処理
-config.PlayersXY[1].x -= config.dealerButtonRadius;
-config.PlayersXY[1].y -= config.dealerButtonRadius;
-config.PlayersXY[4].x += config.dealerButtonRadius;
-config.PlayersXY[4].y -= config.dealerButtonRadius;
-config.PlayersXY[6].x += config.dealerButtonRadius;
-config.PlayersXY[6].y += config.dealerButtonRadius;
-config.PlayersXY[9].x -= config.dealerButtonRadius;
-config.PlayersXY[9].y += config.dealerButtonRadius;
-// ハンド座標と名前座標の計算
-for (var i=0; i<10; i++) {
-	config.PlayersXY[i].x += config.displayCardWidth;
-	config.PlayersXY[i].y += parseInt((config.displayCardHeight + config.nameWinPerBoxHeight) / 2) - 3;
-	config.PlayersXY[i].handsX  = config.PlayersXY[i].x - config.displayCardWidth;
-	config.PlayersXY[i].handsY  = config.PlayersXY[i].y - config.displayCardHeight;
-	config.PlayersXY[i].nameX   = config.PlayersXY[i].x - config.displayCardWidth;
-	config.PlayersXY[i].nameY   = config.PlayersXY[i].y + config.fontSize - 2;
-	config.PlayersXY[i].winPerX = config.PlayersXY[i].x - config.displayCardWidth;
-	config.PlayersXY[i].winPerY = config.PlayersXY[i].y + config.nameWinPerBoxHeight - 2;
-}
-// ディーラーボタンの左上座標
-config.PlayersXY[0].dealerButtonX = config.PlayersXY[0].x + config.displayCardWidth + config.dealerButtonRadius;
-config.PlayersXY[0].dealerButtonY = config.PlayersXY[0].y;
-config.PlayersXY[1].dealerButtonX = config.PlayersXY[1].x + config.dealerButtonRadius*2;
-config.PlayersXY[1].dealerButtonY = config.PlayersXY[1].y + config.nameWinPerBoxHeight;
-config.PlayersXY[2].dealerButtonX = config.PlayersXY[2].x;
-config.PlayersXY[2].dealerButtonY = config.PlayersXY[2].y + config.nameWinPerBoxHeight;
-config.PlayersXY[3].dealerButtonX = config.PlayersXY[3].x;
-config.PlayersXY[3].dealerButtonY = config.PlayersXY[3].y + config.nameWinPerBoxHeight;
-config.PlayersXY[4].dealerButtonX = config.PlayersXY[4].x - config.dealerButtonRadius*2;
-config.PlayersXY[4].dealerButtonY = config.PlayersXY[4].y + config.nameWinPerBoxHeight;
-config.PlayersXY[5].dealerButtonX = config.PlayersXY[5].x - config.displayCardWidth - config.dealerButtonRadius;
-config.PlayersXY[5].dealerButtonY = config.PlayersXY[5].y;
-config.PlayersXY[6].dealerButtonX = config.PlayersXY[6].x - config.dealerButtonRadius*2;
-config.PlayersXY[6].dealerButtonY = config.PlayersXY[6].y - config.displayCardHeight - config.dealerButtonRadius*2;
-config.PlayersXY[7].dealerButtonX = config.PlayersXY[7].x;
-config.PlayersXY[7].dealerButtonY = config.PlayersXY[7].y - config.displayCardHeight - config.dealerButtonRadius*2;
-config.PlayersXY[8].dealerButtonX = config.PlayersXY[8].x;
-config.PlayersXY[8].dealerButtonY = config.PlayersXY[8].y - config.displayCardHeight - config.dealerButtonRadius*2;
-config.PlayersXY[9].dealerButtonX = config.PlayersXY[9].x + config.dealerButtonRadius*2;
-config.PlayersXY[9].dealerButtonY = config.PlayersXY[9].y - config.displayCardHeight - config.dealerButtonRadius*2;
-
 
 var cards = [
 	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
@@ -224,6 +171,18 @@ $("#changeInputMode").change(function(){
 		'<input type="text" onkeydown="keyDown();" id="inputArea" class="form-control">';
 });
 
+$("#changeArrangement").change(function(){
+	switch ($(this).val()) {
+		case '上下':
+			calcUpAndDownXYs();
+			break;
+		case '左右':
+			calcLeftAndRightXYs();
+			break;
+	}
+	drawTableInfo(tableInfo);
+});
+
 $("#changeBackground").change(function(){
 	backgroundColor = $(this).val();
 });
@@ -242,25 +201,12 @@ $(function(){
 	var canvas = $('#canvas').get(0);
 	config.ctxForVideo = canvasForVideo.getContext("2d");
 	config.ctx = canvas.getContext("2d");
+	calcUpAndDownXYs();
 });
 
-socket.on('tableInfo', function(tableInfo) {
-	var players = tableInfo.players;
-	var board = tableInfo.board;
-	drawBackGround();
-	for (var key in players) {
-		var player = players[key];
-		if (!player) continue;
-		drawBox(player.seatId);
-		if (player.isActive == true) {
-			drawPlayerHands(player.seatId, player.hand);
-		}
-		drawPlayerWinperAndName(player.seatId, player.win, player.tie, player.name, player.isActive);
-		if (board && board.length > 0) {
-			drawBoard(board)
-		}
-	}
-	drawDealerButton(tableInfo.button);
+socket.on('tableInfo', function(getTableInfo) {
+	tableInfo = getTableInfo;
+	drawTableInfo(tableInfo);
 });
 
 socket.on('passWord', function(getPassWord) {
@@ -278,6 +224,25 @@ setInterval(function(){
 }, 50);
 
 // ここからフロント表示部分の関数
+function drawTableInfo(tableInfo) {
+	var players = tableInfo.players;
+	var board = tableInfo.board;
+	drawBackGround();
+	for (var key in players) {
+		var player = players[key];
+		if (!player) continue;
+		drawBox(player.seatId);
+		if (player.isActive == true) {
+			drawPlayerHands(player.seatId, player.hand);
+		}
+		drawPlayerWinperAndName(player.seatId, player.win, player.tie, player.name, player.isActive);
+		if (board && board.length > 0) {
+			drawBoard(board)
+		}
+	}
+	drawDealerButton(tableInfo.button);
+}
+
 function drawBackGround() {
 	config.ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
 }
@@ -289,7 +254,7 @@ function drawBox(seatId) {
 	setColorAndFont('black', 0);
 	config.ctx.fillRect(
 		config.PlayersXY[seatId].nameX,
-		config.PlayersXY[seatId].y,
+		config.PlayersXY[seatId].nameY,
 		config.boxWidth,
 		parseInt(config.nameWinPerBoxHeight/2)
 	);
@@ -297,7 +262,7 @@ function drawBox(seatId) {
 	// drawY += halfBoxHeight;
 	config.ctx.fillRect(
 		config.PlayersXY[seatId].winPerX,
-		config.PlayersXY[seatId].y + parseInt(config.nameWinPerBoxHeight/2),
+		config.PlayersXY[seatId].winPerY,
 		config.boxWidth,
 		parseInt(config.nameWinPerBoxHeight/2)
 	);
@@ -316,7 +281,7 @@ function drawDealerButton(seatId) {
 	setColorAndFont('white', 0);
 	config.ctx.beginPath();
 	config.ctx.arc(
-		config.PlayersXY[seatId].dealerButtonX,
+		config.PlayersXY[seatId].dealerButtonX + config.dealerButtonRadius,
 		config.PlayersXY[seatId].dealerButtonY + config.dealerButtonRadius,
 		config.dealerButtonRadius,
 		0,
@@ -328,7 +293,7 @@ function drawDealerButton(seatId) {
 	//drawX -= radius/2; drawY += radius/2;
 	config.ctx.fillText(
 		'D',
-		config.PlayersXY[seatId].dealerButtonX - parseInt(config.dealerButtonRadius/2),
+		config.PlayersXY[seatId].dealerButtonX + config.dealerButtonRadius - parseInt(config.dealerButtonRadius/2),
 		config.PlayersXY[seatId].dealerButtonY + parseInt(config.dealerButtonRadius*3/2)
 	);
 }
@@ -350,13 +315,21 @@ function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 	//var drawX = Math.floor(seatId/5)*(config.canvasWidth - config.boxWidth) + 3;
 	//var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + config.fontSize - 2;
 	if (playerName) {
-		config.ctx.fillText(playerName, config.PlayersXY[seatId].nameX, config.PlayersXY[seatId].nameY);
+		config.ctx.fillText(
+			playerName,
+			config.PlayersXY[seatId].nameX,
+			config.PlayersXY[seatId].nameY + config.fontSize + config.nameFontMargin
+		);
 	}
 	//drawY += config.fontSize;
 	if (typeof isActive == 'undefined') return;
 	setColorAndFont('black', config.fontSize);
 	if (isActive == false) {
-		config.ctx.fillText('Fold', config.PlayersXY[seatId].winPerX, config.PlayersXY[seatId].winPerY);
+		config.ctx.fillText(
+			'Fold',
+			config.PlayersXY[seatId].winPerX,
+			config.PlayersXY[seatId].winPerY + config.fontSize + config.nameFontMargin
+		);
 		return;
 	}
 	if (winPer) {
@@ -369,14 +342,18 @@ function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 				setColorAndFont('black', config.tieFontSize);
 			}
 		}
-		config.ctx.fillText(drawPercent, config.PlayersXY[seatId].winPerX, config.PlayersXY[seatId].winPerY);
+		config.ctx.fillText(
+			drawPercent,
+			config.PlayersXY[seatId].winPerX,
+			config.PlayersXY[seatId].winPerY + config.fontSize + config.nameFontMargin
+		);
 	}
 }
 
 function drawBoard(board) {
 	setColorAndFont('green', 0);
 	var drawX = Number(config.canvasWidth/2)-Number(config.boardWidth/2);
-	var drawY = config.canvasHeight - config.boxHeight - config.boardHeight;
+	var drawY = config.canvasHeight - config.boxHeight - config.dealerButtonRadius*2 - config.boardHeight;
 	config.ctx.fillRect(drawX, drawY, config.boardWidth, config.boardHeight);
 	drawX += config.boardWidthSpace;
 	drawY += config.boardHeightSpace;
@@ -418,6 +395,132 @@ function drawCard(card,x,y) {
 			config.ctx.fillText('♥', drawX+config.markAdjust, drawY);
 			return;
 	}
+}
+
+/**
+ * 上下配置の座標計算。
+ * 計算する座標は左上の座標
+ */
+function calcUpAndDownXYs() {
+	var centerY = parseInt(config.canvasHeight/2);
+	var contentsCenterY = centerY - parseInt((config.displayCardHeight + config.nameWinPerBoxHeight)/2);
+	config.PlayersXY[0] = {x:0, y:contentsCenterY};
+	config.PlayersXY[0].dealerButtonX = config.PlayersXY[0].x + config.displayCardWidth*2;
+	config.PlayersXY[0].dealerButtonY = config.PlayersXY[0].y + config.displayCardHeight;
+	for (var i=0; i<4; i++) {
+		var seatId = i+1;
+		var positionWidth = parseInt(config.canvasWidth / 4);
+		var positionX     = i * positionWidth + parseInt(positionWidth/2) - parseInt(config.boxWidth/2);
+		config.PlayersXY[seatId] = {x:positionX, y:0};
+		config.PlayersXY[seatId].dealerButtonX = positionX + parseInt(config.boxWidth/2) - config.dealerButtonRadius;
+		config.PlayersXY[seatId].dealerButtonY = config.boxHeight;
+	}
+	config.PlayersXY[5] = {x:config.canvasWidth-config.boxWidth, y:contentsCenterY};
+	config.PlayersXY[5].dealerButtonX = config.PlayersXY[5].x - config.dealerButtonRadius*2;
+	config.PlayersXY[5].dealerButtonY = config.PlayersXY[5].y + config.displayCardHeight;
+	for (var i=0; i<4; i++) {
+		var seatId = i+6;
+		var positionWidth = parseInt(config.canvasWidth / 4);
+		var positionX = (3-i) * positionWidth + parseInt(positionWidth/2) - parseInt(config.boxWidth/2);
+		config.PlayersXY[seatId] = {x:positionX, y:config.canvasHeight - config.boxHeight};
+		config.PlayersXY[seatId].dealerButtonX = positionX + parseInt(config.boxWidth/2) - config.dealerButtonRadius;
+		config.PlayersXY[seatId].dealerButtonY = config.canvasHeight - config.boxHeight - config.dealerButtonRadius*2;
+	}
+	// ハンド座標と名前座標の計算
+	for (var seatId=0; seatId<10; seatId++) {
+		calcHandNameWinPerPositions(seatId);
+	}
+}
+
+/**
+ * 左右配置の座標計算。
+ * 計算する座標は左上の座標
+ */
+function calcLeftAndRightXYs() {
+	// 左側
+	var positionHeight = parseInt(config.canvasHeight/5);
+	for (var seatId=0; seatId<5; seatId++) {
+		config.PlayersXY[seatId] = {x:0, y:(positionHeight*seatId)};
+		config.PlayersXY[seatId].dealerButtonX = config.PlayersXY[seatId].x + config.displayCardWidth*2;
+		config.PlayersXY[seatId].dealerButtonY = config.PlayersXY[seatId].y + config.displayCardHeight;
+		calcHandNameWinPerPositions(seatId); // ハンド座標と名前座標の計算
+	}
+	// 右側
+	for (var seatId=5; seatId<10; seatId++) {
+		config.PlayersXY[seatId] = {
+			x:(config.canvasWidth - config.boxWidth),
+			y:(positionHeight*(seatId - 5))
+		};
+		config.PlayersXY[seatId].dealerButtonX = config.PlayersXY[seatId].x - config.dealerButtonRadius*2;
+		config.PlayersXY[seatId].dealerButtonY = config.PlayersXY[seatId].y + config.displayCardHeight;
+		calcHandNameWinPerPositions(seatId); // ハンド座標と名前座標の計算
+	}
+}
+
+function calcCenterXYs() {
+	var ringWidth  = config.canvasWidth  - config.displayCardWidth*2;
+	var ringHeight = config.canvasHeight - (config.displayCardHeight + config.nameWinPerBoxHeight);
+	// 端座標
+	config.PlayersXY[0] = {x:parseInt(ringWidth*0/5), y:parseInt(ringHeight*2/4)};
+	config.PlayersXY[1] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*1/4)};
+	config.PlayersXY[2] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*0/4)};
+	config.PlayersXY[3] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*0/4)};
+	config.PlayersXY[4] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*1/4)};
+	config.PlayersXY[5] = {x:parseInt(ringWidth*5/5), y:parseInt(ringHeight*2/4)};
+	config.PlayersXY[6] = {x:parseInt(ringWidth*4/5), y:parseInt(ringHeight*3/4)};
+	config.PlayersXY[7] = {x:parseInt(ringWidth*3/5), y:parseInt(ringHeight*4/4)};
+	config.PlayersXY[8] = {x:parseInt(ringWidth*2/5), y:parseInt(ringHeight*4/4)};
+	config.PlayersXY[9] = {x:parseInt(ringWidth*1/5), y:parseInt(ringHeight*3/4)};
+	// 一部の箇所だけ特殊処理
+	config.PlayersXY[1].x -= config.dealerButtonRadius;
+	config.PlayersXY[1].y -= config.dealerButtonRadius;
+	config.PlayersXY[4].x += config.dealerButtonRadius;
+	config.PlayersXY[4].y -= config.dealerButtonRadius;
+	config.PlayersXY[6].x += config.dealerButtonRadius;
+	config.PlayersXY[6].y += config.dealerButtonRadius;
+	config.PlayersXY[9].x -= config.dealerButtonRadius;
+	config.PlayersXY[9].y += config.dealerButtonRadius;
+	// ハンド座標と名前座標の計算
+	for (var seatId=0; seatId<10; seatId++) {
+		config.PlayersXY[seatId].x += config.displayCardWidth;
+		config.PlayersXY[seatId].y += parseInt((config.displayCardHeight + config.nameWinPerBoxHeight) / 2) - 3;
+		config.PlayersXY[seatId].handsX  = config.PlayersXY[seatId].x - config.displayCardWidth;
+		config.PlayersXY[seatId].handsY  = config.PlayersXY[seatId].y - config.displayCardHeight;
+		config.PlayersXY[seatId].nameX   = config.PlayersXY[seatId].x - config.displayCardWidth;
+		config.PlayersXY[seatId].nameY   = config.PlayersXY[seatId].y + config.fontSize - 2;
+		config.PlayersXY[seatId].winPerX = config.PlayersXY[seatId].x - config.displayCardWidth;
+		config.PlayersXY[seatId].winPerY = config.PlayersXY[seatId].y + config.nameWinPerBoxHeight - 2;
+	}
+	// ディーラーボタンの左上座標
+	config.PlayersXY[0].dealerButtonX = config.PlayersXY[0].x + config.displayCardWidth + config.dealerButtonRadius;
+	config.PlayersXY[0].dealerButtonY = config.PlayersXY[0].y;
+	config.PlayersXY[1].dealerButtonX = config.PlayersXY[1].x + config.dealerButtonRadius*2;
+	config.PlayersXY[1].dealerButtonY = config.PlayersXY[1].y + config.nameWinPerBoxHeight;
+	config.PlayersXY[2].dealerButtonX = config.PlayersXY[2].x;
+	config.PlayersXY[2].dealerButtonY = config.PlayersXY[2].y + config.nameWinPerBoxHeight;
+	config.PlayersXY[3].dealerButtonX = config.PlayersXY[3].x;
+	config.PlayersXY[3].dealerButtonY = config.PlayersXY[3].y + config.nameWinPerBoxHeight;
+	config.PlayersXY[4].dealerButtonX = config.PlayersXY[4].x - config.dealerButtonRadius*2;
+	config.PlayersXY[4].dealerButtonY = config.PlayersXY[4].y + config.nameWinPerBoxHeight;
+	config.PlayersXY[5].dealerButtonX = config.PlayersXY[5].x - config.displayCardWidth - config.dealerButtonRadius;
+	config.PlayersXY[5].dealerButtonY = config.PlayersXY[5].y;
+	config.PlayersXY[6].dealerButtonX = config.PlayersXY[6].x - config.dealerButtonRadius*2;
+	config.PlayersXY[6].dealerButtonY = config.PlayersXY[6].y - config.displayCardHeight - config.dealerButtonRadius*2;
+	config.PlayersXY[7].dealerButtonX = config.PlayersXY[7].x;
+	config.PlayersXY[7].dealerButtonY = config.PlayersXY[7].y - config.displayCardHeight - config.dealerButtonRadius*2;
+	config.PlayersXY[8].dealerButtonX = config.PlayersXY[8].x;
+	config.PlayersXY[8].dealerButtonY = config.PlayersXY[8].y - config.displayCardHeight - config.dealerButtonRadius*2;
+	config.PlayersXY[9].dealerButtonX = config.PlayersXY[9].x + config.dealerButtonRadius*2;
+	config.PlayersXY[9].dealerButtonY = config.PlayersXY[9].y - config.displayCardHeight - config.dealerButtonRadius*2;
+}
+
+function calcHandNameWinPerPositions(seatId) {
+	config.PlayersXY[seatId].handsX  = config.PlayersXY[seatId].x;
+	config.PlayersXY[seatId].handsY  = config.PlayersXY[seatId].y;
+	config.PlayersXY[seatId].nameX   = config.PlayersXY[seatId].x;
+	config.PlayersXY[seatId].nameY   = config.PlayersXY[seatId].y + config.displayCardHeight;
+	config.PlayersXY[seatId].winPerX = config.PlayersXY[seatId].x;
+	config.PlayersXY[seatId].winPerY = config.PlayersXY[seatId].y + config.displayCardHeight + config.nameBoxHeight;
 }
 
 function setColorAndFont(color, size) {
