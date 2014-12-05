@@ -6,6 +6,7 @@ var config = {
 var lastCard = '';
 var lastCardPassedTimeSec = 0.0;
 var readQRCodeIntervalTimeMSec = 50;
+var anikiMusicFileName = ['aniki1.wav','aniki2.mp3','aniki3.wav','aniki4.wav','aniki5.wav'];
 
 function sendImage(image) {
 	if (image == 'ng') image = 'nextGame';
@@ -18,7 +19,14 @@ function sendImage(image) {
 
 
 function sound() {
-	$("#sound-file").get(0).play();
+	// 選択されている表示文字列を取り出す
+	var fileName = $('[name=musicFileName] option:selected').text();
+	if (fileName == 'アニキランダム') {
+		fileName = anikiMusicFileName[Math.floor( Math.random() * anikiMusicFileName.length )];
+	}
+	// 置換処理
+	var fileName = fileName.replace(".", "\\.");
+	$("#" + fileName).get(0).play();
 }
 
 $(function(){
