@@ -17,6 +17,7 @@ var config = {
 	boardHeightSpace: 6,
 	cardFontSize: 26,
 	fontSize: 12,
+	visibility: 0.3,
 	PlayersXY: [],
 	nameFontMargin: 3
 };
@@ -205,8 +206,8 @@ $(function(){
 });
 
 socket.on('tableInfo', function(getTableInfo) {
+	drawTableInfo(getTableInfo);
 	tableInfo = getTableInfo;
-	drawTableInfo(tableInfo);
 });
 
 socket.on('passWord', function(getPassWord) {
@@ -224,14 +225,25 @@ setInterval(function(){
 }, 50);
 
 // ここからフロント表示部分の関数
-function drawTableInfo(tableInfo) {
-	var players = tableInfo.players;
-	var board = tableInfo.board;
+function drawTableInfo(getTableInfo) {
+	var players = getTableInfo.players;
+	var board = getTableInfo.board;
 	drawBackGround();
 	for (var key in players) {
 		var player = players[key];
 		if (!player) continue;
-		drawBox(player.seatId);
+		// FOLD検知
+		if (
+			tableInfo.players &&
+				tableInfo.players[key] &&
+				tableInfo.players[key].isActive == true &&
+				player.isActive == false
+			) {
+			tableInfo = getTableInfo;
+			foldMovie(key, 0);
+		}
+
+		drawBox(player.seatId, player.isActive);
 		if (player.isActive == true) {
 			drawPlayerHands(player.seatId, player.hand);
 		}
@@ -240,18 +252,18 @@ function drawTableInfo(tableInfo) {
 			drawBoard(board)
 		}
 	}
-	drawDealerButton(tableInfo.button);
+	drawDealerButton(getTableInfo.button);
 }
 
 function drawBackGround() {
 	config.ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
 }
 
-function drawBox(seatId) {
-	// var drawX = Math.floor(seatId/5)*(config.canvasWidth-config.boxWidth);
-	// var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight;
-	// var halfBoxHeight = Math.floor(config.boxHeight/2);
+function drawBox(seatId, isActive) {
 	setColorAndFont('black', 0);
+	if (isActive == false) {
+		config.ctx.fillStyle = 'rgba(0, 0, 0, '+ config.visibility +')';
+	}
 	config.ctx.fillRect(
 		config.PlayersXY[seatId].nameX,
 		config.PlayersXY[seatId].nameY,
@@ -259,7 +271,9 @@ function drawBox(seatId) {
 		parseInt(config.nameWinPerBoxHeight/2)
 	);
 	setColorAndFont('white', 0);
-	// drawY += halfBoxHeight;
+	if (isActive == false) {
+		config.ctx.fillStyle = 'rgba(255, 255, 255, '+ (config.visibility + 0.1) +')';
+	}
 	config.ctx.fillRect(
 		config.PlayersXY[seatId].winPerX,
 		config.PlayersXY[seatId].winPerY,
@@ -268,16 +282,6 @@ function drawBox(seatId) {
 	);
 }
 function drawDealerButton(seatId) {
-	/*
-	var radius = Math.floor(config.boxHeight/2);
-	var drawX = Math.floor(seatId/5)*(config.canvasWidth-config.boxWidth);
-	var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + radius;
-	if (seatId < 5) {
-		drawX += config.boxWidth + radius;
-	} else {
-		drawX -= radius;
-	}
-	*/
 	setColorAndFont('white', 0);
 	config.ctx.beginPath();
 	config.ctx.arc(
@@ -290,7 +294,6 @@ function drawDealerButton(seatId) {
 	);
 	config.ctx.fill();
 	setColorAndFont('green', config.fontSize+8);
-	//drawX -= radius/2; drawY += radius/2;
 	config.ctx.fillText(
 		'D',
 		config.PlayersXY[seatId].dealerButtonX + config.dealerButtonRadius - parseInt(config.dealerButtonRadius/2),
@@ -299,21 +302,35 @@ function drawDealerButton(seatId) {
 }
 
 function drawPlayerHands(playerId, playerHands) {
-	//var drawX = Math.floor(playerId/5)*(config.canvasWidth-config.boxWidth);
-	//var drawY = Math.floor(playerId%5)*config.displayHeight;
 	if (playerHands && playerHands[0]) {
 		drawCard(playerHands[0], config.PlayersXY[playerId].handsX, config.PlayersXY[playerId].handsY);
 	}
 	if (playerHands && playerHands[1]) {
-		//drawX += config.displayCardWidth;
 		drawCard(playerHands[1], config.PlayersXY[playerId].handsX + config.displayCardWidth, config.PlayersXY[playerId].handsY);
 	}
 }
 
+var foldAnimationYs = [0,6,10,12,12,12,10,6,0,3,5,6,6,6,5,3,0,1,1,0,0,0,0];
+function foldMovie(seatId, time) {
+	drawTableInfo(tableInfo);
+	if (time >= foldAnimationYs.length) return;
+
+	setColorAndFont('red', config.fontSize*2);
+	config.ctx.fillText(
+		'Fold',
+		config.PlayersXY[seatId].handsX + 2,
+		config.PlayersXY[seatId].handsY + config.displayCardHeight - foldAnimationYs[time]
+	);
+	setTimeout(
+		function(){ foldMovie(seatId, time+1); }, 50
+	);
+}
+
 function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 	setColorAndFont('white', config.fontSize);
-	//var drawX = Math.floor(seatId/5)*(config.canvasWidth - config.boxWidth) + 3;
-	//var drawY = Math.floor(seatId%5)*config.displayHeight + config.displayCardHeight + config.fontSize - 2;
+	if (isActive && isActive == false) {
+		config.ctx.fillStyle = 'rgba(255, 255, 255, '+ config.visibility +')';
+	}
 	if (playerName) {
 		config.ctx.fillText(
 			playerName,
@@ -321,17 +338,17 @@ function drawPlayerWinperAndName(seatId, winPer, tiePer, playerName, isActive) {
 			config.PlayersXY[seatId].nameY + config.fontSize + config.nameFontMargin
 		);
 	}
-	//drawY += config.fontSize;
 	if (typeof isActive == 'undefined') return;
-	setColorAndFont('black', config.fontSize);
 	if (isActive == false) {
+		config.ctx.fillStyle = 'rgba(0, 0, 0, '+ (config.visibility + 0.1) +')';
 		config.ctx.fillText(
 			'Fold',
-			config.PlayersXY[seatId].winPerX,
+			config.PlayersXY[seatId].winPerX + 2,
 			config.PlayersXY[seatId].winPerY + config.fontSize + config.nameFontMargin
 		);
 		return;
 	}
+	setColorAndFont('black', config.fontSize);
 	if (winPer) {
 		var win = Math.round(Number(winPer.slice(0, -1)) * 10 ) / 10;
 		var drawPercent = win + '％';
