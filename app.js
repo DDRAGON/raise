@@ -41,3 +41,5 @@ var createOddsSystemSocket = require("./socket/oddsSystemSocket");
 new createOddsSystemSocket(io);
 var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
 new createQrCodeReaderSocket(io);
+var createSignalingSocket = require("./socket/SignalingSocket");
+new createSignalingSocket(io);
