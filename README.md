@@ -12,12 +12,13 @@
     ```
     git clone https://github.com/DDRAGON/raise
     ```
-- 依存モジュール(express, stylus, sokect.io, jade)をインストールする
+- 依存モジュール(express, stylus, async, sokect.io, jade)をインストールする
 
     ```
     cd raise
     npm install express
     npm install stylus
+    npm install async
     npm install sokect.io
     npm install jade
     ```
