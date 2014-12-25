@@ -1,9 +1,12 @@
 var socket = io.connect('http://'+hostAddress+'/oddsSystem');
 var easyMode = false;
+var assistantMode = 'Original';
 var mark = '';
 var num  = '　'
 var passWord = '';
 var backgroundColor = 'camera';
+var canvasForVideo;
+var canvas;
 var tableInfo = {};
 var config = {
 	canvasWidth:  640,
@@ -16,7 +19,7 @@ var config = {
 	boardWidthSpace:  6,
 	boardHeightSpace: 6,
 	cardFontSize: 26,
-	fontSize: 12,
+	fontSize: 14,
 	visibility: 0.3,
 	PlayersXY: [],
 	nameFontMargin: 3
@@ -50,6 +53,9 @@ var cardsForEasyMode = [
 	'Tf', '2f', '3f', '4f', '5f', '6f', '7f', '8f', '9f', 'Qf', 'Wf', 'Ef', 'Rf'
 ];
 
+var ASSISTANT_MODE_ORIGINAL = 'Original';
+var ASSISTANT_MODE_ASSISTANT = 'Assistant';
+
 
 function markClick(mark) {
 	this.mark = mark;
@@ -62,7 +68,10 @@ function numClick(num) {
 }
 
 function sendImage(image) {
-	socket.emit('imageSend', image);
+	socket.emit('imageSendWithPassWord', {
+		image: image,
+		passWord: $('#passwordArea').val()
+	});
 	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
@@ -144,18 +153,20 @@ function keyUpPlayer(seatId) {
 	var updateName = $('#inputPlayer'+seatId).val();
 	socket.emit('updatePlayerName', {
 		seatId: seatId,
-		name: updateName
+		name: updateName,
+		passWord: $('#passwordArea').val()
 	});
 }
 function deletePlayer(seatId) {
 	$('#inputPlayer'+seatId).val('');
 	socket.emit('updatePlayerName', {
 		seatId: seatId,
-		name: ""
+		name: "",
+		passWord: $('#passwordArea').val()
 	});
 }
-function moveDealerButton() {
-	socket.emit('moveDealerButton', {});
+function keyUpAssistantPassword() {
+	socket.emit('updateAssistantPassword', $('#passwordArea').val());
 }
 
 $("#changeInputMode").change(function(){
@@ -170,6 +181,21 @@ $("#changeInputMode").change(function(){
 	}
 	document.getElementById("inputArea").innerHTML =
 		'<input type="text" onkeydown="keyDown();" id="inputArea" class="form-control">';
+});
+
+$("#changeAssistantMode").change(function(){
+	assistantMode = $(this).val();
+	socket.emit('changeAssistantMode', assistantMode);
+	var outPutHtml = '<span style="color:#000000;font-size:18px;">　'+assistantMode+'</span>';
+	switch (assistantMode) {
+		case 'Original':
+			socket.emit('updateAssistantPassword', "");
+			break;
+		case 'Assistant':
+			outPutHtml += '<br>pass word:<input type="password" onkeyup="keyUpAssistantPassword();" id="passwordArea">';
+			break;
+	}
+	$('#AssistantModeDisplay').html(outPutHtml);
 });
 
 $("#changeArrangement").change(function(){
@@ -198,8 +224,8 @@ function sound() {
 }
 
 $(function(){
-	var canvasForVideo = $('#canvasForVideo').get(0);
-	var canvas = $('#canvas').get(0);
+	canvasForVideo = $('#canvasForVideo').get(0);
+	canvas = $('#canvas').get(0);
 	config.ctxForVideo = canvasForVideo.getContext("2d");
 	config.ctx = canvas.getContext("2d");
 	calcUpAndDownXYs();
@@ -216,15 +242,19 @@ socket.on('passWord', function(getPassWord) {
 
 // ビデオの描画
 setInterval(function(){
+	if (!config.ctxForVideo) return;
 	if (backgroundColor === 'camera') {
+		// 背景カメラモードならカメラを描画
 		config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
 		return;
 	}
+	// その他は背景を色で塗りつぶす。
 	config.ctxForVideo.fillStyle = backgroundColor;
 	config.ctxForVideo.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
 }, 50);
 
 // ここからフロント表示部分の関数
+
 function drawTableInfo(getTableInfo) {
 	var players = getTableInfo.players;
 	var board = getTableInfo.board;
@@ -253,6 +283,7 @@ function drawTableInfo(getTableInfo) {
 		}
 	}
 	drawDealerButton(getTableInfo.button);
+	updateInputPlayerNames(players);
 }
 
 function drawBackGround() {
@@ -411,6 +442,18 @@ function drawCard(card,x,y) {
 			setColorAndFont('red', config.markFontSize);
 			config.ctx.fillText('♥', drawX+config.markAdjust, drawY);
 			return;
+	}
+}
+
+// プレイヤー書き込み一覧の書き換え
+function updateInputPlayerNames(players) {
+	for (var seatId=0; seatId<10; seatId++) {
+		if (players[seatId]) {
+			var player = players[seatId];
+			$('#inputPlayer'+seatId).val(player.name);
+		} else {
+			$('#inputPlayer'+seatId).val('');
+		}
 	}
 }
 

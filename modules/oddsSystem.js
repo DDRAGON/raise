@@ -2,7 +2,10 @@ var async = require('async');
 var request = require('request');
 Config = require('../config');
 
+var ASSISTANT_MODE_ORIGINAL = 'Original';
+var ASSISTANT_MODE_ASSISTANT = 'Assistant';
 var clients = {};
+var assistantsMapByOriginalSocketId = {};
 
 
 function connect(socket)
@@ -19,6 +22,7 @@ function connect(socket)
 
 function gotImage(socketId, image)
 {
+	if (!clients[socketId]) return;
 	switch (image) {
 		case 'start': gotStart(socketId); break;
 		case 'preFlop': gotPreFlop(socketId); break;
@@ -29,6 +33,7 @@ function gotImage(socketId, image)
 }
 
 function updatePlayerName(socketId, seatId, name) {
+	if (!clients[socketId]) return;
 	if (typeof clients[socketId].frontObj.players[seatId] == 'undefined') {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
@@ -42,20 +47,50 @@ function updatePlayerName(socketId, seatId, name) {
 	sendTableInfo(socketId);
 }
 
-function moveDealerButton(socketId) {
-	clients[socketId].frontObj.button = findNextDealerButton(socketId, clients[socketId].frontObj.button);
-	sendTableInfo(socketId);
+// アシスタントパスワードの変更
+function updateAssistantPassword(socket, socketId, assistantPassword) {
+	if (clients[assistantPassword]) { // オリジナルが見つかっ場合、アシスタントの作成
+		if (!assistantsMapByOriginalSocketId[assistantPassword]) {
+			assistantsMapByOriginalSocketId[assistantPassword] = [];
+		}
+		assistantsMapByOriginalSocketId[assistantPassword].push ({
+			socketId: socketId,
+			socket: socket,
+			originalSocketId: assistantPassword
+		});
+		sendTableInfo(assistantPassword); // アシスタントを作ったら現在のテーブル情報を送る。
+	} else { // オリジナルが見つからない場合
+		deleteAssistant(socketId); // アシスタントの削除
+	}
 }
 
+// アシスタントモードの変更
+function changeAssistantMode(socket, socketId, assistantMode) {
+	if (assistantMode === ASSISTANT_MODE_ORIGINAL) { // オリジナルに変更ならば
+		deleteAssistant(socketId); // アシスタントを削除
+		connect(socket); // オリジナルの作成
+	}
+	if (assistantMode === ASSISTANT_MODE_ASSISTANT) { // アシスタントに変更ならば
+		deleteOriginal(socketId); // オリジナルを削除
+	}
+}
+
+// 接続切断
 function disconnect(socketId) {
-	delete clients[socketId];
+	if (clients[socketId]) { // オリジナルが切断したとき。
+		deleteOriginal(socketId);
+		return;
+	}
+	// オリジナルでない時はアシスタントを探し、いいたら削除する。
+	deleteAssistant(socketId); return;
 }
 
 module.exports = {
 	connect: connect,
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
-	moveDealerButton: moveDealerButton,
+	updateAssistantPassword: updateAssistantPassword,
+	changeAssistantMode: changeAssistantMode,
 	disconnect: disconnect
 };
 
@@ -244,8 +279,22 @@ function addCardToBoard(socketId, card) {
 	clients[socketId].frontObj.board.push(card);
 }
 
-function sendTableInfo(socketId) {
-	clients[socketId].socket.emit('tableInfo', clients[socketId].frontObj);
+function sendTableInfo(originalSocketId) {
+	var tableInfo = clients[originalSocketId].frontObj;
+	clients[originalSocketId].socket.emit('tableInfo', tableInfo); // オリジナルに送信
+	// アシスタントに送信
+	if (assistantsMapByOriginalSocketId[originalSocketId]) {
+		for (var key in assistantsMapByOriginalSocketId[originalSocketId]) {
+			var assistant = assistantsMapByOriginalSocketId[originalSocketId][key];
+			assistant.socket.emit('tableInfo', tableInfo); // 送信
+		}
+	}
+}
+
+// ディーラーボタンを移動する
+function moveDealerButton(socketId) {
+	clients[socketId].frontObj.button = findNextDealerButton(socketId, clients[socketId].frontObj.button);
+	sendTableInfo(socketId);
 }
 
 function findNextDealerButton(socketId, button) {
@@ -261,6 +310,38 @@ function findNextDealerButton(socketId, button) {
 	return firstSeatId;
 }
 
+// アシスタントsocketIdからオリジナルsocketIdを求める。
+function getOriginalSocketIdByAssistantSocketId(assistantSocketId) {
+	for (var originalSocketId in assistantsMapByOriginalSocketId) {
+		var assistants = assistantsMapByOriginalSocketId[originalSocketId];
+		for (var key in assistants) {
+			var assistant = assistants[key];
+			if (assistant.socketId === assistantSocketId) { // アシスタントが見つかったら。
+				return originalSocketId;
+			}
+		}
+	}
+	return false; // 見つからなかったらfalseを返す。
+}
+
+// オリジナルを削除
+function deleteOriginal(socketId) {
+	delete clients[socketId];
+}
+
+// アシスタントを削除
+function deleteAssistant(assistantSocketId) {
+	for (var originalSocketId in assistantsMapByOriginalSocketId) {
+		var assistants = assistantsMapByOriginalSocketId[originalSocketId];
+		for (var key in assistants) {
+			var assistant = assistants[key];
+			if (assistant.socketId === assistantSocketId) { // アシスタントが見つかったら。
+				delete assistantsMapByOriginalSocketId[originalSocketId][key]; // 削除
+				return;
+			}
+		}
+	}
+}
 
 // 降りたプレーヤーが出た時に勝率を再計算する。
 function foldedAndRecalculation(socketId, seatId) {
