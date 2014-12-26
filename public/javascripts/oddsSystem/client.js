@@ -1,9 +1,11 @@
 var socket = io.connect('http://'+hostAddress+'/oddsSystem');
 var easyMode = false;
+var assistantMode = 'Original';
 var mark = '';
 var num  = '　'
 var passWord = '';
 var background = 'camera';
+var canvasForVideo;
 var tableInfo = {};
 var config = {
 	canvasWidth:  640,
@@ -16,7 +18,7 @@ var config = {
 	boardWidthSpace:  6,
 	boardHeightSpace: 6,
 	cardFontSize: 26,
-	fontSize: 12,
+	fontSize: 14,
 	visibility: 0.3,
 	PlayersXY: [],
 	nameFontMargin: 3
@@ -37,22 +39,27 @@ config.boardHeight = config.cardFontSize + config.boardHeightSpace*2;
 config.tieFontSize = config.fontSize - 4;
 config.dealerButtonRadius = parseInt(config.nameWinPerBoxHeight/2);
 
-var cards = [
-	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
-	'Ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', 'Th', 'Jh', 'Qh', 'Kh',
-	'Ad', '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', 'Td', 'Jd', 'Qd', 'Kd',
-	'Ac', '2c', '3c', '4c', '5c', '6c', '7c', '8c', '9c', 'Tc', 'Jc', 'Qc', 'Kc'
-];
-var cardsForEasyMode = [
-	'Ta', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', 'Qa', 'Wa', 'Ea', 'Ra',
-	'Ts', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Qs', 'Ws', 'Es', 'Rs',
-	'Td', '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', 'Qd', 'Wd', 'Ed', 'Rd',
-	'Tf', '2f', '3f', '4f', '5f', '6f', '7f', '8f', '9f', 'Qf', 'Wf', 'Ef', 'Rf'
-];
+var ASSISTANT_MODE_ORIGINAL = 'Original';
+var ASSISTANT_MODE_ASSISTANT = 'Assistant';
 
-function moveDealerButton() {
-	socket.emit('moveDealerButton', {});
+function keyUpAssistantPassword() {
+	socket.emit('updateAssistantPassword', $('#passwordArea').val());
 }
+
+$("#changeAssistantMode").change(function(){
+	assistantMode = $(this).val();
+	socket.emit('changeAssistantMode', assistantMode);
+	var outPutHtml = '<span style="color:#000000;font-size:18px;">　'+assistantMode+'</span>';
+	switch (assistantMode) {
+		case 'Original':
+			socket.emit('updateAssistantPassword', "");
+			break;
+		case 'Assistant':
+			outPutHtml += '<br>pass word:<input type="password" onkeyup="keyUpAssistantPassword();" id="passwordArea">';
+			break;
+	}
+	$('#AssistantModeDisplay').html(outPutHtml);
+});
 
 function sound() {
 	var str = "";
@@ -64,7 +71,7 @@ function sound() {
 }
 
 $(function(){
-	var canvasForVideo = $('#canvasForVideo').get(0);
+	canvasForVideo = $('#canvasForVideo').get(0);
 	config.ctxForVideo = canvasForVideo.getContext("2d");
 });
 
@@ -84,15 +91,19 @@ socket.on('passWord', function(getPassWord) {
 
 // ビデオの描画
 setInterval(function(){
+	if (!config.ctxForVideo) return;
 	if (background === 'camera') {
+		// 背景カメラモードならカメラを描画
 		config.ctxForVideo.drawImage(video, 0, 0, config.canvasWidth, config.canvasHeight);
 		return;
 	}
+	// その他は背景を色で塗りつぶす。
 	config.ctxForVideo.fillStyle = background;
 	config.ctxForVideo.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
 }, 50);
 
 // ここからフロント表示部分の関数
+
 function drawTableInfo(getTableInfo) {
 	var players = getTableInfo.players;
 	var board = getTableInfo.board;

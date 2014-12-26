@@ -5,16 +5,28 @@ var createOddsSystemSocket = function(io) {
 
 		oddsSystem.connect(socket);
 
-		socket.on('imageSend', function(image) {
-			oddsSystem.gotImage(socket.id, image);
+		socket.on('imageSendWithPassWord', function(data) {
+			var socketId = socket.id;
+			if (data.passWord) {
+				socketId = data.passWord;
+			}
+			oddsSystem.gotImage(socketId, data.image);
 		});
 
 		socket.on('updatePlayerName', function(data) {
-			oddsSystem.updatePlayerName(socket.id, data.seatId, data.name);
+			var socketId = socket.id;
+			if (data.passWord) {
+				socketId = data.passWord;
+			}
+			oddsSystem.updatePlayerName(socketId, data.seatId, data.name);
 		});
 
-		socket.on('moveDealerButton', function(data) {
-			oddsSystem.moveDealerButton(socket.id);
+		socket.on('updateAssistantPassword', function(assistantPassword) {
+			oddsSystem.updateAssistantPassword(socket, socket.id, assistantPassword);
+		});
+
+		socket.on('changeAssistantMode', function(assistantMode) {
+			oddsSystem.changeAssistantMode(socket, socket.id, assistantMode);
 		});
 
 		socket.on('disconnect', function() {

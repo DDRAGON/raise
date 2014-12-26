@@ -57,17 +57,19 @@ block content
 		div(id="center_pane" style="float:left;")
 
 			div(style="position:absolute;")
-				// video canvas
 				canvas(id="canvasForVideo" width="640" height="360" style="float:left;")
-				// video canvas
+
 			div(style="position:relative")
-				// canvas
 				canvas(id="canvas" width="640" height="360" style="float:left;")
 				div(id="canvas_pane" style="position:absolute; width:640px; height:360px;")
+
+					// Board
 					div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:225px; left:203px;")
 						div(style="overflow:hidden; margin: 5px 5px;")
 							for boardId, key in [0,1,2,3,4]
 								div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
+
+					// PlayerBox
 					for seatId, key in [0,1,2,3,4,5,6,7,8,9]
 						div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
 							div(id="player#{seatId}Hand" class="cardHolder")
@@ -78,10 +80,9 @@ block content
 								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
 								div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId}
 							div(id="player#{seatId}Odds" style="clear:both; display:inline-block;")
-				// canvas
 
 			hr(class="featurette-divider")
-			
+
 			<!-- card selections -->
 			div(id="card_selector" style="float: left; margin-top: 10px;")
 				div(id="suit_selector" class="btn-group" style="float: left;margin-right: 10px;")
@@ -117,6 +118,17 @@ block content
 				div(id="image" width="300")
 					span(style="color:#000;font-size:64px;")
 						text 　
+
+			div(style="float: left;")
+				text Assistant mode
+				br
+				select(id="changeAssistantMode")
+					option(value="Original") Original
+					option(value="Assistant") Assistant
+			div(style="float: left;")
+				div(id="AssistantModeDisplay" width="300")
+					span(style="color:#000;font-size:18px;")
+						text 　Original
 			// card selections
 
 		// game progression
@@ -155,9 +167,9 @@ block content
 				p(class="pull-right")
 					a(href="#") Back to top
 				p
-					&copy; 2014 DWPC Tech. &middot;
+					text &copy; 2014 DWPC Tech. &middot;
 					a(href="#") Privacy
-					&middot;
+					text &middot;
 					a(href="#") Terms
 		// footer
 		
