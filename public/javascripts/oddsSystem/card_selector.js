@@ -23,11 +23,14 @@ function numClick(num) {
 }
 
 function sendImage(image) {
-	socket.emit('imageSend', image);
+	socket.emit('imageSendWithPassWord', {
+		image: image,
+		passWord: $('#passwordArea').val()
+	});
 	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
-	this.num  = '　';
+	this.num = '　';
 	drawImage();
 	drawSentImage(image);
 	if (image == 'start') {
@@ -105,7 +108,7 @@ function keyDown() {
 $("#changeInputMode").change(function(){
 	switch ($(this).val()) {
 		case 'easy':
-			easyMode = true;  break;
+			easyMode = true; break;
 		case 'normal':
 			easyMode = false; break;
 		case 'qrCode':

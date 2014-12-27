@@ -25,18 +25,39 @@ function setLocationRound(){
 	$('#player9Box').css({left:"40px", top:"294px"});
 }
 
+function keyUpAssistantPassword() {
+	socket.emit('updateAssistantPassword', $('#passwordArea').val());
+}
+
+$("#changeAssistantMode").change(function(){
+	assistantMode = $(this).val();
+	socket.emit('changeAssistantMode', assistantMode);
+	var outPutHtml = '<span style="color:#000000;font-size:18px;">　'+assistantMode+'</span>';
+	switch (assistantMode) {
+		case 'Original':
+			socket.emit('updateAssistantPassword', "");
+			break;
+		case 'Assistant':
+			outPutHtml += '<br>pass word:<input type="password" onkeyup="keyUpAssistantPassword();" id="passwordArea">';
+			break;
+	}
+	$('#AssistantModeDisplay').html(outPutHtml);
+});
+
 function changePlayerName(seatId) {
 	var updateName = $('#inputPlayer'+seatId).val();
 	socket.emit('updatePlayerName', {
 		seatId: seatId,
-		name: updateName
+		name: updateName,
+		passWord: $('#passwordArea').val()
 	});
 }
 function deletePlayer(seatId) {
 	$('#inputPlayer'+seatId).val('');
 	socket.emit('updatePlayerName', {
 		seatId: seatId,
-		name: ""
+		name: "",
+		passWord: $('#passwordArea').val()
 	});
 }
 
@@ -50,17 +71,17 @@ $(function(){
 	});
 
 	$('#plain_form').on('click', function(){ $('.action_form').hide(); $('.chip_form').hide(); });
-  $('#plain_action_form').on('click', function(){ $('.action_form').show(); $('.chip_form').hide(); });
-  $('#plain_action_chip_form').on('click', function(){ $('.action_form').show(); $('.chip_form').show(); });
+	$('#plain_action_form').on('click', function(){ $('.action_form').show(); $('.chip_form').hide(); });
+	$('#plain_action_chip_form').on('click', function(){ $('.action_form').show(); $('.chip_form').show(); });
 
-  $("#changeArrangement").change(function(){
-  	switch ($(this).val()) {
-  		case '上下':
-  			setLocationRound();
-  			break;
-  		case '左右':
-  			setLocationSide();
-  			break;
-  	}
-  });
+	$("#changeArrangement").change(function(){
+		switch ($(this).val()) {
+			case '上下':
+				setLocationRound();
+				break;
+			case '左右':
+				setLocationSide();
+				break;
+		}
+	});
 });
