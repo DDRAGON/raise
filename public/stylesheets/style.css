@@ -17,9 +17,12 @@ a.mark {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
 }
+.list-group-item.stripe {
+  background-color: #f6f6f6;
+}
 /* canvas */
 .wall_camera {
-  background-color: #fff;
+  background-image: none;
 }
 .wall_wood {
   background-image: url("/image/background/wood.jpg");

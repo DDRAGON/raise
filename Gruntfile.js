@@ -9,10 +9,14 @@ module.exports = function(grunt){
 			min : {
 				files: {
 					"public/javascripts/oddsSystem/ugly.min.js" : [
+						"public/javascripts/oddsSystem/socket_event.js",
 						"public/javascripts/oddsSystem/video.js",
-						"public/javascripts/oddsSystem/client.js",
+						"public/javascripts/oddsSystem/video_layer.js",
+						"public/javascripts/oddsSystem/tableinfo_layer.js",
+						"public/javascripts/oddsSystem/tableinfo_layout.js",
+						"public/javascripts/oddsSystem/players.js",
 						"public/javascripts/oddsSystem/card_selector.js",
-						"public/javascripts/oddsSystem/layout.js"
+						"public/javascripts/oddsSystem/assistant.js"
 					],
 					"public/javascripts/qrCodeReader/ugly.min.js" : [
 						"public/javascripts/qrCodeReader/video.js",

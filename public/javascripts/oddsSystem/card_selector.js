@@ -1,4 +1,9 @@
-
+var passWord = '';
+var easyMode = false;
+var mark = '';
+var markRegExp = /[^shdc]/;
+var num = '　'
+var numRegExp = /[^2-9TJQKA]/;
 var cards = [
 	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
 	'Ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', 'Th', 'Jh', 'Qh', 'Kh',
@@ -12,6 +17,12 @@ var cardsForEasyMode = [
 	'Tf', '2f', '3f', '4f', '5f', '6f', '7f', '8f', '9f', 'Qf', 'Wf', 'Ef', 'Rf'
 ];
 
+function setPassword(pw) {
+	passWord = pw;
+}
+
+addUpdatePasswordListener(setPassword);
+
 function markClick(mark) {
 	this.mark = mark;
 	drawImage();
@@ -23,10 +34,7 @@ function numClick(num) {
 }
 
 function sendImage(image) {
-	socket.emit('imageSendWithPassWord', {
-		image: image,
-		passWord: $('#passwordArea').val()
-	});
+	emitImageSendWithPassWord(image, $('#passwordArea').val());
 	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
@@ -41,13 +49,11 @@ function sendImage(image) {
 }
 
 function sendCard() {
-	if (this.mark != 's' && this.mark != 'h' && this.mark != 'd' && this.mark != 'c') {
+	if ((this.mark+"").match(markRegExp)) {
 		$('#message').html('mark is invalid!');
 		return;
 	}
-	if (this.num != '2' && this.num != '3' && this.num != '4' && this.num != '5' && this.num != '6' &&
-		this.num != '7' && this.num != '8' && this.num != '9' && this.num != 'T' && this.num != 'J' &&
-		this.num != 'Q' && this.num != 'K' && this.num != 'A') {
+	if ((this.num+"").match(numRegExp)) {
 		$('#message').html('number is invalid!');
 		return;
 	}
@@ -56,31 +62,21 @@ function sendCard() {
 
 function drawImage() {
 	switch (this.mark) {
-		case 's':
-			$('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'♠</span>'); break;
-		case 'h':
-			$('#image').html('<span style="color:#ff0000;font-size:64px;">'+this.num+'♥</span>'); break;
-		case 'd':
-			$('#image').html('<span style="color:#0000ff;font-size:64px;">'+this.num+'♦</span>'); break;
-		case 'c':
-			$('#image').html('<span style="color:#00bb00;font-size:64px;">'+this.num+'♣</span>'); break;
-		default:
-			$('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'</span>'); break;
+		case 's':　$('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'♠</span>'); break;
+		case 'h':　$('#image').html('<span style="color:#ff0000;font-size:64px;">'+this.num+'♥</span>'); break;
+		case 'd':　$('#image').html('<span style="color:#0000ff;font-size:64px;">'+this.num+'♦</span>'); break;
+		case 'c':　$('#image').html('<span style="color:#00bb00;font-size:64px;">'+this.num+'♣</span>'); break;
+		default:   $('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'</span>'); break;
 	}
 }
 
 function drawSentImage(sentImage) {
 	switch (sentImage[1]) {
-		case 's':
-			$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'♠</span>'); break;
-		case 'h':
-			$('#sentImage').html('<span style="color:#ff0000;font-size:64px;">'+sentImage[0]+'♥</span>'); break;
-		case 'd':
-			$('#sentImage').html('<span style="color:#0000ff;font-size:64px;">'+sentImage[0]+'♦</span>'); break;
-		case 'c':
-			$('#sentImage').html('<span style="color:#00bb00;font-size:64px;">'+sentImage[0]+'♣</span>'); break;
-		default:
-			$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'</span>'); break;
+		case 's':	$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'♠</span>'); break;
+		case 'h':	$('#sentImage').html('<span style="color:#ff0000;font-size:64px;">'+sentImage[0]+'♥</span>'); break;
+		case 'd':	$('#sentImage').html('<span style="color:#0000ff;font-size:64px;">'+sentImage[0]+'♦</span>'); break;
+		case 'c':	$('#sentImage').html('<span style="color:#00bb00;font-size:64px;">'+sentImage[0]+'♣</span>'); break;
+		default: 	$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'</span>'); break;
 	}
 }
 
@@ -118,3 +114,13 @@ $("#changeInputMode").change(function(){
 	document.getElementById("inputArea").innerHTML =
 		'<input type="text" onkeydown="keyDown();" id="inputArea" class="form-control">';
 });
+
+function sound() {
+	var str = "";
+	str = str + "<EMBED id = 'id_sound'";
+	str = str + " SRC=/music/cursor6.wav";
+	str = str + " AUTOSTART='true'";
+	str = str + " HIDDEN='true'>";
+	document.getElementById("id_sound").innerHTML = str;
+}
+
