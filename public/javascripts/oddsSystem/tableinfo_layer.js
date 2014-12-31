@@ -1,4 +1,4 @@
-var lastTableInfo = {};
+var lastTableInfo = {}; // 直前に取得したテーブル情報
 
 // socket:tableInfo イベント処理
 function drawTableInfo(tableInfo) {
@@ -62,7 +62,7 @@ function displayBoard(board) {
 	if (!board || board.length <= 0) {
 		// clear
 		$('.board').fadeOut(200, function() {
-			$('.board.card').removeClass('s h d c').text('');
+			$('.board.card').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
 		});
 
 	} else {
@@ -70,10 +70,11 @@ function displayBoard(board) {
 		$('#board').show();
 		for (var key in board) {
 			var code = board[key];
-			$card = $('#board'+key);
-			$card.fadeIn();
-			$card.text(code.charAt(0));
-			$card.addClass(code.charAt(1));
+			$selector = $('#board'+key);
+			$selector.fadeIn();
+			$selector.text(code.charAt(0));
+			$selector.addClass('color_'+code.charAt(1));
+			$selector.addClass('mark_'+code.charAt(1));
 		}
 	}
 }
@@ -99,11 +100,12 @@ function displayHand(playerId, playerHands, isActive) {
 }
 function hideCard($selector) {
 	$selector.hide();
-	$selector.removeClass('s h d c').text('');
+	$selector.removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
 }
 function displayCard($selector, code) {
 	$selector.text(code.charAt(0));
-	$selector.addClass(code.charAt(1));
+	$selector.addClass('color_'+code.charAt(1));
+	$selector.addClass('mark_'+code.charAt(1));
 	$selector.fadeIn();
 }
 
@@ -125,15 +127,18 @@ function displayFold(seatId) {
 		.textillate('start');
 }
 
-function displayOdds(seatId, winPer, tiePer, playerName) {
+function displayOdds(seatId, winPer, tiePer) {
 	var $playerOdds = $('#player'+seatId+"Odds");
 	if(!winPer) {
 		// clear
-		$playerOdds.text('');
+		$playerOdds.hide();
 
 	} else {
 		//show
-		$playerOdds.text(createWinOdds(winPer) + createTieOdds(tiePer));
+		var odds = createWinOdds(winPer) + createTieOdds(tiePer);
+		$playerOdds
+		.text(odds)
+		.show()
 	}
 }
 function createWinOdds(winPer) {

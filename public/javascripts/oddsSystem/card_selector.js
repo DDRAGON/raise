@@ -1,9 +1,7 @@
 var passWord = '';
 var easyMode = false;
-var mark = '';
-var markRegExp = /[^shdc]/;
-var num = '　'
-var numRegExp = /[^2-9TJQKA]/;
+var markRegExp = /[shdc]/;
+var rankRegExp = /[2-9TJQKA]/;
 var cards = [
 	'As', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', 'Ts', 'Js', 'Qs', 'Ks',
 	'Ah', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', 'Th', 'Jh', 'Qh', 'Kh',
@@ -23,14 +21,25 @@ function setPassword(pw) {
 
 addUpdatePasswordListener(setPassword);
 
-function markClick(mark) {
-	this.mark = mark;
-	drawImage();
+function onClickProgression(progression) {
+	$("a.card_selector.mark").removeClass('active');
+	$("a.card_selector.rank").removeClass('active');
+	$("a.card_selector.progression").removeClass('active');
+	$("a#"+progression).addClass('active');
 }
 
-function numClick(num) {
-	this.num = num;
-	drawImage();
+function onClickMark(mark) {
+	$("a.card_selector.progression").removeClass('active');
+	$("a.card_selector.mark").removeClass('active');
+	$("a.card_selector.rank").removeClass('color_s color_h color_d color_c');
+	$("a#"+mark).addClass('active');
+	$("a.card_selector.rank").addClass('color_'+mark);
+}
+
+function onClickRank(rank) {
+	$("a.card_selector.progression").removeClass('active');
+	$("a.card_selector.rank").removeClass('active');
+	$("a#"+rank).addClass('active');
 }
 
 function sendImage(image) {
@@ -38,8 +47,7 @@ function sendImage(image) {
 	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
-	this.num = '　';
-	drawImage();
+	this.rank = '　';
 	drawSentImage(image);
 	if (image == 'start') {
 		for (var seatId=0; seatId<10; seatId++) {
@@ -48,26 +56,29 @@ function sendImage(image) {
 	}
 }
 
-function sendCard() {
-	if ((this.mark+"").match(markRegExp)) {
-		$('#message').html('mark is invalid!');
-		return;
-	}
-	if ((this.num+"").match(numRegExp)) {
-		$('#message').html('number is invalid!');
-		return;
-	}
-	sendImage(this.num+this.mark);
-}
+function onClickSend() {
+	var progression = $('.card_selector.progression.active').attr('id');
+	if(progression) {
+		// 進行
+		sendImage(progression);
 
-function drawImage() {
-	switch (this.mark) {
-		case 's':　$('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'♠</span>'); break;
-		case 'h':　$('#image').html('<span style="color:#ff0000;font-size:64px;">'+this.num+'♥</span>'); break;
-		case 'd':　$('#image').html('<span style="color:#0000ff;font-size:64px;">'+this.num+'♦</span>'); break;
-		case 'c':　$('#image').html('<span style="color:#00bb00;font-size:64px;">'+this.num+'♣</span>'); break;
-		default:   $('#image').html('<span style="color:#000000;font-size:64px;">'+this.num+'</span>'); break;
+	} else {
+		// カード
+		var mark = $('.card_selector.mark.active').attr('id');
+		if (!mark || !(mark+"").match(markRegExp)) {
+			$('#message').html('mark is invalid!');
+			return;
+		}
+		var rank = $('.card_selector.rank.active').attr('id');
+		if (!rank || !(rank+"").match(rankRegExp)) {
+			$('#message').html('number is invalid!');
+			return;
+		}
+		sendImage(rank+mark);
 	}
+	$("a.card_selector.mark").removeClass('active');
+	$("a.card_selector.rank").removeClass('active');
+	$("a.card_selector.progression").removeClass('active');
 }
 
 function drawSentImage(sentImage) {

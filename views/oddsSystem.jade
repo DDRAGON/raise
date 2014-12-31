@@ -47,7 +47,7 @@ block content
 				// change form visibility
 				li(class="list-group-item playerList 0 text-left")
 					div(class="btn-group btn-group-xs" role="group")
-						button(type="button" id="plain_form" class="btn btn-default") Plain
+						button(type="button" id="plain_form" class="btn btn-default") Name
 						button(type="button" id="plain_action_form" class="btn btn-default") +Action
 						button(type="button" id="plain_action_chip_form" class="btn btn-default") +Chip
 
@@ -78,25 +78,31 @@ block content
 							div(style="display:table;")
 								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
 								div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId}
-							div(id="player#{seatId}Odds" style="clear:both; display:inline-block;")
+							div(style="clear:both; display:inline-block;")
+								div(id="player#{seatId}Odds")
 
 			hr(class="featurette-divider")
 
 			<!-- card selections -->
 			div(id="card_selector" style="float: left; margin-top: 10px;")
-				div(id="suit_selector" class="btn-group" style="float: left;margin-right: 10px;")
-					a(id="s" onclick="markClick('s')" style="color:#222" class="btn btn-default btn-lg mark") &#9824;
-					a(id="h" onclick="markClick('h')" style="color:#F44" class="btn btn-default btn-lg mark") &#9829;
-					a(id="d" onclick="markClick('d')" style="color:#55F" class="btn btn-default btn-lg mark") &#9830;
-					a(id="c" onclick="markClick('c')" style="color:#393" class="btn btn-default btn-lg mark") &#9827;
-				div(id="num_selector" style="float: left;")
-					div(id="num_low_selector" class="btn-group")
-						for num, key in [2,3,4,5,6,7,8,9]
-							a(id="#{num}" onclick="numClick(#{num})" class="btn btn-default btn-lg num") #{num}
-				div
-					div(id="num_high_selector" class="btn-group")
-						for num, key in ['T','J','Q','K','A']
-							a(id="#{num}" onclick="numClick('#{num}')" class="btn btn-default btn-lg num") #{num}
+				div(style="clear:both; text-align: left")
+					div(id="suit_selector" class="btn-group")
+						a(id="s" onclick="onClickMark('s')" style="color:#FFF" class="btn btn-default btn-lg card_selector mark") &#9824;
+						a(id="h" onclick="onClickMark('h')" style="color:#F44" class="btn btn-default btn-lg card_selector mark") &#9829;
+						a(id="d" onclick="onClickMark('d')" style="color:#55F" class="btn btn-default btn-lg card_selector mark") &#9830;
+						a(id="c" onclick="onClickMark('c')" style="color:#393" class="btn btn-default btn-lg card_selector mark") &#9827;
+					div(id="progression_selector" class="btn-group" style="margin-left: 0px;")
+						a(id="nextGame" onclick="onClickProgression('nextGame')" class="btn btn-default btn-lg card_selector progression" style="width:98px") Next
+						a(id="resetGame" onclick="onClickProgression('resetGame')" class="btn btn-default btn-lg card_selector progression" style="width:98px") Reset
+				div(style="clear:both; text-align: left")
+					div(id="rank_low_selector" class="btn-group")
+						for rank, key in [2,3,4,5,6,7,8,9]
+							a(id="#{rank}" onclick="onClickRank(#{rank})" class="btn btn-default btn-lg card_selector rank") #{rank}
+					div
+						div(id="rank_high_selector" class="btn-group")
+							for rank, key in ['T','J','Q','K','A']
+								a(id="#{rank}" onclick="onClickRank('#{rank}')" class="btn btn-default btn-lg card_selector rank") #{rank}
+						a(onclick="onClickSend()" class="btn btn-success btn-lg pull-right card_selector" style="width:147px") Send
 
 			br
 			div(style="float: left;")
@@ -111,7 +117,6 @@ block content
 				input(type="text" onkeydown="keyDown();" id="inputArea" class="form-control")
 			div(style="float: left;")
 				p(class="text-danger" id="message" style="font-size:18px;")
-			a(onclick="sendCard()" class="btn btn-success btn-lg pull-right") Card Send
 
 			div(style="clear:both;")
 				div(id="image" width="300")
@@ -129,17 +134,6 @@ block content
 					span(style="color:#000;font-size:18px;")
 						text 　Original
 			// card selections
-
-		// game progression
-		div(class="btn-group-vertical")
-			a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
-				span(class="glyphicon glyphicon-chevron-right")
-				text Next Game
-			br
-			a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('resetGame')")
-				span(class="glyphicon glyphicon-chevron-right")
-				text Reset Game
-		// game progression
 
 		// 配置設定
 		div
