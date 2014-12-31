@@ -1,5 +1,3 @@
-var passWord = '';
-var easyMode = false;
 var markRegExp = /[shdc]/;
 var rankRegExp = /[2-9TJQKA]/;
 var cards = [
@@ -14,12 +12,6 @@ var cardsForEasyMode = [
 	'Td', '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', 'Qd', 'Wd', 'Ed', 'Rd',
 	'Tf', '2f', '3f', '4f', '5f', '6f', '7f', '8f', '9f', 'Qf', 'Wf', 'Ef', 'Rf'
 ];
-
-function setPassword(pw) {
-	passWord = pw;
-}
-
-addUpdatePasswordListener(setPassword);
 
 function onClickProgression(progression) {
 	$("a.card_selector.mark").removeClass('active');
@@ -43,12 +35,12 @@ function onClickRank(rank) {
 }
 
 function sendImage(image) {
-	emitImageSendWithPassWord(image, $('#passwordArea').val());
+	emitImageSendWithPassWord(image, $('#assistant_id').val());
 	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
 	this.rank = '　';
-	drawSentImage(image);
+	showBalloon(image);
 	if (image == 'start') {
 		for (var seatId=0; seatId<10; seatId++) {
 			$('#inputPlayer'+seatId).val('');
@@ -65,13 +57,8 @@ function onClickSend() {
 	} else {
 		// カード
 		var mark = $('.card_selector.mark.active').attr('id');
-		if (!mark || !(mark+"").match(markRegExp)) {
-			$('#message').html('mark is invalid!');
-			return;
-		}
 		var rank = $('.card_selector.rank.active').attr('id');
-		if (!rank || !(rank+"").match(rankRegExp)) {
-			$('#message').html('number is invalid!');
+		if (!mark || !rank || !(mark+"").match(markRegExp) || !(rank+"").match(rankRegExp)) {
 			return;
 		}
 		sendImage(rank+mark);
@@ -81,50 +68,35 @@ function onClickSend() {
 	$("a.card_selector.progression").removeClass('active');
 }
 
-function drawSentImage(sentImage) {
-	switch (sentImage[1]) {
-		case 's':	$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'♠</span>'); break;
-		case 'h':	$('#sentImage').html('<span style="color:#ff0000;font-size:64px;">'+sentImage[0]+'♥</span>'); break;
-		case 'd':	$('#sentImage').html('<span style="color:#0000ff;font-size:64px;">'+sentImage[0]+'♦</span>'); break;
-		case 'c':	$('#sentImage').html('<span style="color:#00bb00;font-size:64px;">'+sentImage[0]+'♣</span>'); break;
-		default: 	$('#sentImage').html('<span style="color:#000000;font-size:64px;">'+sentImage[0]+'</span>'); break;
-	}
-}
-
-function keyDown() {
-	var inputString = $('#inputArea').val().toUpperCase() + String.fromCharCode(event.keyCode).toLowerCase();
-	if (easyMode == true) { // 簡易入力モード
-		var indexOfResult = cardsForEasyMode.indexOf(inputString);
-		if (indexOfResult >= 0) { // Hit!
-			sendImage(cards[indexOfResult]);
-			setTimeout(function(){ $('#inputArea').val(''); }, 100);
-			return;
-		}
-		if (inputString == 'g') {
-			sound();
-			setTimeout(function(){ $('#inputArea').val(''); }, 100);
-		}
+function showBalloon(sentImage) {
+	var contents = 'send ';
+	if(sentImage.length == 2) {
+		contents += sentImage[0];
 	} else {
-		if (cards.indexOf(inputString) >= 0) { // Hit!
-			sendImage(inputString);
-			setTimeout(function(){ $('#inputArea').val(''); }, 100);
-		}
+		contents += sentImage;
 	}
-}
 
-$("#changeInputMode").change(function(){
-	switch ($(this).val()) {
-		case 'easy':
-			easyMode = true; break;
-		case 'normal':
-			easyMode = false; break;
-		case 'qrCode':
-			document.getElementById("inputArea").innerHTML = passWord;
-			return;
-	}
-	document.getElementById("inputArea").innerHTML =
-		'<input type="text" onkeydown="keyDown();" id="inputArea" class="form-control">';
-});
+	$("#send").showBalloon({
+		contents : contents,
+		position : "right",
+		showDuration : 100,
+		maxLifetime : 3000,
+		hideDuration : 500,
+		classname : "send_balloon",
+		css : {
+			color : "#FFF",
+			backgroundColor : "#222",
+			opacity : "0.75",
+			border : "solid 1px #000",
+			boxShadow : "2px 2px 2px #333"
+		}
+	});
+
+	$('.send_balloon').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c');
+	if(sentImage.length == 2) {
+		$('.send_balloon').addClass("send_balloon mark_"+sentImage[1]+" color_"+sentImage[1]);
+  }
+}
 
 function sound() {
 	var str = "";

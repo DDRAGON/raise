@@ -18,7 +18,7 @@ a.mark {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
 }
-.list-group-item.stripe {
+.stripe {
   background-color: #f6f6f6;
 }
 /* canvas */
@@ -28,7 +28,7 @@ a.mark {
 .wall_wood {
   background-image: url("/image/background/wood.jpg");
 }
-.wall_green_mat {
+.wall_mat {
   background-image: url("/image/background/green_mat.jpg");
 }
 /* board */
@@ -58,16 +58,16 @@ a.mark {
 .color_d {
   color: #69f !important;
 }
-.card.mark_c:after {
+.mark_c:after {
   content: "♣";
 }
-.card.mark_s:after {
+.mark_s:after {
   content: "♠";
 }
-.card.mark_h:after {
+.mark_h:after {
   content: "♥";
 }
-.card.mark_d:after {
+.mark_d:after {
   content: "♦";
 }
 /* playerBox */
