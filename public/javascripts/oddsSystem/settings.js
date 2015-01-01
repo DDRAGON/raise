@@ -53,9 +53,8 @@ $(function(){
 	$('#show_name_action').on('click', function(){ $('.action_form').show(); $('.chip_form').hide(); });
 	$('#show_name_action_chip').on('click', function(){ $('.action_form').show(); $('.chip_form').show(); });
 
+	$('#howto_header').on('click', function() { $('#howto_items').collapse('toggle'); });
 	$('#player_header').on('click', function() { $('#player_items').collapse('toggle'); });
-	$('#config_header').on('click', function() { $('#config_items').collapse('toggle'); });
-
 	$('#config_header').on('click', function() { $('#config_items').collapse('toggle'); });
 
 	$(".draggable").draggable({
@@ -63,14 +62,7 @@ $(function(){
 		snap: "#canvas_pane"
 	});
 
-	$('#card_selector_toggle').on('click', function() {
-		$('#card_selector').slideToggle();
-		if($(this).text()=="Show"){
-			$(this).text('Hide');
-		} else {
-			$(this).text('Show');
-		}
-	});
+	$('#card_selector_toggle').on('click', function() { $('#card_selector').slideToggle(); });
 
 	$('#assistant_id').on('focusout', function() {
 		var assistant_id = $(this).val();

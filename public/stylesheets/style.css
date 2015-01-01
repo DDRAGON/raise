@@ -5,6 +5,9 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+a.howto {
+  color: #666 !important;
+}
 a.card_selector {
   width: 50px;
   height: 50px;
