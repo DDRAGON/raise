@@ -47,13 +47,15 @@ $(function(){
 	$('.selectpicker').selectpicker({ 'selectedText': 'cat' });
 	$('.selectpicker.btn').addClass('btn-sm');
 
-	$('.playerList.1').addClass('stripe');
+	$('.playerList.0').addClass('stripe_a');
+	$('.playerList.1').addClass('stripe_b');
 
 	$('#show_name').on('click', function(){ $('.action_form').hide(); $('.chip_form').hide(); });
 	$('#show_name_action').on('click', function(){ $('.action_form').show(); $('.chip_form').hide(); });
 	$('#show_name_action_chip').on('click', function(){ $('.action_form').show(); $('.chip_form').show(); });
 
 	$('#howto_header').on('click', function() { $('#howto_items').collapse('toggle'); });
+	$('#direction_header').on('click', function() { $('#direction_items').collapse('toggle'); });
 	$('#player_header').on('click', function() { $('#player_items').collapse('toggle'); });
 	$('#config_header').on('click', function() { $('#config_items').collapse('toggle'); });
 

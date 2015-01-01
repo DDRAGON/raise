@@ -1,104 +1,174 @@
 body
-	padding: 0px
-	font:14px "Lucida Grande", Helvetica, Arial, sans-serif
-	text-align:center
-	margin-left: auto
-	margin-right: auto
+	padding 0px
+	font 14px "Meiryo UI", "Lucida Grande", Helvetica, Arial, sans-serif
+	text-align center
+	margin-left auto
+	margin-right auto
+	background-color #eee
+	color #374655
 
-a.howto
-	color: #666 !important
-	
+.navbar-inverse
+	background-color #4e5d6c
+	border 0px
+.navbar-inverse .navbar-brand
+	color #FFF
+
+hr
+	border-top 1px solid #8E979F
+
+.modal-content
+	background-color #eee
+.modal-header
+	border-bottom 1px solid #bdc7c0
+.modal-footer
+	border-top 1px solid #bdc7c0
+
+#settings
+	padding-right 10px
+	min-width 175px
+	min-height 500px
+
+.setting_wrap
+	padding-bottom 10px
+
+.collapse_body>div
+	color #374655
+	padding 5px 10px
+	width auto
+.collapse_body>div>a
+	color #953d12
+
+.btn-default
+	color #FFF
+	background-color #4e5d6c
+	border-color #2e3d4c
+.btn-default:hover
+	color #FFF
+	background-color #6e7d8c
+	border-color #2e3d4c
+.btn-default.active
+	color #FFF
+	background-color #6e7d8c
+	border-color #2e3d4c
+
+.btn-success
+	color #FFF
+	background-color #57bB93
+	border-color #278B63
+.btn-success:hover
+	color #FFF
+	background-color #67cBb3
+	border-color #278B63
+
+.btn .caret
+	margin-left 5px
+
+.dropdown-menu
+	min-width: 0
+.dropdown-menu>li>a
+	color #374655
+
+.collapse_header
+	padding-bottom 5px
+	border-bottom 1px solid #8E979F
+	padding-left 5px
+
+.collapse_header
+	cursor pointer
+
 a.card_selector
-	width: 50px
-	height: 50px
+	width 50px
+	height 50px
 a.mark
-	font-size: 30px
-	padding: 3px 0
+	font-size 30px
+	padding 3px 0
 
 .border_radius
-	border-radius: 5px
-	-webkit-border-radius: 5px
-	-moz-border-radius: 5px
+	border-radius 5px
+	-webkit-border-radius 5px
+	-moz-border-radius 5px
 
-.stripe
-	background-color: #F6F6F6
+.stripe_b
+	background-color #e5e5e5
 
 /* canvas */
 .wall_camera
-	background-image: none;
+	background-image none;
 .wall_wood
-	background-image: url(/image/background/wood.jpg)
+	background-image url(/image/background/wood.jpg)
 .wall_mat
-	background-image: url(/image/background/green_mat.jpg)
+	background-image url(/image/background/green_mat.jpg)
 	
 /* board */
 .board
-	background-color:rgba(200,200,200,0.4)
+	background-color rgba(200,200,200,0.4)
 
 .board .card
-	background-color:rgba(0,0,0,0.6)
-	padding:9px 7px
-	width: 39px
-	height: 48px
-	margin: 3px
+	background-color rgba(0,0,0,0.6)
+	padding 12px 7px
+	width 39px
+	height 48px
+	margin 3px
 
 /* card */
 .card
-	font-size:16pt
+	padding-top 5px
+	font 16pt Arial, sans-serif
 
 .color_c
-	color:#6C6 !important
+	color #6C6 !important
 .color_s
-	color:#FFF !important
+	color #FFF !important
 .color_h
-	color:#F66 !important
+	color #F66 !important
 .color_d
-	color:#69F !important
+	color #69F !important
 
 .mark_c:after
-	content:"♣"
+	content "♣"
 .mark_s:after
-	content:"♠"
+	content "♠"
 .mark_h:after
-	content:"♥"
+	content "♥"
 .mark_d:after
-	content:"♦"
+	content "♦"
 
 /* playerBox */
 .playerBox
-	font-size:9pt
-	background-color: rgba(0,0,0,0.4)
-	color: #EEE
-	width:80px
-	position: absolute
+	font-size 9pt
+	background-color rgba(0,0,0,0.4)
+	color #EEE
+	width 80px
+	position absolute
 
 .playerBox
 	.cardHolder
-		height:30px
+		height 30px
 
 .playerBox
 	.folded
-		font-size:16pt
-
-.playerBox
-	.card
-		width:40px
+		font-size 16pt
 
 .playerBox
 	.name
-		background-color:rgba(0,0,0,0.4)
-		width:64px
+		background-color rgba(0,0,0,0.4)
+		width 64px
+
+.handLeft
+	padding-left 10px
+.handRight
+	padding-right 10px
 
 .playerBox
 	.dealer
-		width:16px
-		font-size:9pt
+		width 16px
+		font-size 9pt
 
 .playerBox
 	.dealer
-		color:rgba(255,255,255,0.0)
-		background-color:rgba(0,0,0,0.6)
+		color rgba(255,255,255,0.0)
+		background-color rgba(0,0,0,0.6)
 .playerBox
 	.dealer.on
-		color:#FFF
-		background-color:#D96
+		color #FFF
+		background-color #D96

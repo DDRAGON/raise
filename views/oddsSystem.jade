@@ -6,6 +6,7 @@ block append headContents
 	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
 	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
 	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
+	link(rel="stylesheet" href="/stylesheets/style.css")
 
 block content
 
@@ -15,28 +16,27 @@ block content
 		div(class="navbar-wrapper")
 			div(class="navbar navbar-inverse navbar-static-top" role="navigation")
 				div(class="navbar-header")
-					a(id="home" class="navbar-brand" href="#")
-						text Poker Live!
-				div(style="float:right;")
-					a(href="https://twitter.com/share" class="twitter-share-button") Tweet
+					a(id="home" class="navbar-brand" href="#") Poker Live!
 
 		// settings
-		div(id="settings" style="float:left; padding-right:10px; min-height: 500px;")
+		div(id="settings" style="float:left;")
 
-			// player entrance
-			div(style='padding-bottom: 10px;')
-				H4(id="howto_header" class='text-left' style="padding-bottom:5px; border-bottom: 1px solid #eeeeee; padding-left:5px; min-width:170px; cursor:pointer;")
-					span(class="glyphicon glyphicon-play")
+			// how to
+			div(class="setting_wrap")
+				H4(id="howto_header" class='text-left collapse_header')
+					span(class="glyphicon glyphicon-flag")
 					text HOW TO
 
-				div(id="howto_items" class="collapse")
-					div(class="playerList 1 text-left" style=" padding: 5px 10px;")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About
+				div(id="howto_items" class="collapse collapse_body")
+					div(class="stripe_b text-left")
+						a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About System
 						div(id="modalAbout" class="modal fade")
 							div(class="modal-dialog")
 								div(class="modal-content")
 									div(class="modal-header")
-										h4(class="modal-title") About: システムについて
+										h4(class="modal-title")
+											b About System
+											text  システムについて
 									div(class="modal-body")
 										div 本システムは、カードを一枚一枚入力する
 											b レジ方式
@@ -47,13 +47,15 @@ block content
 									div(class="modal-footer")
 										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalRequirements") Requirements
 
-					div(class="playerList 0 text-left" style=" padding: 5px 10px;")
+					div(class="stripe_a text-left")
 						a(class="howto" href="#" data-toggle="modal" data-target="#modalRequirements") Requirements
 						div(id="modalRequirements" class="modal fade")
 							div(class="modal-dialog")
 								div(class="modal-content")
 									div(class="modal-header")
-										h4(class="modal-title") Requirements: 必要なもの
+										h4(class="modal-title")
+											b Requirements
+											text  必要なもの
 									div(class="modal-body")
 										ul
 											liパソコン（２台推奨）
@@ -65,13 +67,15 @@ block content
 									div(class="modal-footer")
 										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage
 
-					div(class="playerList 1 text-left" style=" padding: 5px 10px;")
+					div(class="stripe_b text-left")
 						a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage oddsSystem
 						div(id="modalUsageOddsSystem" class="modal fade")
 							div(class="modal-dialog")
 								div(class="modal-content")
 									div(class="modal-header")
-										h4(class="modal-title") Usage oddsSystem: oddsSystemの使い方
+										h4(class="modal-title")
+											b Usage oddsSystem
+											text  oddsSystemの使い方
 									div(class="modal-body")
 										div oddsSystemページにアクセスすると、カメラを許可するか？と聞かれるので、許可して下さい。
 										div カメラを付けた状態で許可すると中央上部にカメラ映像が映ります。これは放送用の映像になります。
@@ -88,13 +92,15 @@ block content
 									div(class="modal-footer")
 										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageQrCodeReader") Usage qrCodeReader
 
-					div(class="playerList 0 text-left" style=" padding: 5px 10px;")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageQrCodeReader") QR codes
+					div(class="stripe_a text-left")
+						a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageQrCodeReader") Usage qrCodeReader
 						div(id="modalUsageQrCodeReader" class="modal fade")
 							div(class="modal-dialog")
 								div(class="modal-content")
 									div(class="modal-header")
-										h4(class="modal-title") Usage qrCodeReader: qrCodeReaderの使い方
+										h4(class="modal-title")
+											b Usage qrCodeReader
+											text  qrCodeReaderの使い方
 									div(class="modal-body")
 										div
 											a(href="/qrCodeReader" target="_blank") qrCodeReader
@@ -108,13 +114,15 @@ block content
 									div(class="modal-footer")
 										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalGameProgression") Game Progression
 
-					div(class="playerList 1 text-left" style=" padding: 5px 10px;")
+					div(class="stripe_b text-left")
 						a(class="howto" href="#" data-toggle="modal" data-target="#modalGameProgression") Game Progression
 						div(id="modalGameProgression" class="modal fade")
 							div(class="modal-dialog")
 								div(class="modal-content")
 									div(class="modal-header")
-										h4(class="modal-title") Game Progression: ゲームの進め方
+										h4(class="modal-title")
+											b Game Progression
+											text  ゲームの進め方
 									div(class="modal-body")
 										div シャッフルが終わったらディーラーはSBに配るカードをカメラにかざして認識させます。
 										div カードの認識に成功したらQR Code Readerからピッっと音がなり、データがサーバーに送られます。ディーラーはそのカードをSBに配ります。
@@ -138,19 +146,29 @@ block content
 										br
 										div さぁ、次のゲームを始めよう！
 									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal") ×
+										a(href="#" class="close" data-dismiss="modal") Let's Play Poker!
 
-			// player entrance
-			div(style='padding-bottom: 10px;')
-				H4(id="player_header" class='text-left' style="padding-bottom:5px; border-bottom: 1px solid #eeeeee; padding-left:5px; min-width:162px; cursor:pointer;")
+			// direction
+			div(class="setting_wrap")
+				H4(id="direction_header" class='text-left collapse_header')
+					span(class="glyphicon glyphicon-play")
+					text DIRECTION
+
+				div(id="direction_items" class="collapse collapse_body")
+					div(class="stripe_b text-left")
+						a(role="menuitem" tabindex="-1" href="/qrCodeReader" target="_blank") By QR Reader
+					div(class="stripe_a text-left")
+						a(id="card_selector_toggle" role="menuitem" tabindex="-1" href="#") By Web UI
+
+			// players
+			div(class="setting_wrap")
+				H4(id="player_header" class='text-left collapse_header')
 					span(class="glyphicon glyphicon-user")
-					text PLAYERS
+					text PLAYER
 
-				div(id="player_items" class="collapse")
-					ul(class="nav" style="display:table;")
-
+				div(id="player_items" class="collapse collapse_body")
 						for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-							li(class="playerList #{1-seatId%2}" style="overflow:hidden; padding: 5px 10px;")
+							div(class="playerList #{1-seatId%2}" style="overflow:hidden;")
 								div(style="width:140px; float:left")
 									div(class="input-group input-group-sm")
 										span(class="input-group-btn")
@@ -164,11 +182,12 @@ block content
 								div(class="chip_form" style="width: 55px; padding-left: 5px; float:left; display:none;")
 									input(type="text" class="form-control input-sm" placeholder="Chip")
 
-						// change form visibility
-						li(class="playerList 1 text-left" style=" padding: 5px 10px;")
+						// Additional Forms
+						div(class="stripe_b text-left")
 							div(class="dropdown")
-								button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Additional Forms
-									span(class="caret" style="margin-left: 5px;")
+								button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width:140px") Additional Forms
+									div(style="float:right")
+										span(class="caret")
 								ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
 									li(role="presentation")
 										a(id="show_name" role="menuitem" tabindex="-1" href="#") Name
@@ -176,58 +195,52 @@ block content
 										a(id="show_name_action_chip" role="menuitem" tabindex="-1" href="#") Name+Action+Chip
 
 			// config
-			div(style='padding-bottom: 10px;')
-				H4(id="config_header" class='text-left' style="padding-bottom:5px; border-bottom: 1px solid #eeeeee; padding-left:5px; cursor:pointer;")
+			div(class="setting_wrap")
+				H4(id="config_header" class='text-left collapse_header')
 					span(class="glyphicon glyphicon-cog")
 					text CONFIG
 
-				div(id="config_items" class="collapse")
-					ul(class="nav" style="display:table; width:100%;")
+				div(id="config_items" class="collapse collapse_body")
 
-						// Card Interface
-						li(class="playerList 1 text-left" style=" padding: 5px 10px;")
-							div Card Reading
-							div(class="dropdown")
-								button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Interface
-									span(class="caret" style="margin-left: 5px;")
-								ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
-									li(role="presentation")
-										a(role="menuitem" tabindex="-1" href="/qrCodeReader" target="_blank") QR Reader
-										a(id="card_selector_toggle" role="menuitem" tabindex="-1" href="#") Web UI
+					// Room Id
+					div(class="stripe_b text-left")
+						text Room Id
+						input(id="room_id" type="text" class="form-control input-sm" style="cursor: pointer; width:140px" onfocus="this.select();" readonly)
 
-						// Room Id
-						li(class="playerList 0 text-left" style=" padding: 5px 10px; width:auto")
-							text Room Id
-							input(id="room_id" type="text" class="form-control input-sm" style="cursor: pointer; width:140px" onfocus="this.select();" readonly)
+					// Assistant Mode
+					div(class="stripe_a text-left")
+						text Assistant Mode
+						input(id="assistant_id" type="text" class="form-control input-sm" style="width:140px" placeholder="Parent Room id")
 
-						// Assistant Mode
-						li(class="playerList 1 text-left" style=" padding: 5px 10px; width:auto")
-							text Assistant Mode
-							input(id="assistant_id" type="text" class="form-control input-sm" style="width:140px" placeholder="Parent Room id")
+					// layout
+					div(class="stripe_b text-left")
+						div View Layout
+						div(class="dropdown")
+							button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Select
+								span(class="caret")
+							ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
+								li(role="presentation")
+									for value, key in ['Round','Sides','Show']
+										a(id="layout#{value}" role="menuitem" tabindex="-1" href="#") #{value}
 
-						// layout
-						li(class="playerList 0 text-left" style=" padding: 5px 10px; width:auto")
-							div View Layout
-							div(class="dropdown")
-								button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Layout
-									span(class="caret" style="margin-left: 5px;")
-								ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
-									li(role="presentation")
-										for value, key in ['Round','Sides','Show']
-											a(id="layout#{value}" role="menuitem" tabindex="-1" href="#") #{value}
+					// background
+					div(class="stripe_a text-left")
+						div Background
+						select(class="selectpicker" data-width="80px" id="changeBackground")
+							for value, key in ['camera','wood','mat']
+								option #{value}
 
-						// background
-						li(class="playerList 1 text-left" style=" padding: 5px 10px; width:auto")
-							div Background
-							select(class="selectpicker" data-width="80px" id="changeBackground")
-								for value, key in ['camera','wood','mat']
-									option #{value}
+					// QR sheet
+					div(class="stripe_b text-left")
+						a(href='/qrSheet') Download QR Sheet
+
+			div(style="width:auto;height:1px;")
 
 		// view
 		div(id="right_pane" style="float:left;")
 
 			div(style="position:absolute;")
-				canvas(id="canvasForVideo" width="640" height="360" style="float:left; background-color: #f6f6f6;")
+				canvas(id="canvasForVideo" width="640" height="360" style="float:left; background-color: #ddd;")
 
 			div(style="position:relative")
 				canvas(id="canvas" width="640" height="360" style="float:left;")
@@ -243,8 +256,8 @@ block content
 					for seatId, key in [0,1,2,3,4,5,6,7,8,9]
 						div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
 							div(id="player#{seatId}Hand" class="cardHolder")
-								div(id="player#{seatId}HandRight" class="card " style="float:right;")
-								div(id="player#{seatId}HandLeft" class="card " style="float:left;")
+								div(id="player#{seatId}HandLeft" class="card handLeft" style="float:left;")
+								div(id="player#{seatId}HandRight" class="card handRight" style="float:right;")
 								div(id="player#{seatId}Folded" class="folded" style="display:none;") Folded
 							div(style="display:table;")
 								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
@@ -277,6 +290,9 @@ block content
 		div(style="clear:both;")
 			footer
 				hr(class="featurette-divider")
+				div(style="float:left")
+					a(href="https://twitter.com/share" class="twitter-share-button") Tweet
+				div
 				p(class="pull-right")
 					a(href="#") Back to top
 				p

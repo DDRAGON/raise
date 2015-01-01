@@ -85,10 +85,9 @@ function showBalloon(sentImage) {
 		classname : "send_balloon",
 		css : {
 			color : "#FFF",
-			backgroundColor : "#222",
-			opacity : "0.75",
-			border : "solid 1px #000",
-			boxShadow : "2px 2px 2px #333"
+			backgroundColor : "#4e5d6c",
+			border : "solid 1px #2e3d4c",
+			boxShadow : "2px 2px 2px #999"
 		}
 	});
 
