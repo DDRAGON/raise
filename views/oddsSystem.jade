@@ -3,14 +3,9 @@ extends layout
 block append css
 
 block append headContents
-	link(href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/cerulean/bootstrap.min.css")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/journal/bootstrap.min.css")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css")
+	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
+	link(rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" )
 	link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/spacelab/bootstrap.min.css")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/united/bootstrap.min.css")
-	// link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css")
 
 block content
 
@@ -27,37 +22,68 @@ block content
 		// header
 
 		// player entrance
-		div(id="players")
-			ul(class="nav nav-list col-xs-3")
-				li(class="list-group-item")
-					h4
+		div(id="players" style="padding-right:10px; float:left;")
+			ul(class="nav nav-list" style="display:table;")
+				li(class="list-group-item" style="overflow:hidden;")
 						span(class="glyphicon glyphicon-user") PLAYERS
+
 				for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-					li(class="list-group-item")
-						div(class="input-group")
-							input(type="text" onkeyup="keyUpPlayer(#{seatId});" id="inputPlayer#{seatId}" class="form-control" placeholder="Player #{seatId+1}")
-							span(class="input-group-btn")
-								button(class="btn" onClick="deletePlayer(#{seatId})") ×
+					li(class="list-group-item playerList #{seatId%2}" style="overflow:hidden; padding:5px 10px;")
+						div(style="width:140px; padding:0 5px; float:left")
+							div(class="input-group input-group-sm")
+								span(class="input-group-btn")
+									button(class="btn btn-default btn-sm" type="button" onclick="deletePlayer(#{seatId});") ×
+								input(id="inputPlayer#{seatId}" onkeyup="changePlayerName(#{seatId});" type="text" class="form-control" placeholder="Player#{seatId+1}")
+
+						// assistant options
+						div(class="chip_form" style="width: 60px; padding:0 5px; float:left; display:none;")
+							input(type="text" class="form-control input-sm" placeholder="Chip")
+						div(class="btn-group btn-group-sm action_form" role="group" style="padding:0; display:none;")
+							button(type="button" class="btn btn-default btn_F player#{seatId}") F
+							button(type="button" class="btn btn-default btn_C player#{seatId}") C
+							button(type="button" class="btn btn-default btn_BR player#{seatId}") B/R
+							button(type="button" class="btn btn-default btn_A player#{seatId}") A
+
+				// change form visibility
+				li(class="list-group-item playerList 0 text-left")
+					div(class="btn-group btn-group-xs" role="group")
+						button(type="button" id="plain_form" class="btn btn-default") Plain
+						button(type="button" id="plain_action_form" class="btn btn-default") +Action
+						button(type="button" id="plain_action_chip_form" class="btn btn-default") +Chip
+
 		// player entrance
 
 		div(id="center_pane" style="float:left;")
 
-			// video 重ねる canvases
-			div(style="float: left;")
-				div(style="position:absolute;")
-					// video canvas
-					canvas(id="canvasForVideo" width="640" height="360" style="float:left;")
-					// video canvas
-				div(style="position:relative")
-					// canvas
-					canvas(id="canvas" width="640" height="360" style="float:left;")
-					// canvas
-			// video 重ねる canvases
+			div(style="position:absolute;")
+				canvas(id="canvasForVideo" width="640" height="360" style="float:left;")
+
+			div(style="position:relative")
+				canvas(id="canvas" width="640" height="360" style="float:left;")
+				div(id="canvas_pane" style="position:absolute; width:640px; height:360px;")
+
+					// Board
+					div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:225px; left:203px;")
+						div(style="overflow:hidden; margin: 5px 5px;")
+							for boardId, key in [0,1,2,3,4]
+								div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
+
+					// PlayerBox
+					for seatId, key in [0,1,2,3,4,5,6,7,8,9]
+						div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
+							div(id="player#{seatId}Hand" class="cardHolder")
+								div(id="player#{seatId}HandRight" class="card " style="float:right;")
+								div(id="player#{seatId}HandLeft" class="card " style="float:left;")
+								div(id="player#{seatId}Folded" class="folded" style="display:none;") Folded
+							div(style="display:table;")
+								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
+								div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId}
+							div(id="player#{seatId}Odds" style="clear:both; display:inline-block;")
 
 			hr(class="featurette-divider")
 
 			<!-- card selections -->
-			div(id="card_selector" style="float: left;")
+			div(id="card_selector" style="float: left; margin-top: 10px;")
 				div(id="suit_selector" class="btn-group" style="float: left;margin-right: 10px;")
 					a(id="s" onclick="markClick('s')" style="color:#222" class="btn btn-default btn-lg mark") &#9824;
 					a(id="h" onclick="markClick('h')" style="color:#F44" class="btn btn-default btn-lg mark") &#9829;
@@ -126,10 +152,10 @@ block content
 
 		// 背景色
 		div
-			text back ground color
+			text back ground
 			br
 			select(id="changeBackground")
-				for num, key in ['camera','rgb(255, 255, 0)','rgb(255, 0, 255)','rgb(0, 255, 255)']
+				for num, key in ['camera','wood','green_mat']
 					option(value="#{num}") #{num}
 		// 背景色
 
@@ -159,4 +185,9 @@ block content
 
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
+	script(src="/assets/bootstrap.min.js")
+	script(src="/assets/jquery-ui.min.js")
+	script(src='/assets/textillate/assets/jquery.fittext.js')
+	script(src='/assets/textillate/assets/jquery.lettering.js')
+	script(src='/assets/textillate/jquery.textillate.js')
 	script(src="/javascripts/oddsSystem/ugly.min.js")

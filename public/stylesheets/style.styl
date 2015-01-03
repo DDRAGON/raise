@@ -1,11 +1,97 @@
 body
-  padding: 0px
-  font:14px "Lucida Grande", Helvetica, Arial, sans-serif
-  text-align:center
-  margin-left: auto
-  margin-right: auto
-
+	padding: 0px
+	font:14px "Lucida Grande", Helvetica, Arial, sans-serif
+	text-align:center
+	margin-left: auto
+	margin-right: auto
+	
 a.num
-  width: 45px
+	width: 45px
 a.mark
-  width: 65px;font-size: 50px
+	width: 65px
+	font-size: 50px
+	
+	
+.border_radius
+	border-radius: 5px
+	-webkit-border-radius: 5px
+	-moz-border-radius: 5px
+
+/* canvas */
+.wall_camera
+	background-image: none;
+.wall_wood
+	background-image: url(/image/background/wood.jpg)
+.wall_green_mat
+	background-image: url(/image/background/green_mat.jpg)
+	
+/* board */
+.board
+	background-color:rgba(200,200,200,0.4)
+
+.board .card
+	background-color:rgba(0,0,0,0.6)
+	padding:9px 7px
+	width: 39px
+	height: 48px
+	margin: 3px
+
+/* card */
+.card
+	font-size:16pt
+
+.card.c
+	color:#6C6
+.card.c:after
+	content:"♣"
+.card.s
+	color:#FFF
+.card.s:after
+	content:"♠"
+.card.h
+	color:#F66
+.card.h:after
+	content:"♥"
+.card.d
+	color:#69F
+.card.d:after
+	content:"♦"
+
+/* playerBox */
+.playerBox
+	font-size:9pt
+	background-color: rgba(0,0,0,0.4)
+	color: #EEE
+	width:80px
+	position: absolute
+
+.playerBox
+	.cardHolder
+		height:30px
+
+.playerBox
+	.folded
+		font-size:16pt
+
+.playerBox
+	.card
+		width:40px
+
+.playerBox
+	.name
+		background-color:rgba(0,0,0,0.4)
+		width:64px
+
+.playerBox
+	.dealer
+		width:16px
+		font-size:9pt
+
+.playerBox
+	.dealer
+		color:rgba(255,255,255,0.0)
+		background-color:rgba(0,0,0,0.6)
+.playerBox
+	.dealer.on
+		color:#FFF
+		background-color:#D96
