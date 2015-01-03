@@ -19,7 +19,7 @@ a.mark {
 }
 /* canvas */
 .wall_camera {
-  background-color: #fff;
+  background-image: none;
 }
 .wall_wood {
   background-image: url("/image/background/wood.jpg");

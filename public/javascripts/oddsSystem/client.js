@@ -42,15 +42,6 @@ config.dealerButtonRadius = parseInt(config.nameWinPerBoxHeight/2);
 var ASSISTANT_MODE_ORIGINAL = 'Original';
 var ASSISTANT_MODE_ASSISTANT = 'Assistant';
 
-function sound() {
-	var str = "";
-	str = str + "<EMBED id = 'id_sound'";
-	str = str + " SRC=/music/cursor6.wav";
-	str = str + " AUTOSTART='true'";
-	str = str + " HIDDEN='true'>";
-	document.getElementById("id_sound").innerHTML = str;
-}
-
 $(function(){
 	canvasForVideo = $('#canvasForVideo').get(0);
 	config.ctxForVideo = canvasForVideo.getContext("2d");
@@ -164,13 +155,15 @@ function setName(seatId, playerName) {
 }
 
 function setFold(seatId) {
-	$('#player'+seatId+'Folded').show();
-	$('#player'+seatId+'Folded').textillate({
-		in: { effect: 'swing' },
-		callback: function() {
-			$('#player'+seatId+'Box').stop().animate({ opacity: "0.5"}, 600);
-		}
-	});
+	$('#player'+seatId+'Folded')
+		.show()
+		.textillate({
+			in: { effect: 'swing' },
+			callback: function() {
+				$('#player'+seatId+'Box').stop().animate({ opacity: "0.5"}, 600);
+			}
+		})
+		.textillate('start');
 }
 
 function setOdds(seatId, winPer, tiePer, playerName) {
