@@ -72,7 +72,6 @@ function sendImage(image) {
 		image: image,
 		passWord: $('#passwordArea').val()
 	});
-	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
 	this.num  = '　';
@@ -139,7 +138,6 @@ function keyDown() {
 			return;
 		}
 		if (inputString == 'g') {
-			sound();
 			setTimeout(function(){ $('#inputArea').val(''); }, 100);
 		}
 	} else {
@@ -213,15 +211,6 @@ $("#changeArrangement").change(function(){
 $("#changeBackground").change(function(){
 	backgroundColor = $(this).val();
 });
-
-function sound() {
-	var str = "";
-	str = str + "<EMBED id = 'id_sound'";
-	str = str + " SRC=/music/cursor6.wav";
-	str = str + " AUTOSTART='true'";
-	str = str + " HIDDEN='true'>";
-	document.getElementById("id_sound").innerHTML = str;
-}
 
 $(function(){
 	canvasForVideo = $('#canvasForVideo').get(0);
