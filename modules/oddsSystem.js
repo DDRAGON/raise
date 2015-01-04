@@ -381,6 +381,7 @@ function getWinPerFromAPI(socketId, frontObj) {
 		json: true,
 		body: JSON.stringify(sendJson)
 	};
+	console.log(url);
 	request.post(options, function(error, response, body){
 		if (!error && response.statusCode == 200) {
 			// var gotPlayers = JSON.parse(body);

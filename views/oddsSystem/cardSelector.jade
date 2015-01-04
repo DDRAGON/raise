@@ -1,0 +1,19 @@
+div(id="card_selector" style="float: left; margin: 10px 0; display: none;")
+	div(style="clear:both; text-align: left")
+		div(id="suit_selector" class="btn-group")
+			a(id="s" onclick="onClickMark('s')" style="color:#FFF" class="btn btn-default btn-lg card_selector mark") &#9824;
+			a(id="h" onclick="onClickMark('h')" style="color:#F44" class="btn btn-default btn-lg card_selector mark") &#9829;
+			a(id="d" onclick="onClickMark('d')" style="color:#55F" class="btn btn-default btn-lg card_selector mark") &#9830;
+			a(id="c" onclick="onClickMark('c')" style="color:#393" class="btn btn-default btn-lg card_selector mark") &#9827;
+		div(id="progression_selector" class="btn-group" style="margin-left: 0px;")
+			a(id="nextGame" onclick="onClickProgression('nextGame')" class="btn btn-default btn-lg card_selector progression" style="width:98px") Next
+			a(id="resetGame" onclick="onClickProgression('resetGame')" class="btn btn-default btn-lg card_selector progression" style="width:99px") Reset
+	div(style="clear:both; text-align: left")
+		div(id="rank_low_selector" class="btn-group")
+			for rank, key in [2,3,4,5,6,7,8,9]
+				a(id="#{rank}" onclick="onClickRank(#{rank})" class="btn btn-default btn-lg card_selector rank") #{rank}
+		div
+			div(id="rank_high_selector" class="btn-group")
+				for rank, key in ['T','J','Q','K','A']
+					a(id="#{rank}" onclick="onClickRank('#{rank}')" class="btn btn-default btn-lg card_selector rank") #{rank}
+			a(id="send" onclick="onClickSend()" class="btn btn-success btn-lg pull-right card_selector" style="width:147px") Send

@@ -1,16 +1,16 @@
 extends layout
 
 block append css
-
-block append headContents
 	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
 	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
 	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
-	link(rel="stylesheet" href="/stylesheets/style.css")
+	link(rel="stylesheet" href="/stylesheets/oddsSystem.css")
+
+block append headContents
 
 block content
 
-	div(class="container" style="background-color: #00000")
+	div(class="container")
 
 		// header
 		div(class="navbar-wrapper")
@@ -20,271 +20,15 @@ block content
 
 		// settings
 		div(id="settings" style="float:left;")
+			include ./oddsSystem/howTo.jade
+			include ./oddsSystem/players.jade
+			include ./oddsSystem/direction.jade
+			include ./oddsSystem/config.jade
+			div(class="collapseSaver" style="width:auto;height:1px;")
 
-			// how to
-			div(class="setting_wrap")
-				H4(id="howto_header" class='text-left collapse_header')
-					span(class="glyphicon glyphicon-flag")
-					text HOW TO
-
-				div(id="howto_items" class="collapse collapse_body")
-					div(class="stripe_b text-left")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About System
-						div(id="modalAbout" class="modal fade")
-							div(class="modal-dialog")
-								div(class="modal-content")
-									div(class="modal-header")
-										h4(class="modal-title")
-											b About System
-											text  システムについて
-									div(class="modal-body")
-										div 本システムは、カードを一枚一枚入力する
-											b レジ方式
-											text という方法でプレイヤーの手札と勝率を計算します。
-										div ディーラーの手元にカメラを１台置き、ディーラーはカード配る前にカメラにカードをかざします。
-										div ディーラーとは別に、本システムを使用しカメラ画像からカードを入力してサーバーにカード情報を送る人が必要になります。
-										div カード認識とは別に、放送用のカメラも必要ですので、カメラは合計２台使用します。
-									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalRequirements") Requirements
-
-					div(class="stripe_a text-left")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalRequirements") Requirements
-						div(id="modalRequirements" class="modal fade")
-							div(class="modal-dialog")
-								div(class="modal-content")
-									div(class="modal-header")
-										h4(class="modal-title")
-											b Requirements
-											text  必要なもの
-									div(class="modal-body")
-										ul
-											liパソコン（２台推奨）
-											li web カメラ２台
-											li プリンタ
-											li 適当なトランプ（100均一でOK）
-											li カットカード
-											li ネット環境
-									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage
-
-					div(class="stripe_b text-left")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage oddsSystem
-						div(id="modalUsageOddsSystem" class="modal fade")
-							div(class="modal-dialog")
-								div(class="modal-content")
-									div(class="modal-header")
-										h4(class="modal-title")
-											b Usage oddsSystem
-											text  oddsSystemの使い方
-									div(class="modal-body")
-										div oddsSystemページにアクセスすると、カメラを許可するか？と聞かれるので、許可して下さい。
-										div カメラを付けた状態で許可すると中央上部にカメラ映像が映ります。これは放送用の映像になります。
-										br
-										div 中央左の入力欄にプレイヤー名を入力して下さい。入力するとカメラ映像の上に名前が表示されます。
-										div プレイヤー名の右の×印を押すとプレイヤーを消すことができます。（席移動やプレイヤーが飛んだ時などに使用しよう。）
-										br
-										div 中央下にはカードを入力ためのボタンや入力欄があります。
-										div ここからカード情報をサーバーに送信することができます。
-										br
-										div 画面下に「input mode」というのがあるので、「OR code」に設定します。
-										div この時に表示されるのが QR code Reader に入力するパスワードです。
-										img(src="/image/howToUse/inputModeQRCode.png" style="border:double 5px #ff0000")
-									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageQrCodeReader") Usage qrCodeReader
-
-					div(class="stripe_a text-left")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageQrCodeReader") Usage qrCodeReader
-						div(id="modalUsageQrCodeReader" class="modal fade")
-							div(class="modal-dialog")
-								div(class="modal-content")
-									div(class="modal-header")
-										h4(class="modal-title")
-											b Usage qrCodeReader
-											text  qrCodeReaderの使い方
-									div(class="modal-body")
-										div
-											a(href="/qrCodeReader" target="_blank") qrCodeReader
-											text ページにアクセスすると、カメラを許可するか？と聞かれるので、許可して下さい。
-										div 「webカメラからの画像切り抜き頻度（ミリ秒）」というのがあるが、この値を下げるとWebカメラから画像を切り抜きQRコード認識する間隔を設定できます。
-										div （下げすぎるとPCファンがうなったりするので注意、デフォルト100ミリ秒）
-										br
-										div 「password」欄に、oddsSystemの方のパスワードを入力します。
-										div （これで、QRコードリーダーとオッズシステムが紐好きます。）
-										div ためしにQRコードをカメラにかざし、ピッっと認識されれば準備はおkです。
-									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalGameProgression") Game Progression
-
-					div(class="stripe_b text-left")
-						a(class="howto" href="#" data-toggle="modal" data-target="#modalGameProgression") Game Progression
-						div(id="modalGameProgression" class="modal fade")
-							div(class="modal-dialog")
-								div(class="modal-content")
-									div(class="modal-header")
-										h4(class="modal-title")
-											b Game Progression
-											text  ゲームの進め方
-									div(class="modal-body")
-										div シャッフルが終わったらディーラーはSBに配るカードをカメラにかざして認識させます。
-										div カードの認識に成功したらQR Code Readerからピッっと音がなり、データがサーバーに送られます。ディーラーはそのカードをSBに配ります。
-										div サーバーは１枚目のカードがボタンの次の人に配られるということを知っているため、そのカードをボタンの次のプレイヤーのものとします。
-										br
-										div こうして全員にカードがくばられたら、サーバーはプリフロップが始まったと認識し、プレイヤーの勝率を計算します。
-										div プレイヤーがフォールドした場合は、回収した手札のどちらか一枚をカメラにかざして認識させて下さい。
-										div （サーバーは既に出たカードがもう一度送られてきた場合にそのプレイヤーがフォールドしたと認識し、残ったプレイヤーの勝率を再計算します。）
-										br
-										div プリフロップが終わりフロップのカードをめくる時は３枚のカードを順にカメラにかざして認識させて下さい。
-										div （サーバーはまだ出ていないカードが送られてきた場合、フロップのカードだと認識します。）
-										div プロップの３枚を送信したら、サーバーはプロップが配られたことを認識し、勝率を再計算します。
-										div フォールドする場合は上記に同じ。
-										br
-										div まだ出ていないカードが送られたら、サーバーはターンのカードだと認識し、勝率を再計算します。
-										div まだ出ていないカードが送られたら、サーバーはリバーのカードだと認識し、勝率を再計算します。
-										br
-										div ゲームが終了したら ng （カットカードについてるQRコード）をカメラにかざして認識させます。
-										div （もしくは「Next Game」ボタンをクリックして下さい。)
-										div プレイヤーのハンドが消え、ボタンが次のプレイヤーに自動で動きます。
-										br
-										div さぁ、次のゲームを始めよう！
-									div(class="modal-footer")
-										a(href="#" class="close" data-dismiss="modal") Let's Play Poker!
-
-			// direction
-			div(class="setting_wrap")
-				H4(id="direction_header" class='text-left collapse_header')
-					span(class="glyphicon glyphicon-play")
-					text DIRECTION
-
-				div(id="direction_items" class="collapse collapse_body")
-					div(class="stripe_b text-left")
-						a(role="menuitem" tabindex="-1" href="/qrCodeReader" target="_blank") By QR Reader
-					div(class="stripe_a text-left")
-						a(id="card_selector_toggle" role="menuitem" tabindex="-1" href="#") By Web UI
-
-			// players
-			div(class="setting_wrap")
-				H4(id="player_header" class='text-left collapse_header')
-					span(class="glyphicon glyphicon-user")
-					text PLAYER
-
-				div(id="player_items" class="collapse collapse_body")
-						for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-							div(class="playerList #{1-seatId%2}" style="overflow:hidden;")
-								div(style="width:140px; float:left")
-									div(class="input-group input-group-sm")
-										span(class="input-group-btn")
-											button(class="btn btn-default btn-sm" type="button" onclick="deletePlayer(#{seatId});") ×
-										input(id="inputPlayer#{seatId}" onkeyup="changePlayerName(#{seatId});" type="text" class="form-control" placeholder="Player#{seatId+1}")
-
-								// assistant options
-								div(class="btn-group btn-group-sm action_form" role="group" style=" float:left; padding-left: 5px; display:none;")
-									for value, key in ['F','C','B-R','A']
-										button(type="button" class="btn btn-default btn_#{value} player#{seatId}") #{value}
-								div(class="chip_form" style="width: 55px; padding-left: 5px; float:left; display:none;")
-									input(type="text" class="form-control input-sm" placeholder="Chip")
-
-						// Additional Forms
-						div(class="stripe_b text-left")
-							div(class="dropdown")
-								button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width:140px") Additional Forms
-									div(style="float:right")
-										span(class="caret")
-								ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
-									li(role="presentation")
-										a(id="show_name" role="menuitem" tabindex="-1" href="#") Name
-										a(id="show_name_action" role="menuitem" tabindex="-1" href="#") Name+Action
-										a(id="show_name_action_chip" role="menuitem" tabindex="-1" href="#") Name+Action+Chip
-
-			// config
-			div(class="setting_wrap")
-				H4(id="config_header" class='text-left collapse_header')
-					span(class="glyphicon glyphicon-cog")
-					text CONFIG
-
-				div(id="config_items" class="collapse collapse_body")
-
-					// Room Id
-					div(class="stripe_b text-left")
-						text Room Id
-						input(id="room_id" type="text" class="form-control input-sm" style="cursor: pointer; width:140px" onfocus="this.select();" readonly)
-
-					// Assistant Mode
-					div(class="stripe_a text-left")
-						text Assistant Mode
-						input(id="assistant_id" type="text" class="form-control input-sm" style="width:140px" placeholder="Parent Room id")
-
-					// layout
-					div(class="stripe_b text-left")
-						div View Layout
-						div(class="dropdown")
-							button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Select
-								span(class="caret")
-							ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
-								li(role="presentation")
-									for value, key in ['Round','Sides','Show']
-										a(id="layout#{value}" role="menuitem" tabindex="-1" href="#") #{value}
-
-					// background
-					div(class="stripe_a text-left")
-						div Background
-						select(class="selectpicker" data-width="80px" id="changeBackground")
-							for value, key in ['camera','wood','mat']
-								option #{value}
-
-					// QR sheet
-					div(class="stripe_b text-left")
-						a(href='/qrSheet') Download QR Sheet
-
-			div(style="width:auto;height:1px;")
-
-		// view
 		div(id="right_pane" style="float:left;")
-
-			div(style="position:absolute;")
-				canvas(id="canvasForVideo" width="640" height="360" style="float:left; background-color: #ddd;")
-
-			div(style="position:relative")
-				canvas(id="canvas" width="640" height="360" style="float:left;")
-				div(id="canvas_pane" style="position:absolute; width:640px; height:360px;")
-
-					// Board
-					div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:225px; left:203px;")
-						div(style="overflow:hidden; margin: 5px 5px;")
-							for boardId, key in [0,1,2,3,4]
-								div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
-
-					// PlayerBox
-					for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-						div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
-							div(id="player#{seatId}Hand" class="cardHolder")
-								div(id="player#{seatId}HandLeft" class="card handLeft" style="float:left;")
-								div(id="player#{seatId}HandRight" class="card handRight" style="float:right;")
-								div(id="player#{seatId}Folded" class="folded" style="display:none;") Folded
-							div(style="display:table;")
-								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
-								div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId+1}
-							div(style="clear:both; display:inline-block;")
-								div(id="player#{seatId}Odds")
-
-			// card selections
-			div(id="card_selector" style="float: left; margin: 10px 0; display: none;")
-				div(style="clear:both; text-align: left")
-					div(id="suit_selector" class="btn-group")
-						a(id="s" onclick="onClickMark('s')" style="color:#FFF" class="btn btn-default btn-lg card_selector mark") &#9824;
-						a(id="h" onclick="onClickMark('h')" style="color:#F44" class="btn btn-default btn-lg card_selector mark") &#9829;
-						a(id="d" onclick="onClickMark('d')" style="color:#55F" class="btn btn-default btn-lg card_selector mark") &#9830;
-						a(id="c" onclick="onClickMark('c')" style="color:#393" class="btn btn-default btn-lg card_selector mark") &#9827;
-					div(id="progression_selector" class="btn-group" style="margin-left: 0px;")
-						a(id="nextGame" onclick="onClickProgression('nextGame')" class="btn btn-default btn-lg card_selector progression" style="width:98px") Next
-						a(id="resetGame" onclick="onClickProgression('resetGame')" class="btn btn-default btn-lg card_selector progression" style="width:99px") Reset
-				div(style="clear:both; text-align: left")
-					div(id="rank_low_selector" class="btn-group")
-						for rank, key in [2,3,4,5,6,7,8,9]
-							a(id="#{rank}" onclick="onClickRank(#{rank})" class="btn btn-default btn-lg card_selector rank") #{rank}
-					div
-						div(id="rank_high_selector" class="btn-group")
-							for rank, key in ['T','J','Q','K','A']
-								a(id="#{rank}" onclick="onClickRank('#{rank}')" class="btn btn-default btn-lg card_selector rank") #{rank}
-						a(id="send" onclick="onClickSend()" class="btn btn-success btn-lg pull-right card_selector" style="width:147px") Send
+			include ./oddsSystem/liveView.jade
+			include ./oddsSystem/cardSelector.jade
 
 		// footer
 		div(style="clear:both;")
