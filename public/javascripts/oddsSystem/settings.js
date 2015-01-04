@@ -76,7 +76,32 @@ $(function(){
 		}
 	});
 
+	$('#title').on('keyup',function() {
+		var box = $('#titleBox')
+		box.text($(this).val());
+		if(box.text().length > 0) {
+			box.show();
+		} else {
+			box.hide();
+		}
+	});
+
+	$('#blind').on('keyup',function() {
+		var box = $('#blindBox')
+		box.text($(this).val());
+		if(box.text().length > 0) {
+			box.show();
+		} else {
+			box.hide();
+		}
+	});
+
 	$('#layoutRound').on('click', function() { setLayoutRound(); });
 	$('#layoutSides').on('click', function() { setLayoutSides(); });
-	$('#layoutShow').on('click', function() { $('.playerBox').show(); $('.board').show(); });
+	$('#layoutShow').on('click', function() {
+		$('#titleBox').show();
+		$('#blindBox').show();
+		$('.board').show();
+		$('.playerBox').show();
+	});
 });
