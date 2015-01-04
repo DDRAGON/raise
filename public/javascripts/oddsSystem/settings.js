@@ -60,8 +60,7 @@ $(function(){
 	$('#config_header').on('click', function() { $('#config_items').collapse('toggle'); });
 
 	$(".draggable").draggable({
-		containment: "#canvas_pane",
-		snap: "#canvas_pane"
+		containment: "#canvas_pane"
 	});
 
 	$('#card_selector_toggle').on('click', function() { $('#card_selector').slideToggle(); });
