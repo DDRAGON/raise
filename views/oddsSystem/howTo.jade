@@ -5,14 +5,14 @@ div(class="setting_wrap")
 
 	div(id="howto_items" class="collapse collapse_body")
 		div(class="stripe_b text-left")
-			a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About System
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About
 			div(id="modalAbout" class="modal fade")
 				div(class="modal-dialog")
 					div(class="modal-content")
 						div(class="modal-header")
 							h4(class="modal-title")
-								b About System
-								text  システムについて
+								b About
+								text  サービス概要
 						div(class="modal-body")
 							div 当サービスでは
 								b テキサスホールデムポーカーの動画配信
@@ -44,29 +44,29 @@ div(class="setting_wrap")
 							div 最小構成
 							ul
 								li 配信用PC
-								li WEBカメラ(全体撮影用)
+								li WEBカメラ（全体撮影用）
 								li インターネット環境
 							div 推奨構成
 							ul
 								li 配信用PC
-								li WEBカメラ(全体撮影用)
-								li WEBカメラ(カード入力用)
+								li WEBカメラ（全体撮影用）
+								li WEBカメラ（カード入力用）
 								li
 									a(href='/qrSheet') 既定のQRコード
 									text  を貼付（または印刷）したトランプ
 								li インターネット環境
 						div(class="modal-footer")
-							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage
+							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalSetup") Setup
 
 		div(class="stripe_b text-left")
-			a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageOddsSystem") Usage
-			div(id="modalUsageOddsSystem" class="modal fade")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalSetup") Setup
+			div(id="modalSetup" class="modal fade")
 				div(class="modal-dialog")
 					div(class="modal-content")
 						div(class="modal-header")
 							h4(class="modal-title")
-								b Usage
-								text  使い方
+								b Setup
+								text  初期設定
 						div(class="modal-body")
 							h5 放送用映像の取り込み
 							div 当ページにアクセスすると、カメラ入力の許可を確認されるので、[許可]して下さい。
@@ -81,7 +81,7 @@ div(class="setting_wrap")
 							div
 								b By QR Reader
 								text を選択した場合は
-								a(href="#" data-dismiss="modal" data-toggle="modal" data-target="#modalUsageQrCodeReader") こちら
+								a(href="#" data-dismiss="modal" data-toggle="modal" data-target="#modalSetupQR") こちら
 								text の利用方法を参照ください。
 							div
 								b By Web UI
@@ -91,14 +91,14 @@ div(class="setting_wrap")
 							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalGameProgression") Game Progression
 
 		div(class="stripe_a text-left")
-			a(class="howto" href="#" data-toggle="modal" data-target="#modalUsageQrCodeReader") Usage qrCodeReader
-			div(id="modalUsageQrCodeReader" class="modal fade")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalSetupQR") Setup QR Reading
+			div(id="modalSetupQR" class="modal fade")
 				div(class="modal-dialog")
 					div(class="modal-content")
 						div(class="modal-header")
 							h4(class="modal-title")
-								b Usage qrCodeReader
-								text  QRコードリーダーページの使い方
+								b Setup QR Reading
+								text  QRコード入力の設定
 						div(class="modal-body")
 							div
 								a(href="/qrCodeReader" target="_blank") QRコードリーダーページ
@@ -137,12 +137,10 @@ div(class="setting_wrap")
 							div 全員にカードが配られたらプリフロップとなり、各プレイヤーの勝率が表示されます。
 							div プレイヤーがフォールドした場合は、回収した手札のどちらか一枚を入力して下さい。該当プレイヤーがFold状態となり、残ったプレイヤーの勝率が再計算されます。
 							br
-							h5 フロップ
+							h5 フロップ～リバー
 							div フロップのカード３枚を入力して下さい。フロップ３枚目の入力時に勝率を再計算します。
-							div フォールドする場合はプリフロップの時と同じようにフォールドされたハンドを入力します。
-							br
-							h5 ターン～リバー
-							div ターン、リバーのカードを入力したタイミングで勝率が再計算されます。
+							div ターン、リバーのカードも入力したタイミングで勝率が再計算されます。
+							div プレイヤーがフォールドする場合は、プリフロップの時と同じようにフォールドされたハンドを入力します。
 							br
 							h5 ゲームの終了
 							div 次のゲームに進む場合、NextGame（ボタン入力ではNext、QRコードではng）を入力します。
