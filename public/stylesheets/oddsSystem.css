@@ -197,3 +197,17 @@ a.mark {
   color: #fff;
   background-color: #d96;
 }
+.playerBox .odds.withTie {
+  font-size: 11px;
+}
+.playerBox .odds {
+  color: #6cf;
+  font-weight: bold;
+}
+.playerBox .odds.max {
+  color: #f66;
+  font-weight: bold;
+}
+.playerBox .odds.win:before {
+  content: "✔ ";
+}

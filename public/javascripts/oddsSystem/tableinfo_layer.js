@@ -1,4 +1,5 @@
 var lastTableInfo = {}; // 直前に取得したテーブル情報
+var oddsList = [];
 
 // socket:tableInfo イベント処理
 function drawTableInfo(tableInfo) {
@@ -31,6 +32,7 @@ function drawTableInfo(tableInfo) {
 				displayFold(player.seatId);
 		}
 	}
+	calculateOddsStyle();
 	updateInputPlayerNames(players);
 
 	lastTableInfo = tableInfo;
@@ -135,26 +137,36 @@ function displayOdds(seatId, winPer, tiePer) {
 
 	} else {
 		//show
-		var odds = createWinOdds(winPer) + createTieOdds(tiePer);
+		var win = createWinOdds(winPer);
+		var tie = createTieOdds(tiePer);
+		if(tie) { $playerOdds.addClass('withTie'); } else { $playerOdds.removeClass('withTie'); }
+		oddsList.push(win);
 		$playerOdds
-		.text(odds)
+		.attr('data-win', win)
+		.text(win + tie + '%')
 		.show()
 	}
 }
 function createWinOdds(winPer) {
-	return roundOdds(winPer) + '%';
+	return roundOdds(winPer);
 }
 function createTieOdds(tiePer) {
-	if(tiePer) {
-		var tie = roundOdds(tiePer);
-		if (tie >= 5) {
-			return '(' + tie +'%)';
-		}
-	}
-	return "";
+	var tie = roundOdds(tiePer);
+	if (tie < 5) return "";
+	return '(' + tie +')';
 }
 function roundOdds(odds) {
-	return (Math.round(Number(odds.slice(0, -1)) * 10 ) / 10);
+	if(!odds) return;
+	return (Math.round(Number(odds.replace('%','')) * 10 ) / 10);
+}
+
+function calculateOddsStyle() {
+	var $odds = $('.odds');
+	$odds.removeClass('max win');
+	var max = Math.max.apply(null, oddsList);
+	$(".odds[data-win='"+max+"']").addClass('max');
+	$(".odds[data-win='100']").addClass('win');
+	oddsList = [];
 }
 
 // プレイヤー書き込み一覧の書き換え
