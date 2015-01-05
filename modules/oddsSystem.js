@@ -172,6 +172,7 @@ function gotCard(socketId, card) {
 function gotCardInStart(socketId, card) {
 	var checkingSeatId = clients[socketId].frontObj.button;
 	var lastSeatId = null;
+	// １枚目
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
@@ -186,6 +187,7 @@ function gotCardInStart(socketId, card) {
 		}
 		lastSeatId = checkingSeatId;
 	}
+	// ２枚目
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
@@ -197,7 +199,7 @@ function gotCardInStart(socketId, card) {
 			}
 			return;
 		}
-		if (clients[socketId].frontObj.players[checkingSeatId].hand[0] == card) {
+		if (clients[socketId].frontObj.players[checkingSeatId].hand[1] == card) {
 			return; // 入力カードを持っているプレイヤーがいたら無視する。
 		}
 	}

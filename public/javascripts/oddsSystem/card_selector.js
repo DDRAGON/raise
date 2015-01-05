@@ -36,7 +36,6 @@ function onClickRank(rank) {
 
 function sendImage(image) {
 	emitImageSendWithPassWord(image, $('#assistant_id').val());
-	sound();
 	$('#message').html('send '+image);
 	this.mark = '';
 	this.rank = '　';
@@ -96,13 +95,3 @@ function showBalloon(sentImage) {
 		$('.send_balloon').addClass("send_balloon mark_"+sentImage[1]+" color_"+sentImage[1]);
   }
 }
-
-function sound() {
-	var str = "";
-	str = str + "<EMBED id = 'id_sound'";
-	str = str + " SRC=/music/cursor6.wav";
-	str = str + " AUTOSTART='true'";
-	str = str + " HIDDEN='true'>";
-	document.getElementById("id_sound").innerHTML = str;
-}
-
