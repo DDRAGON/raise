@@ -1,0 +1,153 @@
+div(class="setting_wrap")
+	H4(id="howto_header" class='text-left collapse_header')
+		span(class="glyphicon glyphicon-flag")
+		text HOW TO
+
+	div(id="howto_items" class="collapse collapse_body")
+		div(class="stripe_b text-left")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalAbout") About
+			div(id="modalAbout" class="modal fade")
+				div(class="modal-dialog")
+					div(class="modal-content")
+						div(class="modal-header")
+							h4(class="modal-title")
+								b About
+								text  サービス概要
+						div(class="modal-body")
+							div 当サービスでは
+								b テキサスホールデムポーカーの動画配信
+								text 向けに、カメラの入力映像の上にプレイヤーのハンド、アクション、勝率等を表示するような映像合成を簡単に行うことができます。
+							div また実況付きのライブ配信等にも利用できるよう、スムーズなデータ入力が可能となっています。
+							br
+							h5 カード情報の入力
+							div ブラウザでの入力の他、別カメラからカード情報の映像入力（※）が可能となっています。
+							div ※ QRコードによる映像入力
+							div(style="padding-left:16px") 既定のQRコードを貼付（または印刷）したカードを別カメラにて映像入力することにより、カードを自動認識し画面に即時反映します。この機能はディーラーの手元にカメラを１台置き、ディーラーはカード配る前にカメラにカードをかざす運用を想定しています。
+							br
+							h5 勝率表示
+							div プリフロップ～リバーの各ステップ時、プレイヤーのホールカード及びボードから各プレイヤーの勝率を自動算出します。
+						div(class="modal-footer")
+							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalRequirements") Requirements
+
+		div(class="stripe_a text-left")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalRequirements") Requirements
+			div(id="modalRequirements" class="modal fade")
+				div(class="modal-dialog")
+					div(class="modal-content")
+						div(class="modal-header")
+							h4(class="modal-title")
+								b Requirements
+								text  必要機材
+						div(class="modal-body")
+							div 当サービスを利用するためには下記の機材が必要となります。
+							br
+							div 最小構成
+							ul
+								li 配信用PC
+								li WEBカメラ（全体撮影用）
+								li インターネット環境
+							div 推奨構成
+							ul
+								li 配信用PC
+								li WEBカメラ（全体撮影用）
+								li WEBカメラ（カード入力用）
+								li
+									a(href='/qrSheet') 既定のQRコード
+									text  を貼付（または印刷）したトランプ
+								li インターネット環境
+						div(class="modal-footer")
+							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalSetup") Setup
+
+		div(class="stripe_b text-left")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalSetup") Setup
+			div(id="modalSetup" class="modal fade")
+				div(class="modal-dialog")
+					div(class="modal-content")
+						div(class="modal-header")
+							h4(class="modal-title")
+								b Setup
+								text  初期設定
+						div(class="modal-body")
+							h5 放送用映像の取り込み
+							div 当ページにアクセスすると、カメラ入力の許可を確認されるので、[許可]して下さい。
+							div カメラを付けた状態で許可すると中央上部にカメラ映像が映ります。これは放送用の映像になります。
+							br
+							h5 プレイヤー名の入力
+							div PLAYERS メニューを開き、入力欄にプレイヤー名を入力して下さい。入力するとカメラ映像の上に名前が表示されます。
+							div プレイヤー名の右の×印を押すとプレイヤーを削除することができます。
+							br
+							h5 カード入力
+							div DIRECTION メニューを開き、By QR Reader（QRコードリーダーからの映像入力）または By Web UI（ブラウザでの手入力）を選択します。
+							div
+								b By QR Reader
+								text を選択した場合は
+								a(href="#" data-dismiss="modal" data-toggle="modal" data-target="#modalSetupQR") こちら
+								text の利用方法を参照ください。
+							div
+								b By Web UI
+								text を選択すると、カードを入力するためのボタン群が表示されます。
+							div 送信するカードを選択後、Sendボタンを押すと画面に反映されます。
+						div(class="modal-footer")
+							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalGameProgression") Game Progression
+
+		div(class="stripe_a text-left")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalSetupQR") Setup QR Reading
+			div(id="modalSetupQR" class="modal fade")
+				div(class="modal-dialog")
+					div(class="modal-content")
+						div(class="modal-header")
+							h4(class="modal-title")
+								b Setup QR Reading
+								text  QRコード入力の設定
+						div(class="modal-body")
+							div
+								a(href="/qrCodeReader" target="_blank") QRコードリーダーページ
+								text にアクセスします。
+							br
+							h5 準備
+							div ページを開くと、カメラ入力の許可を確認されるので、[許可]して下さい。
+							div CONFIG メニューの[Room ID]をQRコードリーダーページページの[password]欄に入力します。
+							div ※ [password]欄の入力内容が間違っていると、カード情報が画面に反映されません。
+							br
+							h5 動作確認
+							div QRコードをカメラにかざし、「ピッ」っと音が鳴り画面にカード情報が表示されることを確認してください。
+							br
+							h5 その他
+							div WEBカメラからの画像切り抜き速度にて、カードを認識する間隔を設定できます。
+							div ※ 「高速」に設定するとPCへの負荷が高まり、重くなる可能性があります。
+						div(class="modal-footer")
+							a(href="#" class="close" data-dismiss="modal" data-toggle="modal" data-target="#modalGameProgression") Game Progression
+
+		div(class="stripe_b text-left")
+			a(class="howto" href="#" data-toggle="modal" data-target="#modalGameProgression") Game Progression
+			div(id="modalGameProgression" class="modal fade")
+				div(class="modal-dialog")
+					div(class="modal-content")
+						div(class="modal-header")
+							h4(class="modal-title")
+								b Game Progression
+								text  ゲームの進め方
+						div(class="modal-body")
+							h5 ゲーム開始
+							div シャッフルが終わったらディーラーはSBから順番に1枚ずつカード情報を入力します。
+							div （QRリーダーを使う場合は手元にカメラを固定しておくとスムーズです）
+							div 画面にカード情報が表示されたらディーラーはそのカードをプレイヤーに配っていきます。
+							br
+							h5 プリフロップ
+							div 全員にカードが配られたらプリフロップとなり、各プレイヤーの勝率が表示されます。
+							div プレイヤーがフォールドした場合は、回収した手札のどちらか一枚を入力して下さい。該当プレイヤーがFold状態となり、残ったプレイヤーの勝率が再計算されます。
+							br
+							h5 フロップ～リバー
+							div フロップのカード３枚を入力して下さい。フロップ３枚目の入力時に勝率を再計算します。
+							div ターン、リバーのカードも入力したタイミングで勝率が再計算されます。
+							div プレイヤーがフォールドする場合は、プリフロップの時と同じようにフォールドされたハンドを入力します。
+							br
+							h5 ゲームの終了
+							div 次のゲームに進む場合、NextGame（ボタン入力ではNext、QRコードではng）を入力します。
+							div 各プレイヤーのハンド及びボードがリセットされ、ボタンが次のプレイヤーに移動します。
+							br
+							h5 ゲームのやり直し
+							div ミスディールやその他トラブル等でゲームをやり直す場合、ResetGame（ボタン入力ではReset、QRコードではrg）を入力します。
+							div 各プレイヤーのハンド及びボードがリセットされ、ボタンは元のプレイヤーの位置のままとなります。
+						div(class="modal-footer")
+							a(href="#" class="close" data-dismiss="modal") Let's Play Poker!
