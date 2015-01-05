@@ -81,9 +81,9 @@ function displayBoard(board) {
 			var cardCode = board[key];
 			$selector = $('#board'+key);
 			$selector.fadeIn();
-			$selector.text(code.charAt(0));
-			$selector.addClass('color_'+code.charAt(1));
-			$selector.addClass('mark_'+code.charAt(1));
+			$selector.text(cardCode.charAt(0));
+			$selector.addClass('color_'+cardCode.charAt(1));
+			$selector.addClass('mark_'+cardCode.charAt(1));
 		}
 	}
 }
