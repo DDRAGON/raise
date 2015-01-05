@@ -24,12 +24,12 @@ function drawTableInfo(tableInfo) {
 
 		// FOLD検知
 		if (
-				lastTableInfo.players &&
-				lastTableInfo.players[key] &&
- 				isActive(lastTableInfo.players[key]) &&
- 				!isActive(player)
-			) {
-				displayFold(player.seatId);
+			lastTableInfo.players &&
+			lastTableInfo.players[key] &&
+			isActive(lastTableInfo.players[key]) &&
+			!isActive(player)
+		) {
+			displayFold(player.seatId);
 		}
 	}
 	calculateOddsStyle();
@@ -42,6 +42,13 @@ addUpdateTableInfoListener(drawTableInfo);
 
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
+	$('#caption').trigger('keyup');
+	$('#description').trigger('keyup');
+	$('.actionBox').removeClass('actionF actionC actionR actionA ');
+	$('.chipBox').removeClass('actionF actionC actionR actionA ');
+	$('.btn_action').removeClass('active');
+	$('.chipBox').text('');
+	$('.chip_form').children().val('');
 }
 
 function resetPlayerBox(seatId) {
@@ -50,9 +57,9 @@ function resetPlayerBox(seatId) {
 	$('#player'+seatId+'Box').css({opacity:"1.0"}); // Fold（半透明）状態を解除
 }
 
-function isActive(target) {
+function isActive(targetPlayer) {
 	// 文字列の場合があるのでラップする
-	return target.isActive == true;
+	return targetPlayer.isActive == true;
 }
 
 function displayDealerButton(seatId) {
@@ -71,7 +78,7 @@ function displayBoard(board) {
 		// show
 		$('#board').show();
 		for (var key in board) {
-			var code = board[key];
+			var cardCode = board[key];
 			$selector = $('#board'+key);
 			$selector.fadeIn();
 			$selector.text(code.charAt(0));
@@ -142,9 +149,9 @@ function displayOdds(seatId, winPer, tiePer) {
 		if(tie) { $playerOdds.addClass('withTie'); } else { $playerOdds.removeClass('withTie'); }
 		oddsList.push(win);
 		$playerOdds
-		.attr('data-win', win)
-		.text(win + tie + '%')
-		.show()
+			.attr('data-win', win)
+			.text(win + tie + '%')
+			.show()
 	}
 }
 function createWinOdds(winPer) {

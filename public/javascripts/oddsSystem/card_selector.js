@@ -93,5 +93,5 @@ function showBalloon(sentImage) {
 	$('.send_balloon').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c');
 	if(sentImage.length == 2) {
 		$('.send_balloon').addClass("send_balloon mark_"+sentImage[1]+" color_"+sentImage[1]);
-  }
+	}
 }

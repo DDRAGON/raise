@@ -3,32 +3,22 @@ function setPassword(pw) {
 }
 addUpdatePasswordListener(setPassword);
 
-// PlayerBoxを左右に再配置する
-function setLayoutSides() {
-	$('#player0Box').css({left:"0px", top:"10px"});
-	$('#player1Box').css({left:"0px", top:"80px"});
-	$('#player2Box').css({left:"0px", top:"150px"});
-	$('#player3Box').css({left:"0px", top:"220px"});
-	$('#player4Box').css({left:"0px", top:"290px"});
-	$('#player5Box').css({left:"560px", top:"10px"});
-	$('#player6Box').css({left:"560px", top:"80px"});
-	$('#player7Box').css({left:"560px", top:"150px"});
-	$('#player8Box').css({left:"560px", top:"220px"});
-	$('#player9Box').css({left:"560px", top:"290px"});
-}
-
 // PlayerBoxを環状に再配置する
 function setLayoutRound() {
-	$('#player0Box').css({left:"0px", top:"150px"});
-	$('#player1Box').css({left:"40px", top:"0px"});
-	$('#player2Box').css({left:"200px", top:"0px"});
-	$('#player3Box').css({left:"360px", top:"0px"});
-	$('#player4Box').css({left:"520px", top:"0px"});
-	$('#player5Box').css({left:"560px", top:"150px"});
-	$('#player6Box').css({left:"520px", top:"294px"});
-	$('#player7Box').css({left:"360px", top:"294px"});
-	$('#player8Box').css({left:"200px", top:"294px"});
-	$('#player9Box').css({left:"40px", top:"294px"});
+	var canvasWidth = Number($('#canvas').attr('width'));
+	var canvasHeight = Number($('#canvas').attr('height'));
+	var playerBoxWidth = Number($('#player0Box').css('width').replace('px',''));
+	var playerBoxHeight = Number($('#player0Box').css('height').replace('px',''));
+	$('#player0Box').css({left: 0 + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player1Box').css({left: 0 + "px", top: 0 + "px"});
+	$('#player2Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player3Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player4Box').css({left: canvasWidth - playerBoxWidth + "px", top: 0 + "px"});
+	$('#player5Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player6Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player7Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player8Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player9Box').css({left: 0 + "px", top: canvasHeight - playerBoxHeight + "px"});
 }
 
 function changePlayerName(seatId) {
@@ -41,30 +31,66 @@ function deletePlayer(seatId) {
 	emitUpdatePlayerName(seatId, '', $('#assistant_id').val());
 }
 
+function changeChip(seatId) {
+	var chip = $('#inputChip'+seatId).val();
+	$('#player'+seatId+'Chip').text(chip);
+}
+
+function changeAction(seatId, action) {
+	$('.player'+seatId+'.btn_action').removeClass('active');
+	$('#inputAction'+action+seatId).addClass('active');
+	var $actionBox = $('#player'+seatId+'Action');
+	var $chipBox = $('#player'+seatId+'Chip');
+	$chipBox.removeClass('actionF actionC actionR actionA ');
+	$chipBox.addClass('action'+action);
+	$actionBox.removeClass('actionF actionC actionR actionA ');
+	$actionBox.addClass('action'+action);
+	$actionBox.text(action);
+	if(action == 'A') {
+		$('#inputChip'+seatId).val('All In');
+		$('#player'+seatId+'Chip').text('All In');
+	} else {
+		$('#inputChip'+seatId).val('');
+		$('#player'+seatId+'Chip').text('');
+	}
+	$('#inputChip'+seatId).focus();
+}
+
 $(function(){
 	setLayoutRound(); // playerBoxの初期配置を環状にする
 
+	// Bootstrap-Select対応
 	$('.selectpicker').selectpicker({ 'selectedText': 'cat' });
 	$('.selectpicker.btn').addClass('btn-sm');
 
+	// PlayerBoxのドラッグ可能設定
+	$(".draggable").draggable({
+		containment: "#canvas_pane"
+	});
+
+	// プレイヤー一覧のStyle設定
 	$('.playerList.0').addClass('stripe_a');
 	$('.playerList.1').addClass('stripe_b');
 
-	$('#show_name').on('click', function(){ $('.action_form').hide(); $('.chip_form').hide(); });
-	$('#show_name_action').on('click', function(){ $('.action_form').show(); $('.chip_form').hide(); });
-	$('#show_name_action_chip').on('click', function(){ $('.action_form').show(); $('.chip_form').show(); });
+	// プレイヤーアクション 入力表示切替
+	$('#showAdditionalForm').on('click', function(){
+		$('.actionBox').toggle();
+		$('.chipBox').toggle();
+		$('.action_form').toggle();
+		$('.chip_form').toggle();
+		setLayoutRound();
+	});
 
+	// メニューアコーディオン設定
 	$('#howto_header').on('click', function() { $('#howto_items').collapse('toggle'); });
 	$('#direction_header').on('click', function() { $('#direction_items').collapse('toggle'); });
 	$('#player_header').on('click', function() { $('#player_items').collapse('toggle'); });
 	$('#config_header').on('click', function() { $('#config_items').collapse('toggle'); });
 
-	$(".draggable").draggable({
-		containment: "#canvas_pane"
-	});
-
+	// カード入力フォーム表示切替
 	$('#card_selector_toggle').on('click', function() { $('#card_selector').slideToggle(); });
 
+	// アシスタントモード切替
 	$('#assistant_id').on('focusout', function() {
 		var assistant_id = $(this).val();
 		if(assistant_id) {
@@ -76,8 +102,18 @@ $(function(){
 		}
 	});
 
-	$('#title').on('keyup',function() {
-		var box = $('#titleBox')
+	// Caption,Description入力設定
+	$('#caption').on('keyup',function() {
+		var box = $('#captionBox')
+		box.text($(this).val());
+		if(box.text().length > 0) {
+			box.show();
+		} else {
+			box.hide();
+		}
+	});
+	$('#description').on('keyup',function() {
+		var box = $('#descriptionBox')
 		box.text($(this).val());
 		if(box.text().length > 0) {
 			box.show();
@@ -86,21 +122,11 @@ $(function(){
 		}
 	});
 
-	$('#blind').on('keyup',function() {
-		var box = $('#blindBox')
-		box.text($(this).val());
-		if(box.text().length > 0) {
-			box.show();
-		} else {
-			box.hide();
-		}
-	});
-
-	$('#layoutRound').on('click', function() { setLayoutRound(); });
-	$('#layoutSides').on('click', function() { setLayoutSides(); });
+	// Main View レイアウト設定
+	$('#layoutSetDefault').on('click', function() { setLayoutRound(); });
 	$('#layoutShow').on('click', function() {
-		$('#titleBox').show();
-		$('#blindBox').show();
+		$('#captionBox').show();
+		$('#descriptionBox').show();
 		$('.board').show();
 		$('.playerBox').show();
 	});

@@ -8,7 +8,7 @@ div(class="setting_wrap")
 		// Room Id
 		div(class="stripe_b text-left")
 			text Room Id
-			input(id="room_id" type="text" class="form-control input-sm" style="cursor: pointer; width:140px" onfocus="this.select();" readonly)
+			input(id="room_id" type="text" class="form-control input-sm" style="cursor: pointer; width:70px" onfocus="this.select();" readonly)
 
 		// Assistant Mode
 		div(class="stripe_a text-left")
@@ -21,13 +21,7 @@ div(class="setting_wrap")
 			div(style="float:left;")
 				button(id="layoutShow" class="btn btn-default btn-sm" type="button") Show
 			div(style="float:left; padding-left:5px;")
-				div(class="dropdown")
-					button(class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Select
-						span(class="caret")
-					ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1")
-						li(role="presentation")
-							for value, key in ['Round','Sides']
-								a(id="layout#{value}" role="menuitem" tabindex="-1" href="#") #{value}
+				button(id="layoutSetDefault" class="btn btn-default btn-sm" type="button") Set Default
 
 		// background
 		div(class="stripe_a text-left")

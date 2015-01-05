@@ -100,16 +100,20 @@ a.mark {
 .stripe_b {
   background-color: #e5e5e5;
 }
-#titleBox {
+#captionBox {
   background-color: rgba(0,0,0,0.4);
   color: #fff;
   font-size: 20px;
   padding: 5px 10px;
+  min-height: 38px;
+  min-width: 78px;
 }
-#blindBox {
+#descriptionBox {
   background-color: rgba(0,0,0,0.4);
   color: #fff;
   padding: 5px;
+  min-height: 30px;
+  min-width: 50px;
 }
 /* canvas */
 .wall_camera {
@@ -188,14 +192,55 @@ a.mark {
 .playerBox .dealer {
   width: 16px;
   font-size: 9pt;
-}
-.playerBox .dealer {
   color: rgba(255,255,255,0);
   background-color: rgba(0,0,0,0.6);
 }
 .playerBox .dealer.on {
   color: #fff;
   background-color: #d96;
+}
+.playerBox .actionBox {
+  width: 16px;
+  font-size: 9pt;
+  color: rgba(255,255,255,0);
+  background-color: rgba(0,0,0,0.5);
+}
+.playerBox .actionBox.actionF {
+  color: #fff;
+  background-color: rgba(50,150,200,0.5);
+}
+.playerBox .actionBox.actionC {
+  color: #fff;
+  background-color: rgba(100,200,50,0.5);
+}
+.playerBox .actionBox.actionR {
+  color: #fff;
+  background-color: rgba(250,50,100,0.5);
+}
+.playerBox .actionBox.actionA {
+  color: #fff;
+  background-color: rgba(250,50,100,0.5);
+}
+.playerBox .chipBox {
+  background-color: rgba(0,0,0,0.3);
+  width: 64px;
+  height: 17px;
+}
+.playerBox .chipBox.actionF {
+  color: #fff;
+  background-color: rgba(25,75,100,0.5);
+}
+.playerBox .chipBox.actionC {
+  color: #fff;
+  background-color: rgba(50,100,25,0.5);
+}
+.playerBox .chipBox.actionR {
+  color: #fff;
+  background-color: rgba(125,25,50,0.5);
+}
+.playerBox .chipBox.actionA {
+  color: #fff;
+  background-color: rgba(125,25,50,0.5);
 }
 .playerBox .odds.withTie {
   font-size: 11px;

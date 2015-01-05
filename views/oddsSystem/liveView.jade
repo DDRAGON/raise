@@ -6,13 +6,13 @@ div(style="position:relative")
 	div(id="canvas_pane" style="position:absolute; width:640px; height:360px;")
 
 		// Title
-		div(id="titleBox" class="draggable border_radius" style="display:none; position: absolute; top:75px; left:203px;") Title
+		div(id="captionBox" class="draggable border_radius" style="display:none; position: absolute; top:85px; left:203px;") Caption
 
 		// Blind
-		div(id="blindBox" class="draggable border_radius" style="display:none; position: absolute; top:115px; left:203px;") Blind/Ante
+		div(id="descriptionBox" class="draggable border_radius" style="display:none; position: absolute; top:125px; left:203px;") Description
 
 		// Board
-		div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:225px; left:203px;")
+		div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:210px; left:203px;")
 			div(style="overflow:hidden; margin: 5px 5px;")
 				for boardId, key in [0,1,2,3,4]
 					div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
@@ -27,5 +27,8 @@ div(style="position:relative")
 				div(style="display:table;")
 					div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
 					div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId+1}
+				div(style="display:table;")
+					div(id="player#{seatId}Action" class="actionBox" style="float:left; display:none;") C
+					div(id="player#{seatId}Chip" class="chipBox" style="float:left; display:none;")
 				div(style="clear:both; display:inline-block;")
 					div(id="player#{seatId}Odds" class="odds")
