@@ -1,0 +1,15 @@
+div(class="setting_wrap")
+	H4(id="direction_header" class='text-left collapse_header')
+		span(class="glyphicon glyphicon-play")
+		text DIRECTION
+
+	div(id="direction_items" class="collapse collapse_body")
+		div(class="stripe_b text-left")
+			a(role="menuitem" tabindex="-1" href="/qrCodeReader" target="_blank") By QR Reader
+		div(class="stripe_a text-left")
+			a(id="card_selector_toggle" role="menuitem" tabindex="-1" href="#") By Web UI
+
+		div(class="stripe_b text-left")
+			input(id="caption" type="text" class="form-control input-sm" style="width:140px" placeholder="Caption")
+		div(class="stripe_a text-left")
+			input(id="description" type="text" class="form-control input-sm" style="width:140px" placeholder="Description")

@@ -1,168 +1,45 @@
 extends layout
 
 block append css
+	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
+	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
+	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
+	link(rel="stylesheet" href="/stylesheets/oddsSystem.css")
 
 block append headContents
-	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
-	link(rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" )
-	link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/spacelab/bootstrap.min.css")
 
 block content
 
-	div(class="container" style="background-color: #00000")
+	div(class="container")
 
 		// header
 		div(class="navbar-wrapper")
 			div(class="navbar navbar-inverse navbar-static-top" role="navigation")
 				div(class="navbar-header")
-					a(class="navbar-brand" href="#")
-						text Poker Live!
-				div(style="float:right;")
-					a(href="https://twitter.com/share" class="twitter-share-button") Tweet
-		// header
+					a(id="home" class="navbar-brand" href="#") Poker Live!
 
-		// player entrance
-		div(id="players" style="padding-right:10px; float:left;")
-			ul(class="nav nav-list" style="display:table;")
-				li(class="list-group-item" style="overflow:hidden;")
-						span(class="glyphicon glyphicon-user") PLAYERS
+		// settings
+		div(id="settings" style="float:left;")
+			include ./oddsSystem/howTo.jade
+			div(class="collapseSaver" style="width:auto;height:1px;")
+			include ./oddsSystem/players.jade
+			div(class="collapseSaver" style="width:auto;height:1px;")
+			include ./oddsSystem/direction.jade
+			div(class="collapseSaver" style="width:auto;height:1px;")
+			include ./oddsSystem/config.jade
+			div(class="collapseSaver" style="width:auto;height:1px;")
 
-				for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-					li(class="list-group-item playerList #{seatId%2}" style="overflow:hidden; padding:5px 10px;")
-						div(style="width:140px; padding:0 5px; float:left")
-							div(class="input-group input-group-sm")
-								span(class="input-group-btn")
-									button(class="btn btn-default btn-sm" type="button" onclick="deletePlayer(#{seatId});") ×
-								input(id="inputPlayer#{seatId}" onkeyup="changePlayerName(#{seatId});" type="text" class="form-control" placeholder="Player#{seatId+1}")
-
-						// assistant options
-						div(class="chip_form" style="width: 60px; padding:0 5px; float:left; display:none;")
-							input(type="text" class="form-control input-sm" placeholder="Chip")
-						div(class="btn-group btn-group-sm action_form" role="group" style="padding:0; display:none;")
-							button(type="button" class="btn btn-default btn_F player#{seatId}") F
-							button(type="button" class="btn btn-default btn_C player#{seatId}") C
-							button(type="button" class="btn btn-default btn_BR player#{seatId}") B/R
-							button(type="button" class="btn btn-default btn_A player#{seatId}") A
-
-				// change form visibility
-				li(class="list-group-item playerList 0 text-left")
-					div(class="btn-group btn-group-xs" role="group")
-						button(type="button" id="plain_form" class="btn btn-default") Plain
-						button(type="button" id="plain_action_form" class="btn btn-default") +Action
-						button(type="button" id="plain_action_chip_form" class="btn btn-default") +Chip
-
-		// player entrance
-
-		div(id="center_pane" style="float:left;")
-
-			div(style="position:absolute;")
-				canvas(id="canvasForVideo" width="640" height="360" style="float:left;")
-
-			div(style="position:relative")
-				canvas(id="canvas" width="640" height="360" style="float:left;")
-				div(id="canvas_pane" style="position:absolute; width:640px; height:360px;")
-
-					// Board
-					div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:225px; left:203px;")
-						div(style="overflow:hidden; margin: 5px 5px;")
-							for boardId, key in [0,1,2,3,4]
-								div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
-
-					// PlayerBox
-					for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-						div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
-							div(id="player#{seatId}Hand" class="cardHolder")
-								div(id="player#{seatId}HandRight" class="card " style="float:right;")
-								div(id="player#{seatId}HandLeft" class="card " style="float:left;")
-								div(id="player#{seatId}Folded" class="folded" style="display:none;") Folded
-							div(style="display:table;")
-								div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
-								div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId}
-							div(id="player#{seatId}Odds" style="clear:both; display:inline-block;")
-
-			hr(class="featurette-divider")
-
-			<!-- card selections -->
-			div(id="card_selector" style="float: left; margin-top: 10px;")
-				div(id="suit_selector" class="btn-group" style="float: left;margin-right: 10px;")
-					a(id="s" onclick="markClick('s')" style="color:#222" class="btn btn-default btn-lg mark") &#9824;
-					a(id="h" onclick="markClick('h')" style="color:#F44" class="btn btn-default btn-lg mark") &#9829;
-					a(id="d" onclick="markClick('d')" style="color:#55F" class="btn btn-default btn-lg mark") &#9830;
-					a(id="c" onclick="markClick('c')" style="color:#393" class="btn btn-default btn-lg mark") &#9827;
-				div(id="num_selector" style="float: left;")
-					div(id="num_low_selector" class="btn-group")
-						for num, key in [2,3,4,5,6,7,8,9]
-							a(id="#{num}" onclick="numClick(#{num})" class="btn btn-default btn-lg num") #{num}
-				div
-					div(id="num_high_selector" class="btn-group")
-						for num, key in ['T','J','Q','K','A']
-							a(id="#{num}" onclick="numClick('#{num}')" class="btn btn-default btn-lg num") #{num}
-
-			br
-			div(style="float: left;")
-				text input mode
-				br
-				select(id="changeInputMode")
-					option(value="normal") normal
-					option(value="easy") easy
-					option(value="qrCode") QR code
-
-			div(class="col-xs-4" id="inputArea")
-				input(type="text" onkeydown="keyDown();" id="inputArea" class="form-control")
-			div(style="float: left;")
-				p(class="text-danger" id="message" style="font-size:18px;")
-			a(onclick="sendCard()" class="btn btn-success btn-lg pull-right") Card Send
-
-			div(style="clear:both;")
-				div(id="image" width="300")
-					span(style="color:#000;font-size:64px;")
-						text 　
-
-			div(style="float: left;")
-				text Assistant mode
-				br
-				select(id="changeAssistantMode")
-					option(value="Original") Original
-					option(value="Assistant") Assistant
-			div(style="float: left;")
-				div(id="AssistantModeDisplay" width="300")
-					span(style="color:#000;font-size:18px;")
-						text 　Original
-			// card selections
-
-		// game progression
-		div(class="btn-group-vertical")
-			a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('nextGame')")
-				span(class="glyphicon glyphicon-chevron-right")
-				text Next Game
-			br
-			a(type="button" class="btn btn-Primary btn-lg col-xs-12 " style="text-align: left;" onclick="sendImage('resetGame')")
-				span(class="glyphicon glyphicon-chevron-right")
-				text Reset Game
-		// game progression
-
-		// 配置設定
-		div
-			text 配置設定
-			br
-			select(id="changeArrangement")
-				for num, key in ['上下','左右']
-					option(value="#{num}") #{num}
-		// 配置設定
-
-		// 背景色
-		div
-			text back ground
-			br
-			select(id="changeBackground")
-				for num, key in ['camera','wood','green_mat']
-					option(value="#{num}") #{num}
-		// 背景色
+		div(id="right_pane" style="float:left;")
+			include ./oddsSystem/liveView.jade
+			include ./oddsSystem/cardSelector.jade
 
 		// footer
 		div(style="clear:both;")
 			footer
 				hr(class="featurette-divider")
+				div(style="float:left")
+					a(href="https://twitter.com/share" class="twitter-share-button") Tweet
+				div
 				p(class="pull-right")
 					a(href="#") Back to top
 				p
@@ -170,24 +47,24 @@ block content
 					a(href="#") Privacy
 					text &middot;
 					a(href="#") Terms
-		// footer
-		
-		// video
-		video(id="myVideo" style="visibility:hidden" autoplay="1")
-		// video
+					text &middot;
+					a(href="https://github.com/DDRAGON/raise") Github
 
+		// hidden
+		video(id="myVideo" style="visibility:hidden; display:none;" autoplay="1")
 
 	script.
 		var hostAddress = "#{hostAddress}";
 	script.
 		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 
-
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
-	script(src="/assets/bootstrap.min.js")
+	script(src="/assets/bootstrap/js/bootstrap.min.js")
 	script(src="/assets/jquery-ui.min.js")
 	script(src='/assets/textillate/assets/jquery.fittext.js')
 	script(src='/assets/textillate/assets/jquery.lettering.js')
 	script(src='/assets/textillate/jquery.textillate.js')
+	script(src="/assets/bootstrap-select/bootstrap-select.min.js")
+	script(src="/assets/jquery.balloon.min.js")
 	script(src="/javascripts/oddsSystem/ugly.min.js")
