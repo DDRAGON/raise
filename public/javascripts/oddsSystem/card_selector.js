@@ -40,11 +40,6 @@ function sendImage(image) {
 	this.mark = '';
 	this.rank = '　';
 	showBalloon(image);
-	if (image == 'start') {
-		for (var seatId=0; seatId<10; seatId++) {
-			$('#inputPlayer'+seatId).val('');
-		}
-	}
 }
 
 function onClickSend() {
