@@ -9,8 +9,8 @@ var readQRCodeIntervalTimeMSec = 50;
 var anikiMusicFileName = ['aniki1.wav','aniki2.mp3','aniki3.wav','aniki4.wav','aniki5.wav'];
 
 function sendImage(image) {
-	if (image == 'ng') image = 'nextGame';
-	if (image == 'rg') image = 'resetGame';
+	if (image == 'ng' || image == 'j1') image = 'nextGame';
+	if (image == 'rg' || image == 'j2') image = 'resetGame';
 	socket.emit('imageSendWithPassWord', {
 		image: image,
 		passWord: $('#inputArea').val()
