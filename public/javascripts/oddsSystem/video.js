@@ -12,6 +12,8 @@ navigator.getUserMedia({video: true, audio: false},
 		video.addEventListener('loadeddata', function() {
 			videoWidth  = video.videoWidth;
 			videoHeight = video.videoHeight;
+			console.log('videoWidth = ' + videoWidth + ', videoHeight = ' + videoHeight);
+			setDefaultSize();
 		}, false);
 	},
 	function (err) { // for error case
