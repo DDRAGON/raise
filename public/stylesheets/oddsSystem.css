@@ -167,10 +167,10 @@ a.mark {
 }
 /* playerBox */
 .playerBox {
-  font-size: 9pt;
+  font-size: 10pt;
   background-color: rgba(0,0,0,0.4);
   color: #eee;
-  width: 80px;
+  width: 85px;
   position: absolute;
 }
 .playerBox .cardHolder {
@@ -181,7 +181,7 @@ a.mark {
 }
 .playerBox .name {
   background-color: rgba(0,0,0,0.4);
-  width: 64px;
+  width: 67px;
 }
 .handLeft {
   padding-left: 10px;
@@ -190,8 +190,8 @@ a.mark {
   padding-right: 10px;
 }
 .playerBox .dealer {
-  width: 16px;
-  font-size: 9pt;
+  width: 18px;
+  font-size: 10pt;
   color: rgba(255,255,255,0);
   background-color: rgba(0,0,0,0.6);
 }
@@ -200,8 +200,8 @@ a.mark {
   background-color: #d96;
 }
 .playerBox .actionBox {
-  width: 16px;
-  font-size: 9pt;
+  width: 18px;
+  font-size: 10pt;
   color: rgba(255,255,255,0);
   background-color: rgba(0,0,0,0.5);
 }
@@ -223,8 +223,8 @@ a.mark {
 }
 .playerBox .chipBox {
   background-color: rgba(0,0,0,0.3);
-  width: 64px;
-  height: 17px;
+  width: 6px;
+  height: 18px;
 }
 .playerBox .chipBox.actionF {
   color: #fff;
@@ -243,7 +243,7 @@ a.mark {
   background-color: rgba(125,25,50,0.5);
 }
 .playerBox .odds.withTie {
-  font-size: 11px;
+  font-size: 10px;
 }
 .playerBox .odds {
   color: #6cf;
