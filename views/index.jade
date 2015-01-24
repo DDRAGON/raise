@@ -1,6 +1,7 @@
 extends layout
 
 block append css
+	link(rel="stylesheet" href="/stylesheets/index.css")
 
 block append headContents
 
@@ -8,22 +9,42 @@ block content
 	div(style='background-color:#000000;')
 		a(href='http://allin.jp')
 			img(src='image/index/allin.png' height='90' width='168')
-			script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
-			ins(class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="5734348463")
-			script.
-				(adsbygoogle = window.adsbygoogle || []).push({});
-	a(href='/oddsSystem') oddsSystem
-	br
-	a(href='/qrCodeReader') QR Code Reader
-	br
-	a(href='/howToUse') 使い方
-	br
-	a(href='https://www.youtube.com/watch?v=qhJz2eiMOds') 使い方紹介動画１
-	br
-	a(href='https://www.youtube.com/watch?v=8pZnBBzziqk') 使い方紹介動画２
-	br
-	a(href='/qrSheet') QRシート
-	br
-	a(href='https://github.com/DDRAGON/raise') allin.jpのgithub
+
+	span(style="font-size:28px;")
+		span(style='color:#FF0000;')
+			誰でも、どこでも、
+		span(style='color:#3366FF;')
+			安価に
+		span ハンド公開ポーカー配信ができる！
+	div(style="float:left;width:450px;")
+		a(href='/oddsSystem')
+			img(src='image/index/kuriAllIn.png' width='450px')
+	div(style="float:left;width:450px;")
+		div
+			当サービスでは
+			b テキサスホールデムポーカーの動画配信
+			text 向けに、カメラの入力映像の上にプレイヤーのハンド、アクション、勝率等を表示するような映像合成を簡単に行うことができます。
+		div また実況付きのライブ配信等にも利用できるよう、スムーズなデータ入力が可能となっています。
+
+		a(href='/oddsSystem') 安価ハンド公開ポーカー配信ツール
+		br
+		a(href='/qrCodeReader') QR Code リーダー
+		br
+		a(href='/howToUse') 使い方
+		br
+		a(href='https://www.youtube.com/watch?v=qhJz2eiMOds') 使い方紹介動画１
+		br
+		a(href='https://www.youtube.com/watch?v=8pZnBBzziqk') 使い方紹介動画２
+		br
+		a(href='http://allinjpdev.blogspot.jp/') 開発ブログ
+		br
+		a(href='/qrSheet') QRシート
+		br
+
+	div(style="clear:both;")
+		script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+		ins(class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-2941365993317354" data-ad-slot="5734348463")
+		script.
+			(adsbygoogle = window.adsbygoogle || []).push({});
 
 block append afterScripts

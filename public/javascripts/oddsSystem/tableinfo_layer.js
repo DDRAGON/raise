@@ -144,27 +144,17 @@ function displayOdds(seatId, winPer, tiePer) {
 
 	} else {
 		//show
-		var win = createWinOdds(winPer);
-		var tie = createTieOdds(tiePer);
-		if(tie) { $playerOdds.addClass('withTie'); } else { $playerOdds.removeClass('withTie'); }
+		var win = Number(winPer.replace('%',''));
+		if(tiePer) {
+			win += Number(tiePer.replace('%',''));
+		}
+		win = Math.round(win);
 		oddsList.push(win);
 		$playerOdds
 			.attr('data-win', win)
-			.text(win + tie + '%')
+			.text(win + '%')
 			.show()
 	}
-}
-function createWinOdds(winPer) {
-	return roundOdds(winPer);
-}
-function createTieOdds(tiePer) {
-	var tie = roundOdds(tiePer);
-	if (tie < 5) return "";
-	return '(' + tie +')';
-}
-function roundOdds(odds) {
-	if(!odds) return;
-	return (Math.round(Number(odds.replace('%','')) * 10 ) / 10);
 }
 
 function calculateOddsStyle() {

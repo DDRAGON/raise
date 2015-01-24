@@ -3,6 +3,7 @@ var express = require('express')
 	, routes = require('./routes')
 	, oddsSystem = require('./routes/oddsSystem')
 	, qrCodeReader = require('./routes/qrCodeReader')
+	, howToUse = require('./routes/howToUse')
 	, justGet = require('./routes/justGet')
 	, http = require('http')
 	, path = require('path');
@@ -29,7 +30,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/oddsSystem', oddsSystem.oddsSystem);
 app.get('/qrCodeReader', qrCodeReader.qrCodeReader);
-app.get('/howToUse', justGet.justGet);
+app.get('/howToUse', howToUse.howToUse);
 app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 
