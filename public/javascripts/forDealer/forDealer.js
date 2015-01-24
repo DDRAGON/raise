@@ -1,6 +1,16 @@
+var socket = io.connect('http://'+hostAddress+'/forDealer');
+
+socket.on('tableInfo', function(tableInfo) {
+	drawTableInfo(tableInfo);
+});
+
+function onKyeUpPassword() {
+	var password = $('#inputPasswordArea').val();
+	socket.emit('changePassword', password);
+}
+
 var lastTableInfo = {}; // 直前に取得したテーブル情報
 var oddsList = [];
-
 // socket:tableInfo イベント処理
 function drawTableInfo(tableInfo) {
 	var players = tableInfo.players;
@@ -20,35 +30,22 @@ function drawTableInfo(tableInfo) {
 
 		displayName(player.seatId, player.name);
 		displayHand(player.seatId, player.hand, player.isActive);
-		displayOdds(player.seatId, player.win, player.tie);
 
 		// FOLD検知
 		if (
 			lastTableInfo.players &&
-			lastTableInfo.players[key] &&
-			isActive(lastTableInfo.players[key]) &&
-			!isActive(player)
-		) {
+				lastTableInfo.players[key] &&
+				isActive(lastTableInfo.players[key]) &&
+				!isActive(player)
+			) {
 			displayFold(player.seatId);
 		}
 	}
-	calculateOddsStyle();
-	updateInputPlayerNames(players);
-
 	lastTableInfo = tableInfo;
 }
 
-addUpdateTableInfoListener(drawTableInfo);
-
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
-	$('#caption').trigger('keyup');
-	$('#description').trigger('keyup');
-	$('.actionBox').removeClass('actionF actionC actionR actionA ');
-	$('.chipBox').removeClass('actionF actionC actionR actionA ');
-	$('.btn_action').removeClass('active');
-	$('.chipBox').text('');
-	$('.chip_form').children().val('');
 }
 
 function resetPlayerBox(seatId) {
@@ -81,9 +78,6 @@ function displayBoard(board) {
 			var cardCode = board[key];
 			$selector = $('#board'+key);
 			$selector.fadeIn();
-			$selector.text(cardCode.charAt(0));
-			$selector.addClass('color_'+cardCode.charAt(1));
-			$selector.addClass('mark_'+cardCode.charAt(1));
 		}
 	}
 }
@@ -97,12 +91,12 @@ function displayHand(playerId, playerHands, isActive) {
 		return;
 	}
 	if (playerHands && playerHands[0]) {
-		displayCard($leftCard, playerHands[0]);
+		displayCard($leftCard, '0s');
 	} else {
 		hideCard($leftCard);
 	}
 	if (playerHands && playerHands[1]) {
-		displayCard($rightCard, playerHands[1]);
+		displayCard($rightCard, '1h');
 	} else {
 		hideCard($rightCard);
 	}
@@ -136,44 +130,27 @@ function displayFold(seatId) {
 		.textillate('start');
 }
 
-function displayOdds(seatId, winPer, tiePer) {
-	var $playerOdds = $('#player'+seatId+"Odds");
-	if(!winPer) {
-		// clear
-		$playerOdds.hide();
 
-	} else {
-		//show
-		var win = Number(winPer.replace('%',''));
-		if(tiePer) {
-			win += Number(tiePer.replace('%',''));
-		}
-		win = Math.round(win);
-		oddsList.push(win);
-		$playerOdds
-			.attr('data-win', win)
-			.text(win + '%')
-			.show()
-	}
+var DEFAULT_CANVAS_WIDTH  = 640;
+var DEFAULT_CANVAS_HEIGHT = 360;
+// PlayerBoxを環状に再配置する
+function setLayoutRound() {
+	var canvasWidth  = DEFAULT_CANVAS_WIDTH;
+	var canvasHeight = DEFAULT_CANVAS_HEIGHT;
+	var playerBoxWidth = Number($('#player0Box').css('width').replace('px',''));
+	var playerBoxHeight = Number($('#player0Box').css('height').replace('px',''));
+	$('#player0Box').css({left: 0 + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player1Box').css({left: 0 + "px", top: 0 + "px"});
+	$('#player2Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player3Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player4Box').css({left: canvasWidth - playerBoxWidth + "px", top: 0 + "px"});
+	$('#player5Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player6Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player7Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player8Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player9Box').css({left: 0 + "px", top: canvasHeight - playerBoxHeight + "px"});
 }
 
-function calculateOddsStyle() {
-	var $odds = $('.odds');
-	$odds.removeClass('max win');
-	var max = Math.max.apply(null, oddsList);
-	$(".odds[data-win='"+max+"']").addClass('max');
-	$(".odds[data-win='100']").addClass('win');
-	oddsList = [];
-}
-
-// プレイヤー書き込み一覧の書き換え
-function updateInputPlayerNames(players) {
-	for (var seatId=0; seatId<10; seatId++) {
-		if (players[seatId]) {
-			var player = players[seatId];
-			$('#inputPlayer'+seatId).val(player.name);
-		} else {
-			$('#inputPlayer'+seatId).val('');
-		}
-	}
-}
+$(function(){
+	setLayoutRound(); // playerBoxの初期配置を環状にする
+});

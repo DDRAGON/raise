@@ -4,6 +4,7 @@ var express = require('express')
 	, oddsSystem = require('./routes/oddsSystem')
 	, qrCodeReader = require('./routes/qrCodeReader')
 	, howToUse = require('./routes/howToUse')
+	, forDealer = require('./routes/forDealer')
 	, justGet = require('./routes/justGet')
 	, http = require('http')
 	, path = require('path');
@@ -31,6 +32,7 @@ app.get('/', routes.index);
 app.get('/oddsSystem', oddsSystem.oddsSystem);
 app.get('/qrCodeReader', qrCodeReader.qrCodeReader);
 app.get('/howToUse', howToUse.howToUse);
+app.get('/forDealer', forDealer.forDealer);
 app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 
@@ -43,3 +45,5 @@ var createOddsSystemSocket = require("./socket/oddsSystemSocket");
 new createOddsSystemSocket(io);
 var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
 new createQrCodeReaderSocket(io);
+var createForDealerSocket = require("./socket/forDealerSocket");
+new createForDealerSocket(io);
