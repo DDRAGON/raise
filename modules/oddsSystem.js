@@ -6,6 +6,7 @@ var ASSISTANT_MODE_ORIGINAL = 'Original';
 var ASSISTANT_MODE_ASSISTANT = 'Assistant';
 var clients = {};
 var assistantsMapByOriginalSocketId = {};
+var dealersMapByOriginalSocketId = {};
 
 
 function connect(socket)
@@ -75,10 +76,26 @@ function changeAssistantMode(socket, socketId, assistantMode) {
 	}
 }
 
+// forDealerのパスワード変更
+function dealerChangePassword(socket, socketId, dealerPassword) {
+	if (clients[dealerPassword]) { // オリジナルが見つかっ場合、ディーラーの作成
+		if (!dealersMapByOriginalSocketId[dealerPassword]) {
+			dealersMapByOriginalSocketId[dealerPassword] = [];
+		}
+		dealersMapByOriginalSocketId[dealerPassword].push ({
+			socketId: socketId,
+			socket: socket,
+			originalSocketId: dealerPassword
+		});
+		sendTableInfoForDealer(dealerPassword); // ディーラーを作ったら現在のテーブル情報を送る。
+	}
+}
+
 // 接続切断
 function disconnect(socketId) {
 	if (clients[socketId]) { // オリジナルが切断したとき。
 		deleteOriginal(socketId);
+		deleteDealers(socketId);
 		return;
 	}
 	// オリジナルでない時はアシスタントを探し、いいたら削除する。
@@ -91,6 +108,7 @@ module.exports = {
 	updatePlayerName: updatePlayerName,
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
+	dealerChangePassword: dealerChangePassword,
 	disconnect: disconnect
 };
 
@@ -291,6 +309,51 @@ function sendTableInfo(originalSocketId) {
 			assistant.socket.emit('tableInfo', tableInfo); // 送信
 		}
 	}
+	// ディーラーの送信
+	sendTableInfoForDealer(originalSocketId);
+}
+
+function sendTableInfoForDealer(originalSocketId) {
+	var tableInfoForDealer = createTableInfoForDealer(originalSocketId);
+	if (dealersMapByOriginalSocketId[originalSocketId]) {
+		for (var key in dealersMapByOriginalSocketId[originalSocketId]) {
+			var assistant = dealersMapByOriginalSocketId[originalSocketId][key];
+			assistant.socket.emit('tableInfo', tableInfoForDealer); // 送信
+		}
+	}
+
+}
+
+function createTableInfoForDealer(originalSocketId) {
+	var tableInfo = clients[originalSocketId].frontObj;
+	var tableInfoForDealer = {
+		players: [],
+		board: [],
+		button: tableInfo.button
+	};
+	var players = tableInfo.players;
+	var board   = tableInfo.board;
+	for (var key in players) {
+		var player = players[key];
+		tableInfoForDealer.players[key] = {
+			name: player.name,
+			seatId: player.seatId,
+			isActive: player.isActive,
+			hand: []
+		};
+		for (var handKey in player.hand) {
+			if (player.hand[handKey]) {
+				tableInfoForDealer.players[key].hand[handKey] = true;
+			}
+		}
+	}
+	for (var key in board)  {
+		if (board[key]) {
+			tableInfoForDealer.board[key] = true;
+		}
+	}
+
+	return tableInfoForDealer;
 }
 
 // ディーラーボタンを移動する
@@ -343,6 +406,10 @@ function deleteAssistant(assistantSocketId) {
 			}
 		}
 	}
+}
+
+function deleteDealers(socketId) {
+	delete dealersMapByOriginalSocketId[socketId];
 }
 
 // 降りたプレーヤーが出た時に勝率を再計算する。
