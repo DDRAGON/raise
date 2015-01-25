@@ -5,7 +5,7 @@ socket.on('tableInfo', function(tableInfo) {
 	drawTableInfo(tableInfo);
 });
 
-function onKyeUpPassword() {	//$('debugWindow').text('onKyeUpPassword');
+function sendPassword() {
 	var password = $('#inputPasswordArea').val();
 	$('#debugWindow').html(password);
 	socket.emit('changePassword', password);
