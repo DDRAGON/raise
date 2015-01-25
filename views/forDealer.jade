@@ -37,7 +37,8 @@ block content
 	div
 		text password
 		br
-		input(type="password" id="inputPasswordArea" onkeyup="onKyeUpPassword();")
+		input(type="password" id="inputPasswordArea")
+		<input type="button" value="send" onClick="sendPassword();" />
 	br
 	div(id='debugWindow')
 
