@@ -12,14 +12,14 @@ block content
 	div(id="canvas_pane" style="width:640px; height:360px;")
 
 		// Board
-		div(id="board" style="display:none; position: absolute; top:210px; left:203px;")
+		div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:210px; left:203px;")
 			div(style="overflow:hidden; margin: 5px 5px;")
 				for boardId, key in [0,1,2,3,4]
 					div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
 
 		// PlayerBox
 		for seatId, key in [0,1,2,3,4,5,6,7,8,9]
-			div(id="player#{seatId}Box" data-active="false" style="display:none;")
+			div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
 				div(id="player#{seatId}Hand" class="cardHolder")
 					div(id="player#{seatId}HandLeft" class="card handLeft" style="float:left;")
 					div(id="player#{seatId}HandRight" class="card handRight" style="float:right;")
@@ -39,8 +39,6 @@ block content
 		br
 		input(type="password" id="inputPasswordArea")
 		<input type="button" value="send" onClick="sendPassword();" />
-	br
-	div(id='debugWindow')
 
 
 	script.
