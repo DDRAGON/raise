@@ -1,11 +1,13 @@
 var socket = io.connect('http://'+hostAddress+'/forDealer');
 
 socket.on('tableInfo', function(tableInfo) {
+	$('#debugWindow').html('tableInfo come');
 	drawTableInfo(tableInfo);
 });
 
-function onKyeUpPassword() {
+function onKyeUpPassword() {	//$('debugWindow').text('onKyeUpPassword');
 	var password = $('#inputPasswordArea').val();
+	$('#debugWindow').html(password);
 	socket.emit('changePassword', password);
 }
 
