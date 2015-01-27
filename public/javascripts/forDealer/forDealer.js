@@ -108,9 +108,7 @@ function hideCard($selector) {
 	$selector.removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
 }
 function displayCard($selector, code) {
-	$selector.text(code.charAt(0));
-	$selector.addClass('color_'+code.charAt(1));
-	$selector.addClass('mark_'+code.charAt(1));
+	$selector.text("●");
 	$selector.fadeIn();
 }
 
