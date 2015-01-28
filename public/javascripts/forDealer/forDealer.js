@@ -151,6 +151,40 @@ function setLayoutRound() {
 	$('#player9Box').css({left: 0 + "px", top: canvasHeight - playerBoxHeight + "px"});
 }
 
+function bindTapAndTapHold() {
+	for (var playerId = 0; playerId < 10; playerId++) {
+		$('#player'+playerId+'Box').bind("taphold", tapHoldHandler);
+		$('#player'+playerId+'Box').bind("tap", tapHandler);
+	}
+}
+
+function tapHoldHandler(event) {
+	var id = event.target.id;
+	var seatId = id.substring(6, 7);
+	var password = $('#inputPasswordArea').val();
+	socket.emit(
+		'deletePlayerWithPassword',
+		{
+			password: password,
+			seatId: seatId
+		}
+	);
+}
+
+function tapHandler(event) {
+	var id = event.target.id;
+	var seatId = id.substring(6, 7);
+	var password = $('#inputPasswordArea').val();
+	socket.emit(
+		'foldPlayerWithPassword',
+		{
+			password: password,
+			seatId: seatId
+		}
+	);
+}
+
 $(function(){
 	setLayoutRound(); // playerBoxの初期配置を環状にする
+	bindTapAndTapHold(); // イベントに合わせたバインド設定
 });
