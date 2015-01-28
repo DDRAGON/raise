@@ -10,10 +10,10 @@ block append headContents
 
 block content
 
-	div(id="canvas_pane" style="width:640px; height:360px;")
+	div(id="canvas_pane")
 
 		// Board
-		div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:210px; left:203px;")
+		div(id="board" class="draggable border_radius board" style="display:none; position: absolute;")
 			div(style="overflow:hidden; margin: 5px 5px;")
 				for boardId, key in [0,1,2,3,4]
 					div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
@@ -50,6 +50,7 @@ block append afterScripts
 	script(src="/assets/bootstrap/js/bootstrap.min.js")
 	script(src="/assets/jquery-ui.min.js")
 	script(src="/assets/jquery.ui.touch-punch.min.js")
+	//script(src="/assets/jquery.mobile-1.4.5.min.js")
 	script(src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
 	script(src='/assets/textillate/assets/jquery.fittext.js')
 	script(src='/assets/textillate/assets/jquery.lettering.js')

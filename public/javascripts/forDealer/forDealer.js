@@ -9,6 +9,7 @@ function sendPassword() {
 	var password = $('#inputPasswordArea').val();
 	$('#debugWindow').html(password);
 	socket.emit('changePassword', password);
+	$('#canvas_pane').show();
 }
 
 var lastTableInfo = {}; // 直前に取得したテーブル情報
@@ -135,20 +136,31 @@ var DEFAULT_CANVAS_WIDTH  = 640;
 var DEFAULT_CANVAS_HEIGHT = 360;
 // PlayerBoxを環状に再配置する
 function setLayoutRound() {
-	var canvasWidth  = DEFAULT_CANVAS_WIDTH;
-	var canvasHeight = DEFAULT_CANVAS_HEIGHT;
-	var playerBoxWidth = Number($('#player0Box').css('width').replace('px',''));
+	var windowWidth  = $(window).width();
+	var windowHeight = $(window).height();
+	if (windowWidth < windowHeight) { // 大きい方が横幅として調節
+		var stack = windowHeight;
+		windowHeight = windowWidth;
+		windowWidth  = stack;
+	}
+	$("#canvas_pane").css({"width": windowWidth+"px" , "height": windowHeight+"px"});
+	windowHeight -= 80;
+	var boardTop  = parseInt(210*windowHeight / DEFAULT_CANVAS_HEIGHT); // 360:210 = windowHeight: y
+	var boardLeft = parseInt(203*windowWidth  / DEFAULT_CANVAS_WIDTH ); // 640:203 = windowWidth: x
+	$("#board").css({"top": boardTop+"px" , "left": boardLeft+"px"});
+
+	var playerBoxWidth  = parseInt(windowWidth*85 / DEFAULT_CANVAS_WIDTH); // 85:640 = x:windowWidth
 	var playerBoxHeight = Number($('#player0Box').css('height').replace('px',''));
-	$('#player0Box').css({left: 0 + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player0Box').css({left: 0 + "px", top: windowHeight/2 - playerBoxHeight/2 + "px"});
 	$('#player1Box').css({left: 0 + "px", top: 0 + "px"});
-	$('#player2Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px"});
-	$('#player3Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px"});
-	$('#player4Box').css({left: canvasWidth - playerBoxWidth + "px", top: 0 + "px"});
-	$('#player5Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight/2 - playerBoxHeight/2 + "px"});
-	$('#player6Box').css({left: canvasWidth - playerBoxWidth + "px", top: canvasHeight - playerBoxHeight + "px"});
-	$('#player7Box').css({left: canvasWidth/3*2 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
-	$('#player8Box').css({left: canvasWidth/3*1 - playerBoxWidth/2 + "px", top: canvasHeight - playerBoxHeight + "px"});
-	$('#player9Box').css({left: 0 + "px", top: canvasHeight - playerBoxHeight + "px"});
+	$('#player2Box').css({left: windowWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player3Box').css({left: windowWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px"});
+	$('#player4Box').css({left: windowWidth - playerBoxWidth + "px", top: 0 + "px"});
+	$('#player5Box').css({left: windowWidth - playerBoxWidth + "px", top: windowHeight/2 - playerBoxHeight/2 + "px"});
+	$('#player6Box').css({left: windowWidth - playerBoxWidth + "px", top: windowHeight - playerBoxHeight + "px"});
+	$('#player7Box').css({left: windowWidth/3*2 - playerBoxWidth/2 + "px", top: windowHeight - playerBoxHeight + "px"});
+	$('#player8Box').css({left: windowWidth/3*1 - playerBoxWidth/2 + "px", top: windowHeight - playerBoxHeight + "px"});
+	$('#player9Box').css({left: 0 + "px", top: windowHeight - playerBoxHeight + "px"});
 }
 
 function bindTapAndTapHold() {
@@ -185,6 +197,7 @@ function tapHandler(event) {
 }
 
 $(function(){
+	$('#canvas_pane').hide();
 	setLayoutRound(); // playerBoxの初期配置を環状にする
 	bindTapAndTapHold(); // イベントに合わせたバインド設定
 });
