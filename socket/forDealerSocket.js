@@ -15,6 +15,10 @@ var createForDealerSocket = function(io) {
 			oddsSystem.foldPlayer(data.password, data.seatId);
 		});
 
+		socket.on('imageSendWithPassWord', function(data) {
+			oddsSystem.gotImage(data.password, data.image);
+		});
+
 	});
 
 	return forDealerSocket;

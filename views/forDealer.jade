@@ -35,11 +35,16 @@ block content
 					div(id="player#{seatId}Odds" class="odds")
 
 	br
-	div
+	div(id='passwordArea' style='font-size:32px')
 		text password
-		br
 		input(type="password" id="inputPasswordArea")
 		<input type="button" value="send" onClick="sendPassword();" />
+
+	div(id='controlButton' style='font-size:40px')
+		div(style="float:left;")
+			input(type='button' value='Next'  onClick="sendNextGame();"  id='nextButton')
+		div(style="float:right;")
+			input(type='button' value='Reset' onClick="sendResetGame();" id='resetButton')
 
 
 	script.
