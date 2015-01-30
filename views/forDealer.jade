@@ -4,15 +4,16 @@ block append css
 	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
 	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
 	link(rel="stylesheet" href="/stylesheets/oddsSystem.css")
+	link(rel="stylesheet" href="/stylesheets/forDealer.css")
 
 block append headContents
 
 block content
 
-	div(id="canvas_pane" style="width:640px; height:360px;")
+	div(id="canvas_pane")
 
 		// Board
-		div(id="board" class="draggable border_radius board" style="display:none; position: absolute; top:210px; left:203px;")
+		div(id="board" class="draggable border_radius board" style="display:none; position: absolute;")
 			div(style="overflow:hidden; margin: 5px 5px;")
 				for boardId, key in [0,1,2,3,4]
 					div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
@@ -34,11 +35,16 @@ block content
 					div(id="player#{seatId}Odds" class="odds")
 
 	br
-	div
+	div(id='passwordArea' style='font-size:32px')
 		text password
-		br
 		input(type="password" id="inputPasswordArea")
 		<input type="button" value="send" onClick="sendPassword();" />
+
+	div(id='controlButton' style='font-size:40px')
+		div(style="float:left;")
+			input(type='button' value='Next'  onClick="sendNextGame();"  id='nextButton')
+		div(style="float:right;")
+			input(type='button' value='Reset' onClick="sendResetGame();" id='resetButton')
 
 
 	script.
@@ -49,6 +55,8 @@ block append afterScripts
 	script(src="/assets/bootstrap/js/bootstrap.min.js")
 	script(src="/assets/jquery-ui.min.js")
 	script(src="/assets/jquery.ui.touch-punch.min.js")
+	//script(src="/assets/jquery.mobile-1.4.5.min.js")
+	script(src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
 	script(src='/assets/textillate/assets/jquery.fittext.js')
 	script(src='/assets/textillate/assets/jquery.lettering.js')
 	script(src='/assets/textillate/jquery.textillate.js')

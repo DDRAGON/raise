@@ -48,6 +48,13 @@ function updatePlayerName(socketId, seatId, name) {
 	sendTableInfo(socketId);
 }
 
+function foldPlayer(socketId, seatId) {
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	if (!clients[socketId].frontObj.players[seatId]) return; // プレイヤーがいない時は何もしない。
+	foldedAndRecalculation(socketId, seatId); // フォールドさせて勝率再計算
+	sendTableInfo(socketId); // テーブル情報送信
+}
+
 // アシスタントパスワードの変更
 function updateAssistantPassword(socket, socketId, assistantPassword) {
 	if (clients[assistantPassword]) { // オリジナルが見つかっ場合、アシスタントの作成
@@ -106,6 +113,7 @@ module.exports = {
 	connect: connect,
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
+	foldPlayer: foldPlayer,
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
 	dealerChangePassword: dealerChangePassword,
@@ -309,7 +317,7 @@ function sendTableInfo(originalSocketId) {
 			assistant.socket.emit('tableInfo', tableInfo); // 送信
 		}
 	}
-	// ディーラーの送信
+	// ディーラーへの送信
 	sendTableInfoForDealer(originalSocketId);
 }
 

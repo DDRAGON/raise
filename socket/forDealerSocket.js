@@ -7,6 +7,18 @@ var createForDealerSocket = function(io) {
 			oddsSystem.dealerChangePassword(socket, socket.id, password);
 		});
 
+		socket.on('deletePlayerWithPassword', function(data) {
+			oddsSystem.updatePlayerName(data.password, data.seatId, '');
+		});
+
+		socket.on('foldPlayerWithPassword', function(data) {
+			oddsSystem.foldPlayer(data.password, data.seatId);
+		});
+
+		socket.on('imageSendWithPassWord', function(data) {
+			oddsSystem.gotImage(data.password, data.image);
+		});
+
 	});
 
 	return forDealerSocket;
