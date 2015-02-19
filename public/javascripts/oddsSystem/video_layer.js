@@ -25,7 +25,11 @@ $("#changeScreenSize").change(function(){
 
 $("#changeBackground").change(function(){
 	background = $(this).val();
-	$('#canvas_pane').attr('class', 'wall_'+background);
+	if (background === 'RGB(255,255,0)') {
+		$('#canvas_pane').attr('class', 'wall_yellow');
+	} else {
+		$('#canvas_pane').attr('class', 'wall_'+background);
+	}
 });
 
 // ビデオの描画

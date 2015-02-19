@@ -125,6 +125,9 @@ a.mark {
 .wall_mat {
   background-image: url("/image/background/green_mat.jpg");
 }
+.wall_purple {
+  background-color: #ff0;
+}
 /* board */
 .board {
   background-color: rgba(200,200,200,0.4);
