@@ -10,15 +10,18 @@ block content
 		a(href='http://allin.jp')
 			img(src='image/index/allin.png' height='90' width='168')
 
-	span(style="font-size:28px;")
-		span(style='color:#FF0000;')
-			誰でも、どこでも、
-		span(style='color:#3366FF;')
-			安価に
-		span ハンド公開ポーカー配信ができる！
+	div
+		span(style="font-size:28px;")
+			span(style='color:#FF0000;')
+				誰でも、どこでも、
+			span(style='color:#3366FF;')
+				安価に
+			span ハンド公開ポーカー配信ができる！
+
 	div(style="float:left;width:450px;")
 		a(href='/oddsSystem')
 			img(src='image/index/kuriAllIn.png' width='450px')
+
 	div(style="float:left;width:450px;")
 		div
 			当サービスでは
@@ -40,7 +43,14 @@ block content
 		br
 		a(href='/qrSheet') QRシート
 		br
-		a(href='/forDealer') ディーラーページ
+		div
+			a(href='/forDealer')
+				img(src='image/index/smartPhone.jpg' height='40' width='20')
+				text ディーラーページ
+		div
+			a(href='/QRCodeCards')
+				img(src='image/QRCodeCards/QRCodeCardSample.png' height='60' width='70')
+				text QRコード＆バーコードトランプ
 		br
 
 	div(style="clear:both;")
