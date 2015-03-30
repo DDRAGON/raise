@@ -21,6 +21,7 @@ $("#changeScreenSize").change(function(){
 			setCameraSize();
 			break;
 	}
+	setLayoutRound();
 });
 
 $("#changeBackground").change(function(){
