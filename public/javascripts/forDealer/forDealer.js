@@ -138,36 +138,43 @@ function displayFold(seatId) {
 
 var DEFAULT_CANVAS_WIDTH  = 640;
 var DEFAULT_CANVAS_HEIGHT = 360;
+var DEFAULT_BUTTON_WIDTH  = 120;
+var DEFAULT_BUTTON_HEIGHT = 36;
 // PlayerBoxを環状に再配置する
 function setLayoutRound() {
 	var windowWidth  = $(window).width();
 	var windowHeight = $(window).height();
-	$("#canvas_pane").css({"width": windowWidth+"px" , "height": windowHeight+"px"});
-	var boardTop  = parseInt(210*windowHeight / DEFAULT_CANVAS_HEIGHT); // 360:210 = windowHeight: y
-	var boardLeft = parseInt(203*windowWidth  / DEFAULT_CANVAS_WIDTH ); // 640:203 = windowWidth: x
+	var buttonWidth  = parseInt(DEFAULT_BUTTON_WIDTH*windowWidth / DEFAULT_CANVAS_WIDTH); // DEFAULT_CANVAS_WIDTH:DEFAULT_BUTTON_WIDTH = windowWidth:x
+	var buttonHeight = parseInt(DEFAULT_BUTTON_HEIGHT*windowHeight / DEFAULT_CANVAS_HEIGHT); // DEFAULT_CANVAS_HEIGHT:DEFAULT_BUTTON_HEIGHT = windowHeight:y
+	var displayAreaWidth  = windowWidth;
+	var displayAreaHeight = windowHeight - buttonHeight;
+
+	$("#canvas_pane").css({"width": displayAreaWidth+"px" , "height": displayAreaHeight+"px"});
+	var boardTop  = parseInt(210*displayAreaHeight / DEFAULT_CANVAS_HEIGHT); // 360:210 = displayAreaHeight: y
+	var boardLeft = parseInt(203*displayAreaWidth  / DEFAULT_CANVAS_WIDTH ); // 640:203 = displayAreaWidth: x
 	$("#board").css({"top": boardTop+"px" , "left": boardLeft+"px"});
 
 	// playerBox
-	var playerBoxWidth  = parseInt(windowWidth*85  / DEFAULT_CANVAS_WIDTH); // 85:640 = x:windowWidth
-	var playerBoxHeight = parseInt(windowHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:windowHeight
-	$('#player0Box').css({left: 0 + "px", top: windowHeight/2 - playerBoxHeight/2 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	var playerBoxWidth  = parseInt(displayAreaWidth*85  / DEFAULT_CANVAS_WIDTH); // 85:640 = x:displayAreaWidth
+	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:displayAreaHeight
+	$('#player0Box').css({left: 0 + "px", top: displayAreaHeight/2 - playerBoxHeight/2 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
 	$('#player1Box').css({left: 0 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player2Box').css({left: windowWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player3Box').css({left: windowWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player4Box').css({left: windowWidth - playerBoxWidth + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player5Box').css({left: windowWidth - playerBoxWidth + "px", top: windowHeight/2 - playerBoxHeight/2 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player6Box').css({left: windowWidth - playerBoxWidth + "px", top: windowHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player7Box').css({left: windowWidth/3*2 - playerBoxWidth/2 + "px", top: windowHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player8Box').css({left: windowWidth/3*1 - playerBoxWidth/2 + "px", top: windowHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
-	$('#player9Box').css({left: 0 + "px", top: windowHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player2Box').css({left: displayAreaWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player3Box').css({left: displayAreaWidth/3*2 - playerBoxWidth/2 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player4Box').css({left: displayAreaWidth - playerBoxWidth + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player5Box').css({left: displayAreaWidth - playerBoxWidth + "px", top: displayAreaHeight/2 - playerBoxHeight/2 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player6Box').css({left: displayAreaWidth - playerBoxWidth + "px", top: displayAreaHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player7Box').css({left: displayAreaWidth/3*2 - playerBoxWidth/2 + "px", top: displayAreaHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player8Box').css({left: displayAreaWidth/3*1 - playerBoxWidth/2 + "px", top: displayAreaHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
+	$('#player9Box').css({left: 0 + "px", top: displayAreaHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
 
 	// name
-	var fontSize       = parseInt(windowWidth*10 / DEFAULT_CANVAS_WIDTH);  // 10:640 = x:windowWidth
-	var cardFontSize   = parseInt(windowWidth*16 / DEFAULT_CANVAS_WIDTH);  // 16:640 = x:windowWidth
-	var nameWidth      = parseInt(windowWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:windowWidth
-	var dealerWidth    = parseInt(windowWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:windowWidth
-	var cardPaddingTop = parseInt(windowHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:windowHeight
-	var cardHolderHeight = parseInt(windowHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:windowHeight
+	var fontSize       = parseInt(displayAreaWidth*10 / DEFAULT_CANVAS_WIDTH);  // 10:640 = x:displayAreaWidth
+	var cardFontSize   = parseInt(displayAreaWidth*16 / DEFAULT_CANVAS_WIDTH);  // 16:640 = x:displayAreaWidth
+	var nameWidth      = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
+	var dealerWidth    = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
+	var cardPaddingTop = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
+	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
 	for (var seatId = 0; seatId < 10; seatId++) {
 		$('#player'+seatId+'Hand').css({height: cardHolderHeight+"px"});
 		$('#player'+seatId+'HandLeft').css({'padding-top': cardPaddingTop+"px", font: cardFontSize+"pt Arial, sans-serif"});
@@ -178,6 +185,12 @@ function setLayoutRound() {
 		$('#player'+seatId+'Odds').css({'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Folded').css({'font-size': cardFontSize+"pt"});
 	}
+
+	// button
+	var buttonFontSize = parseInt(buttonHeight / 2);
+	$('#nextButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
+	$('#showOptionButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
+	$('#resetButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 }
 
 $( window ).on( "orientationchange", function( event ) { // 画面が回転したとき
@@ -216,6 +229,10 @@ function tapHandler(event) {
 	);
 }
 
+function showOption() {
+	toggleButtons();
+}
+
 function sendNextGame() {
 	socket.emit(
 		'imageSendWithPassWord',
@@ -224,6 +241,7 @@ function sendNextGame() {
 			image: 'nextGame'
 		}
 	);
+	toggleButtons();
 }
 
 function sendResetGame() {
@@ -234,11 +252,19 @@ function sendResetGame() {
 			image: 'resetGame'
 		}
 	);
+	toggleButtons();
+}
+
+function toggleButtons() {
+	$('#nextButton').toggle();
+	$('#resetButton').toggle();
 }
 
 
 $(function(){
 	$('#canvas_pane').hide();
+	$('#nextButton').hide();
+	$('#resetButton').hide();
 	$('#controlButton').hide();
 	$(".ui-loader").remove();
 	setLayoutRound(); // playerBoxの初期配置を環状にする
