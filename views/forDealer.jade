@@ -34,17 +34,20 @@ block content
 				div(style="clear:both; display:inline-block;")
 					div(id="player#{seatId}Odds" class="odds")
 
-	br
 	div(id='passwordArea' style='font-size:32px')
 		text password
 		input(type="password" id="inputPasswordArea")
 		<input type="button" value="send" onClick="sendPassword();" />
 
-	div(id='controlButton' style='font-size:40px')
+	div(id='controlButton')
 		div(style="float:left;")
-			input(type='button' value='Next'  onClick="sendNextGame();"  id='nextButton')
-		div(style="float:right;")
-			input(type='button' value='Reset' onClick="sendResetGame();" id='resetButton')
+			button(type='button', onClick="sendNextGame();", id='nextButton') Next
+		div(style="float:left;")
+			test 　
+			button(type='button', onClick="showOption();", id='showOptionButton') Option
+			test 　
+		div(style="float:left;")
+			button(type='button', onClick="sendResetGame();", id='resetButton') Reset
 
 
 	script.
