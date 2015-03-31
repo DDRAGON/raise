@@ -1,0 +1,53 @@
+extends layout
+
+block append css
+
+block append headContents
+
+block content
+
+	h3 マルチリーダー
+
+	div(id="center_pane" style="float:left;")
+
+		// video canvas
+		canvas(id="canvasForVideo" width="400" height="300" style="float:left;")
+		// video canvas
+		br
+		// result
+		div(id='result')
+		// result
+
+	br
+	div(style="float:left;")
+		text 　webカメラからの画像切り抜き速度：
+		select(id="changeReadQRCodeIntervalTimeMSec")
+			for num, key in ['標準', '高速']
+				option(value="#{num}") #{num}
+		br
+
+		text 音楽：
+		select(id="changeMusic" name="musicFileName")
+			for value, key in ['meka1.wav','meka2.mp3','meka3.mp3','meka4.mp3','meka5.mp3','meka6.mp3','meka7.mp3','meka8.mp3','meka9.mp3','meka10.mp3','aniki1.wav','aniki2.mp3','aniki3.wav','aniki4.wav','aniki5.wav', 'アニキランダム']
+				option(value="#{value}") #{value}
+
+		br
+
+	// sound
+	for value, key in ['meka1.wav','meka2.mp3','meka3.mp3','meka4.mp3','meka5.mp3','meka6.mp3','meka7.mp3','meka8.mp3','meka9.mp3','meka10.mp3','aniki1.wav','aniki2.mp3','aniki3.wav','aniki4.wav','aniki5.wav']
+		audio(id="#{value}" preload="auto")
+			source(src="/music/#{value}")
+	// sound
+	// video
+	video(id="myVideo" style="visibility:hidden" autoplay="1")
+	// video
+
+
+	script.
+		var hostAddress = "#{hostAddress}";
+
+block append afterScripts
+	script(type='text/javascript', src='/socket.io/socket.io.js')
+	script(src="/assets/mscorlib.js")
+	script(src="/assets/ZXingQR.js")
+	script(src="/javascripts/multiQrCodeReader/ugly.min.js")

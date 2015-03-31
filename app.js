@@ -5,6 +5,9 @@ var express = require('express')
 	, qrCodeReader = require('./routes/qrCodeReader')
 	, howToUse = require('./routes/howToUse')
 	, forDealer = require('./routes/forDealer')
+	, dedicatedTable = require('./routes/dedicatedTable')
+	, multiQrCodeReader = require('./routes/multiQrCodeReader')
+	, manAAgeTool = require('./routes/manAAgeTool')
 	, justGet = require('./routes/justGet')
 	, http = require('http')
 	, path = require('path');
@@ -33,6 +36,9 @@ app.get('/oddsSystem', oddsSystem.oddsSystem);
 app.get('/qrCodeReader', qrCodeReader.qrCodeReader);
 app.get('/howToUse', howToUse.howToUse);
 app.get('/forDealer', forDealer.forDealer);
+app.get('/dedicatedTable', dedicatedTable.dedicatedTable);
+app.get('/multiQrCodeReader', multiQrCodeReader.multiQrCodeReader);
+app.get('/manAAgeTool', manAAgeTool.manAAgeTool);
 app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
@@ -48,3 +54,7 @@ var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
 new createQrCodeReaderSocket(io);
 var createForDealerSocket = require("./socket/forDealerSocket");
 new createForDealerSocket(io);
+var createMultiQrCodeReaderSocket = require("./socket/multiQrCodeReaderSocket");
+new createMultiQrCodeReaderSocket(io);
+var createManAAgeToolSocket = require("./socket/manAAgeToolSocket");
+new createManAAgeToolSocket(io);

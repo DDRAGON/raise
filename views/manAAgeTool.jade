@@ -1,0 +1,27 @@
+extends layout
+
+block append css
+	link(rel="stylesheet" href="/assets/textillate/assets/animate.css")
+	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
+	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
+
+block append headContents
+
+block content
+
+	div(id="multiQrCodeReaderInfo")
+
+	script.
+		var hostAddress = "#{hostAddress}";
+
+block append afterScripts
+	script(type='text/javascript', src='/socket.io/socket.io.js')
+	script(src="/assets/bootstrap/js/bootstrap.min.js")
+	script(src="/assets/jquery-ui.min.js")
+	script(src="/assets/jquery.ui.touch-punch.min.js")
+	script(src='/assets/textillate/assets/jquery.fittext.js')
+	script(src='/assets/textillate/assets/jquery.lettering.js')
+	script(src='/assets/textillate/jquery.textillate.js')
+	script(src="/assets/bootstrap-select/bootstrap-select.min.js")
+	script(src="/assets/jquery.balloon.min.js")
+	script(src="/javascripts/manAAgeTool/ugly.min.js")
