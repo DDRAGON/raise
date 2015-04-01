@@ -149,14 +149,24 @@ function setLayoutRound() {
 	var displayAreaWidth  = windowWidth;
 	var displayAreaHeight = windowHeight - buttonHeight;
 
+	// name
+	var fontSize       = parseInt(displayAreaWidth*10 / DEFAULT_CANVAS_WIDTH);  // 10:640 = x:displayAreaWidth
+	var cardFontSize   = parseInt(displayAreaWidth*16 / DEFAULT_CANVAS_WIDTH);  // 16:640 = x:displayAreaWidth
+	var nameWidth      = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
+	var dealerWidth    = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
+	var cardPaddingTop = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
+	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
+
+	// playerBox
+	var playerBoxWidth  = dealerWidth + nameWidth + 10;
+	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:displayAreaHeight
+
 	$("#canvas_pane").css({"width": displayAreaWidth+"px" , "height": displayAreaHeight+"px"});
 	var boardTop  = parseInt(210*displayAreaHeight / DEFAULT_CANVAS_HEIGHT); // 360:210 = displayAreaHeight: y
 	var boardLeft = parseInt(203*displayAreaWidth  / DEFAULT_CANVAS_WIDTH ); // 640:203 = displayAreaWidth: x
 	$("#board").css({"top": boardTop+"px" , "left": boardLeft+"px"});
 
 	// playerBox
-	var playerBoxWidth  = parseInt(displayAreaWidth*85  / DEFAULT_CANVAS_WIDTH); // 85:640 = x:displayAreaWidth
-	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:displayAreaHeight
 	$('#player0Box').css({left: 0 + "px", top: displayAreaHeight/2 - playerBoxHeight/2 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
 	$('#player1Box').css({left: 0 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
 	$('#player2Box').css({left: displayAreaWidth/3*1 - playerBoxWidth/2 + "px", top: 0 + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
@@ -169,12 +179,6 @@ function setLayoutRound() {
 	$('#player9Box').css({left: 0 + "px", top: displayAreaHeight - playerBoxHeight + "px", width: playerBoxWidth+"px", height: playerBoxHeight+"px"});
 
 	// name
-	var fontSize       = parseInt(displayAreaWidth*10 / DEFAULT_CANVAS_WIDTH);  // 10:640 = x:displayAreaWidth
-	var cardFontSize   = parseInt(displayAreaWidth*16 / DEFAULT_CANVAS_WIDTH);  // 16:640 = x:displayAreaWidth
-	var nameWidth      = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
-	var dealerWidth    = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
-	var cardPaddingTop = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
-	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
 	for (var seatId = 0; seatId < 10; seatId++) {
 		$('#player'+seatId+'Hand').css({height: cardHolderHeight+"px"});
 		$('#player'+seatId+'HandLeft').css({'padding-top': cardPaddingTop+"px", font: cardFontSize+"pt Arial, sans-serif"});
