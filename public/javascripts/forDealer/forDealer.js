@@ -158,7 +158,7 @@ function setLayoutRound() {
 	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
 
 	// playerBox
-	var playerBoxWidth  = dealerWidth + nameWidth;
+	var playerBoxWidth  = dealerWidth + nameWidth + 10;
 	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:displayAreaHeight
 
 	$("#canvas_pane").css({"width": displayAreaWidth+"px" , "height": displayAreaHeight+"px"});
