@@ -36,6 +36,7 @@ app.get('/forDealer', forDealer.forDealer);
 app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
+app.get('/howToUseAllinJpPdf', justGet.justGet);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
