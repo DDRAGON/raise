@@ -43,18 +43,32 @@ app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
 
+// モジュールを呼び出す
+var modules = {
+	oddsSystem: require('./modules/oddsSystem.js'),
+	dedicatedTable: require('./modules/dedicatedTable.js')
+}
+
+// サーバー立てる
 var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
+
+// ソケット通信
 var io = require('socket.io').listen(server);
 
+// オッズシステムページのソケット通信
 var createOddsSystemSocket = require("./socket/oddsSystemSocket");
-new createOddsSystemSocket(io);
+new createOddsSystemSocket(io, modules);
+// QRコードリーダーページのソケット通信
 var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
-new createQrCodeReaderSocket(io);
+new createQrCodeReaderSocket(io, modules);
+// ディーラーページのソケット通信
 var createForDealerSocket = require("./socket/forDealerSocket");
-new createForDealerSocket(io);
+new createForDealerSocket(io, modules);
+// マルチQRコードリーダーページのソケット通信
 var createMultiQrCodeReaderSocket = require("./socket/multiQrCodeReaderSocket");
-new createMultiQrCodeReaderSocket(io);
+new createMultiQrCodeReaderSocket(io, modules);
+// 管理ページのソケット通信
 var createManAAgeToolSocket = require("./socket/manAAgeToolSocket");
-new createManAAgeToolSocket(io);
+new createManAAgeToolSocket(io, modules);

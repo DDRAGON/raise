@@ -1,15 +1,12 @@
-var dedicatedTable = require('../modules/dedicatedTable.js');
-
-var createQrCodeReaderSocket = function(io) {
+var createQrCodeReaderSocket = function(io, modules) {
 	var multiQrCodeReaderSocket = io.of('/multiQrCodeReader').on('connection', function (socket) {
 
 		console.log('A new multiQrCodeReader has entered the ring!');
-		dedicatedTable.multiQrCodeReaderConnect(socket);
+		modules.dedicatedTable.multiQrCodeReaderConnect(socket);
 
 		socket.on('disconnect', function() {
-			dedicatedTable.multiQrCodeReaderDisconnect(socket.id);
+			modules.dedicatedTable.multiQrCodeReaderDisconnect(socket.id);
 		});
-
 	});
 
 	return multiQrCodeReaderSocket;

@@ -1,17 +1,16 @@
 Config = require('../config');
 
-var clients = {};
+var dedicatedTables = {};
 var multiQrCodeReaders = {};
 var managers = {};
 
 // 専用テーブルの接続
-function connect(socket) {
+function dedicatedTableConnect(socket) {
 	var socketId = socket.id;
-	if (!clients[socketId]) {
-		clients[socketId] = {
+	if (!dedicatedTables[socketId]) {
+		dedicatedTables[socketId] = {
 			socket: socket
 		}
-		gotStart(socketId);
 	}
 	socket.emit('passWord', socketId);
 }
@@ -38,14 +37,8 @@ function manAAgeToolConnect(socket) {
 }
 
 // 接続切断
-function disconnect(socketId) {
-	if (clients[socketId]) { // オリジナルが切断したとき。
-		deleteOriginal(socketId);
-		deleteDealers(socketId);
-		return;
-	}
-	// オリジナルでない時はアシスタントを探し、いいたら削除する。
-	deleteAssistant(socketId);
+function dedicatedTableDisconnect(socketId) {
+	delete dedicatedTables[socketId];
 }
 
 // マルチQRリーダーの接続切断
@@ -61,10 +54,10 @@ function manAAgeToolDisconnect(socketId) {
 
 
 module.exports = {
-	connect: connect,
+	dedicatedTableConnect: dedicatedTableConnect,
 	multiQrCodeReaderConnect: multiQrCodeReaderConnect,
 	manAAgeToolConnect: manAAgeToolConnect,
-	disconnect: disconnect,
+	dedicatedTableDisconnect: dedicatedTableDisconnect,
 	multiQrCodeReaderDisconnect: multiQrCodeReaderDisconnect,
 	manAAgeToolDisconnect: manAAgeToolDisconnect
 };

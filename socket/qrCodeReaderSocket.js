@@ -1,10 +1,8 @@
-var oddsSystem = require('../modules/oddsSystem.js');
-
-var createQrCodeReaderSocket = function(io) {
+var createQrCodeReaderSocket = function(io, modules) {
 	var qrCodeReaderSocket = io.of('/qrCodeReader').on('connection', function (socket) {
 
 		socket.on('imageSendWithPassWord', function(data) {
-			oddsSystem.gotImage(data.passWord, data.image);
+			modules.oddsSystem.gotImage(data.passWord, data.image);
 		});
 
 	});
