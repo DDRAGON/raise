@@ -1,0 +1,36 @@
+extends layout
+
+block append css
+
+block append headContents
+	link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/spacelab/bootstrap.min.css")
+
+block content
+
+	// header
+	div(class="navbar-wrapper")
+		div(class="navbar navbar-inverse navbar-static-top" role="navigation")
+			div(class="navbar-header")
+				a(class="navbar-brand" href="../")
+					text Poker Live!
+	// header
+
+
+	object(style="width:100%; height:1200px;" type='application/pdf' data='/image/pdf/howToUseAllinJp/howToUseAllinJp1.pdf')
+	object(style="width:100%; height:1200px;" type='application/pdf' data='/image/pdf/howToUseAllinJp/howToUseAllinJp2.pdf')
+
+	// footer
+	div(style="clear:both;")
+		footer
+			hr(class="featurette-divider")
+			p(class="pull-right")
+				a(href="#") Back to top
+			p &copy; 2014 DWPC Tech. &middot;
+				a(href="#") Privacy
+				&middot;
+				a(href="#") Terms
+	// footer
+
+
+
+block append afterScripts

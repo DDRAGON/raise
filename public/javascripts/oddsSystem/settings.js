@@ -5,8 +5,8 @@ addUpdatePasswordListener(setPassword);
 
 // PlayerBoxを環状に再配置する
 function setLayoutRound() {
-	var canvasWidth  = config.canvasWidth;
-	var canvasHeight = config.canvasHeight;
+	var canvasWidth  = Number(config.canvasWidth);
+	var canvasHeight = Number(config.canvasHeight);
 
 	var playerBoxWidth = Number($('#player0Box').css('width').replace('px',''));
 	var playerBoxHeight = Number($('#player0Box').css('height').replace('px',''));

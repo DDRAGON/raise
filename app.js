@@ -42,6 +42,7 @@ app.get('/manAAgeTool', manAAgeTool.manAAgeTool);
 app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
+app.get('/howToUseAllinJpPdf', justGet.justGet);
 
 // モジュールを呼び出す
 var modules = {
