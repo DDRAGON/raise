@@ -1,5 +1,5 @@
-var createDedicatedSocket = function(io, modules) {
-	var dedicatedTableSocket = io.of('/manAAgeTool').on('connection', function (socket) {
+var createDedicatedTableSocket = function(io, modules) {
+	var dedicatedTableSocket = io.of('/dedicatedTable').on('connection', function (socket) {
 
 		console.log('A new dedicatedTale has entered the ring!');
 		modules.dedicatedTable.dedicatedTableConnect(socket);
@@ -12,4 +12,4 @@ var createDedicatedSocket = function(io, modules) {
 	return dedicatedTableSocket;
 };
 
-module.exports = createDedicatedSocket;
+module.exports = createDedicatedTableSocket;

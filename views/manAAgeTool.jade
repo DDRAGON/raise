@@ -9,19 +9,37 @@ block append headContents
 
 block content
 
+	div(id='dedicatedTableInfo' style='border: 2px solid maroon;')
+		div 専用テーブル
+		div(id='dedicatedTables')
+
 	div(id="multiQrCodeReaderInfo")
+		div 未割り当てマルチQRコードリーダー
+		// 割り当て設定
+		div
+			text マルチQRコードリーダーid:
+			input(type='text' id='multiQrCodeReaderIdInput' size="10px")
+			text を専用テーブルid:
+			input(type='text' id='dedicatedTableIdInput' size="10px")
+			text 席:
+			input(type='text' id='seatIdInput' size="2px")
+			text 番に
+			button(type='button', onClick="assignMultiQrCodeReader();") 割り当てる。
+		// 割り当て失敗メッセージ
+		div(id='assignFail' style="display:none")
+			div(style="color:#FF0000;") 割り当て失敗＞＜。
+				div(id='assignFailedMessage')
+		div(id="multiQrCodeReaders")
+
+
+	div(id='disConnectedMessage' style="display:none")
+		div 接続切れちゃったよぉ、うぅ…(T ^ T)
 
 	script.
 		var hostAddress = "#{hostAddress}";
 
 block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
-	script(src="/assets/bootstrap/js/bootstrap.min.js")
 	script(src="/assets/jquery-ui.min.js")
 	script(src="/assets/jquery.ui.touch-punch.min.js")
-	script(src='/assets/textillate/assets/jquery.fittext.js')
-	script(src='/assets/textillate/assets/jquery.lettering.js')
-	script(src='/assets/textillate/jquery.textillate.js')
-	script(src="/assets/bootstrap-select/bootstrap-select.min.js")
-	script(src="/assets/jquery.balloon.min.js")
 	script(src="/javascripts/manAAgeTool/ugly.min.js")

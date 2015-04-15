@@ -67,6 +67,9 @@ new createQrCodeReaderSocket(io, modules);
 // ディーラーページのソケット通信
 var createForDealerSocket = require("./socket/forDealerSocket");
 new createForDealerSocket(io, modules);
+// 専用テーブルページのソケット通信
+var createDedicatedTableSocket = require("./socket/dedicatedtableSocket");
+new createDedicatedTableSocket(io, modules);
 // マルチQRコードリーダーページのソケット通信
 var createMultiQrCodeReaderSocket = require("./socket/multiQrCodeReaderSocket");
 new createMultiQrCodeReaderSocket(io, modules);
