@@ -97,14 +97,12 @@ function setDefaultSize() {
 	config.isFullScreenMode     = false;
 	config.isFullScreen169Mode  = false;
 
-	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
-
 	// 設定要素を表示する。
 	$('#settings').show();
 	$('.navbar-wrapper').show();
 	$('#footer_contents').show();
 
-	setLayoutRound();
+	displayUpdate(); // 表示更新
 }
 
 function setCameraSize() {
@@ -120,7 +118,7 @@ function setCameraSize() {
 	config.videoDisplayY = 0;
 	config.videoDisplayWidth  = videoWidth;
 	config.videoDisplayHeight = videoHeight;
-	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	displayUpdate(); // 表示更新
 }
 
 function fullScreenMode() {
@@ -150,7 +148,7 @@ function fullScreen169Mode() {
 	$('#footer_contents').hide();
 
 	// キャンバスサイズやカメラサイズ設定
-	setSizeToFullScreen();
+	setSizeToFullScreen169();
 }
 
 function setSizeToFullScreen() {
@@ -169,16 +167,48 @@ function setSizeToFullScreen() {
 	config.videoDisplayY = 0;
 	config.videoDisplayWidth  = windowWidth;
 	config.videoDisplayHeight = windowHeight;
-	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	displayUpdate(); // 表示更新
+}
+
+function setSizeToFullScreen169() {
+	var windowWidth  = $(window).width();
+	var windowHeight = Number(windowWidth*9/16); // windowWidth:windowHeight = 16:9
+	// キャンバスサイズやカメラサイズ設定
+	canvasForVideo.width  = windowWidth;
+	canvasForVideo.height = windowHeight;
+	config.canvasWidth    = windowWidth;
+	config.canvasHeight   = windowHeight;
+	config.videoSourceX = 0;
+	config.videoSourceY = 0;
+	config.videoSourceWidth  = windowWidth;
+	config.videoSourceHeight = windowHeight;
+	config.videoDisplayX = 0;
+	config.videoDisplayY = 0;
+	config.videoDisplayWidth  = windowWidth;
+	config.videoDisplayHeight = windowHeight;
+	displayUpdate(); // 表示更新
 }
 
 // スクリーンサイズの変更
 $(window).resize(function() {
 	if (config.adjustToWindowResize === false) return;
-	console.log('resized');
+
 	if (config.isFullScreenMode === true) { // フルスクリーンモードなら
 		setSizeToFullScreen(); // フルスクリーンサイズに合わせる。
-		setLayoutRound();
+		return;
+	}
+
+	if (config.isFullScreen169Mode === true) { // フルスクリーン169モードなら
+		setSizeToFullScreen169(); // フルスクリーン169サイズに合わせる。
+	}
+});
+
+function displayUpdate() {
+	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	$('#canvasForVideo').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	$('#canvas').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	setLayoutRound();
+	if (config.background === 'camera') { // 背景カメラモードならカメラを描画
 		redrawCamera(
 			config.videoSourceX, config.videoSourceY,
 			config.videoSourceWidth, config.videoSourceHeight,
@@ -186,7 +216,7 @@ $(window).resize(function() {
 			config.videoDisplayWidth, config.videoDisplayHeight
 		);
 	}
-});
+}
 
 $(window).keydown(function(e){
 	if (config.adjustToWindowResize === true) { // スクリーン自動変動設定で
