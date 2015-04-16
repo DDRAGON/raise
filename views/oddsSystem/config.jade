@@ -27,8 +27,8 @@ div(class="setting_wrap")
 		div(class="stripe_a text-left")
 			div screenSize
 			select(class="selectpicker" data-width="113px" id="changeScreenSize")
-				for value, key in ['defaultSize', 'camera']
-					option #{value}
+				for value, key in ['defaultSize', 'camera', 'fullScreen', '16:9_fullScreen']
+					option(value='#{value}') #{value}
 
 		// background
 		div(class="stripe_a text-left")
