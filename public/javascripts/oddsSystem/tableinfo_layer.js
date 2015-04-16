@@ -91,18 +91,21 @@ function displayBoard(board) {
 function displayHand(playerId, playerHands, isActive) {
 	$leftCard = $('#player'+playerId+'HandLeft');
 	$rightCard = $('#player'+playerId+'HandRight');
-	if (!isActive) {
-		hideCard($leftCard);
-		hideCard($rightCard);
-		return;
-	}
 	if (playerHands && playerHands[0]) {
-		displayCard($leftCard, playerHands[0]);
+		if (isActive) {
+			displayCard($leftCard, playerHands[0]);
+		} else {
+			semitransparentDisplayCard($leftCard, playerHands[0]);
+		}
 	} else {
 		hideCard($leftCard);
 	}
 	if (playerHands && playerHands[1]) {
-		displayCard($rightCard, playerHands[1]);
+		if (isActive) {
+			displayCard($rightCard, playerHands[1]);
+		} else {
+			semitransparentDisplayCard($rightCard, playerHands[1]);
+		}
 	} else {
 		hideCard($rightCard);
 	}
@@ -115,7 +118,12 @@ function displayCard($selector, code) {
 	$selector.text(code.charAt(0));
 	$selector.addClass('color_'+code.charAt(1));
 	$selector.addClass('mark_'+code.charAt(1));
+	$selector.css({"opacity": 1});
 	$selector.fadeIn();
+}
+
+function semitransparentDisplayCard($selector, code) {
+	$selector.css({"opacity": 0.4});
 }
 
 function displayName(seatId, playerName) {
