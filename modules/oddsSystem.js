@@ -408,7 +408,6 @@ function deleteAssistant(assistantSocketId) {
 		var assistants = assistantsMapByOriginalSocketId[originalSocketId];
 		for (var key in assistants) {
 			var assistant = assistants[key];
-			var assistant = assistants[key];
 			if (assistant.socketId === assistantSocketId) { // アシスタントが見つかったら。
 				delete assistantsMapByOriginalSocketId[originalSocketId][key]; // 削除
 				return;
