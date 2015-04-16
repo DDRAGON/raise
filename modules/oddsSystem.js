@@ -408,6 +408,7 @@ function deleteAssistant(assistantSocketId) {
 		var assistants = assistantsMapByOriginalSocketId[originalSocketId];
 		for (var key in assistants) {
 			var assistant = assistants[key];
+			var assistant = assistants[key];
 			if (assistant.socketId === assistantSocketId) { // アシスタントが見つかったら。
 				delete assistantsMapByOriginalSocketId[originalSocketId][key]; // 削除
 				return;
@@ -422,12 +423,21 @@ function deleteDealers(socketId) {
 
 // 降りたプレーヤーが出た時に勝率を再計算する。
 function foldedAndRecalculation(socketId, seatId) {
-	if (clients[socketId].frontObj.players[seatId].isActive == false) return;
-	clients[socketId].frontObj.players[seatId].isActive = false;
-	clients[socketId].frontObj.players[seatId].win = 0;
-	clients[socketId].frontObj.players[seatId].tie = 0;
-	clients[socketId].frontObj.playingPlayersNum -= 1;
-	getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	if (clients[socketId].frontObj.players[seatId].isActive == true) {
+		clients[socketId].frontObj.players[seatId].isActive = false;
+		clients[socketId].frontObj.players[seatId].win = 0;
+		clients[socketId].frontObj.players[seatId].tie = 0;
+		clients[socketId].frontObj.playingPlayersNum -= 1;
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+		return;
+	}
+
+	// 降りたプライヤーをサイドタップすると生き返る！
+	if (clients[socketId].frontObj.players[seatId].isActive == false) {
+		clients[socketId].frontObj.players[seatId].isActive = true;
+		clients[socketId].frontObj.playingPlayersNum += 1;
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	}
 }
 
 function getWinPerFromAPI(socketId, frontObj) {
