@@ -1,5 +1,6 @@
 var DEFAULT_CANVAS_WIDTH  = 640;
 var DEFAULT_CANVAS_HEIGHT = 360;
+var KEY_CODE_ESC = 27;
 
 var canvasForVideo;
 var config = {
@@ -91,7 +92,19 @@ function setDefaultSize() {
 		config.videoDisplayHeight = videoHeight;
 	}
 
+	// フラグの設定
+	config.adjustToWindowResize = false;
+	config.isFullScreenMode     = false;
+	config.isFullScreen169Mode  = false;
+
 	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+
+	// 設定要素を表示する。
+	$('#settings').show();
+	$('.navbar-wrapper').show();
+	$('#footer_contents').show();
+
+	setLayoutRound();
 }
 
 function setCameraSize() {
@@ -159,6 +172,7 @@ function setSizeToFullScreen() {
 	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
 }
 
+// スクリーンサイズの変更
 $(window).resize(function() {
 	if (config.adjustToWindowResize === false) return;
 	console.log('resized');
@@ -171,6 +185,14 @@ $(window).resize(function() {
 			config.videoDisplayX, config.videoDisplayY,
 			config.videoDisplayWidth, config.videoDisplayHeight
 		);
+	}
+});
+
+$(window).keydown(function(e){
+	if (config.adjustToWindowResize === true) { // スクリーン自動変動設定で
+		if (e.keyCode === KEY_CODE_ESC) { // escが押された時。
+			setDefaultSize();
+		}
 	}
 });
 
