@@ -54,7 +54,7 @@ function setLayoutRound() {
 		$('#player'+seatId+'Hand').css({height: cardHolderHeight+"px"});
 		$('#player'+seatId+'HandLeft').css({'padding-top': cardPaddingTop+"px", font: cardFontSize+"pt Arial, sans-serif"});
 		$('#player'+seatId+'HandRight').css({'padding-top': cardPaddingTop+"px", font: cardFontSize+"pt Arial, sans-serif"});
-		$('#player'+seatId+'Name').css({width: nameWidth+"px"});s
+		$('#player'+seatId+'Name').css({width: nameWidth+"px"});
 		$('#player'+seatId+'Dealer').css({width: dealerWidth+"px", 'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Box').css({'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Odds').css({'font-size': fontSize+"pt"});
