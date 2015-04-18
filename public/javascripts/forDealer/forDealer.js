@@ -13,6 +13,7 @@ function sendPassword() {
 	$('#passwordArea').remove();
 	$('#canvas_pane').show();
 	$('#controlButton').show();
+	$('#showOptionButton').show();
 }
 
 var lastTableInfo = {}; // 直前に取得したテーブル情報
@@ -52,6 +53,7 @@ function drawTableInfo(tableInfo) {
 
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
+	$('#board').hide();
 }
 
 function resetPlayerBox(seatId) {
@@ -76,15 +78,19 @@ function displayBoard(board) {
 		$('.board').fadeOut(200, function() {
 			$('.board.card').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
 		});
+		return;
+	}
 
-	} else {
-		// show
-		$('#board').show();
-		for (var key in board) {
-			var cardCode = board[key];
-			$selector = $('#board'+key);
-			$selector.fadeIn();
+	// show
+	$('#board').show();
+	for (var boardNum=0; boardNum < 5; boardNum++) {
+		if (!board[boardNum]) { // undoの対応 送られてきたデータに次のボード情報が無いときは消す。
+			$('#board'+boardNum).hide();
+			continue;
 		}
+		var cardCode = board[boardNum];
+		$selector = $('#board'+boardNum);
+		$selector.fadeIn();
 	}
 }
 
@@ -144,7 +150,8 @@ var DEFAULT_BUTTON_HEIGHT = 36;
 function setLayoutRound() {
 	var windowWidth  = $(window).width();
 	var windowHeight = $(window).height();
-	var buttonWidth  = parseInt(DEFAULT_BUTTON_WIDTH*windowWidth / DEFAULT_CANVAS_WIDTH); // DEFAULT_CANVAS_WIDTH:DEFAULT_BUTTON_WIDTH = windowWidth:x
+	// var buttonWidth  = parseInt(DEFAULT_BUTTON_WIDTH*windowWidth / DEFAULT_CANVAS_WIDTH); // DEFAULT_CANVAS_WIDTH:DEFAULT_BUTTON_WIDTH = windowWidth:x
+	var buttonWidth  = parseInt(windowWidth  / 5);
 	var buttonHeight = parseInt(DEFAULT_BUTTON_HEIGHT*windowHeight / DEFAULT_CANVAS_HEIGHT); // DEFAULT_CANVAS_HEIGHT:DEFAULT_BUTTON_HEIGHT = windowHeight:y
 	var displayAreaWidth  = windowWidth;
 	var displayAreaHeight = windowHeight - buttonHeight;
@@ -195,6 +202,7 @@ function setLayoutRound() {
 	$('#nextButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 	$('#showOptionButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 	$('#resetButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
+	$('#undoButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 }
 
 $( window ).on( "orientationchange", function( event ) { // 画面が回転したとき
@@ -259,17 +267,20 @@ function sendResetGame() {
 	toggleButtons();
 }
 
+function sendUndo() {
+	socket.emit('undoWithPassword', password);
+	toggleButtons();
+}
+
 function toggleButtons() {
 	$('#nextButton').toggle();
 	$('#resetButton').toggle();
+	$('#undoButton').toggle();
 }
 
 
 $(function(){
 	$('#canvas_pane').hide();
-	$('#nextButton').hide();
-	$('#resetButton').hide();
-	$('#controlButton').hide();
 	$(".ui-loader").remove();
 	setLayoutRound(); // playerBoxの初期配置を環状にする
 	bindTapAndTapHold(); // イベントに合わせたバインド設定

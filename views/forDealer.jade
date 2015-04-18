@@ -34,20 +34,25 @@ block content
 				div(style="clear:both; display:inline-block;")
 					div(id="player#{seatId}Odds" class="odds")
 
+	// パスワードエリア
 	div(id='passwordArea' style='font-size:32px')
 		text password
 		input(type="password" id="inputPasswordArea")
 		<input type="button" value="send" onClick="sendPassword();" />
 
+	// 操作ボタン
 	div(id='controlButton')
 		div(style="float:left;")
-			button(type='button', onClick="sendNextGame();", id='nextButton') Next
+			button(type='button', onClick="sendNextGame();", id='nextButton' style="display:none;") Next
 		div(style="float:left;")
 			test 　
-			button(type='button', onClick="showOption();", id='showOptionButton') Option
+			button(type='button', onClick="showOption();", id='showOptionButton' style="display:none;") Option
 			test 　
 		div(style="float:left;")
-			button(type='button', onClick="sendResetGame();", id='resetButton') Reset
+			button(type='button', onClick="sendResetGame();", id='resetButton' style="display:none;") Reset
+			test 　
+		div(style="float:left;")
+			button(type='button', onClick="sendUndo();", id='undoButton' style="display:none;") Undo
 
 
 	script.

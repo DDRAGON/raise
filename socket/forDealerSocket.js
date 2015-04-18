@@ -19,6 +19,10 @@ var createForDealerSocket = function(io) {
 			oddsSystem.gotImage(data.password, data.image);
 		});
 
+		socket.on('undoWithPassword', function(password) {
+			oddsSystem.undoFrontObj(password);
+		});
+
 	});
 
 	return forDealerSocket;
