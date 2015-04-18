@@ -130,15 +130,7 @@ function displayName(seatId, playerName) {
 }
 
 function displayFold(seatId) {
-	$('#player'+seatId+'Folded')
-		.show()
-		.textillate({
-			in: { effect: 'swing' },
-			callback: function() {
-				$('#player'+seatId+'Box').stop().animate({ opacity: "0.5"}, 600);
-			}
-		})
-		.textillate('start');
+	$('#player'+seatId+'Folded').show();
 }
 
 
@@ -214,6 +206,7 @@ function bindTapAndTapHold() {
 	for (var playerId = 0; playerId < 10; playerId++) {
 		$('#player'+playerId+'Box').bind("taphold", tapHoldHandler);
 		$('#player'+playerId+'Box').bind("tap", tapHandler);
+		//$('#player'+playerId+'Folded').bind("tap", tapHandler);
 	}
 }
 
