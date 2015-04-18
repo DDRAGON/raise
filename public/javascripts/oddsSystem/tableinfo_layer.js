@@ -22,7 +22,6 @@ function drawTableInfo(tableInfo) {
 		displayHand(player.seatId, player.hand, player.isActive);
 		displayOdds(player.seatId, player.win, player.tie);
 
-		// FOLD検知
 		if (
 			lastTableInfo.players &&
 			lastTableInfo.players[key] &&
@@ -42,6 +41,7 @@ addUpdateTableInfoListener(drawTableInfo);
 
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
+	$('#board').hide();
 	$('#caption').trigger('keyup');
 	$('#description').trigger('keyup');
 	$('.actionBox').removeClass('actionF actionC actionR actionA ');
@@ -77,9 +77,13 @@ function displayBoard(board) {
 	} else {
 		// show
 		$('#board').show();
-		for (var key in board) {
-			var cardCode = board[key];
-			$selector = $('#board'+key);
+		for (var boardNum=0; boardNum < 5; boardNum++) {
+			if (!board[boardNum]) { // undoの対応 送られてきたデータに次のボード情報が無いときは消す。
+				$('#board'+boardNum).hide();
+				continue;
+			}
+			var cardCode = board[boardNum];
+			$selector = $('#board'+boardNum);
 			$selector.fadeIn();
 			$selector.text(cardCode.charAt(0));
 			$selector.addClass('color_'+cardCode.charAt(1));

@@ -38,7 +38,8 @@ function updatePlayerName(socketId, seatId, name) {
 	if (typeof clients[socketId].frontObj.players[seatId] == 'undefined') {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
-			hand: []
+			hand: [],
+			isActive: true
 		};
 	}
 	clients[socketId].frontObj.players[seatId].name = name;
@@ -98,6 +99,19 @@ function dealerChangePassword(socket, socketId, dealerPassword) {
 	}
 }
 
+// 対象socketIDのfrontObjを１つ前の状態にし、最新の履歴情報を消します。
+function undoFrontObj(socketId) {
+	if (!clients[socketId]) return; // そんなテーブル無いときは無視。
+	var historyLength = clients[socketId].historyOfFrontObj.length;
+	if (historyLength === 0) return; // 履歴が無いときは何もしない。
+	var latestHistory = clients[socketId].historyOfFrontObj[(historyLength - 1)]; // 最新の履歴
+	clients[socketId].frontObj = JSON.parse(JSON.stringify(latestHistory)); // 最新の履歴に書き換える。
+	if (historyLength > 1) { // 1はstartの状態なので、これは消さない。
+		clients[socketId].historyOfFrontObj.splice((historyLength - 1), 1);
+	}
+	sendTableInfo(socketId);
+}
+
 // 接続切断
 function disconnect(socketId) {
 	if (clients[socketId]) { // オリジナルが切断したとき。
@@ -117,6 +131,7 @@ module.exports = {
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
 	dealerChangePassword: dealerChangePassword,
+	undoFrontObj: undoFrontObj,
 	disconnect: disconnect
 };
 
@@ -133,26 +148,26 @@ function gotStart(socketId) {
 		board: [],
 		players: []
 	};
-	clients[socketId].gotCards = [];
+	clients[socketId].historyOfFrontObj = [];
 	sendTableInfo(socketId);
 }
 
 // プリフロップカードを受け取った時の処理。
 function gotPreFlop(socketId) {
-	if (clients[socketId].frontObj.state === 'start') {
-		clients[socketId].frontObj.state = 'preFlop';
-		clients[socketId].frontObj.allPlayersNum = clients[socketId].gotCards.length/2;
-		clients[socketId].frontObj.playingPlayersNum = clients[socketId].frontObj.allPlayersNum;
-		for (var key in clients[socketId].frontObj.players) {
-			var player = clients[socketId].frontObj.players[key];
-			if (!player) continue;
-			var seatId = player.seatId;
-			clients[socketId].frontObj.players[seatId].isActive = true;
-			clients[socketId].frontObj.players[seatId].win = null;
-			clients[socketId].frontObj.players[seatId].tie = null;
-		}
-		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	if (clients[socketId].frontObj.state !== 'start') return;
+
+	clients[socketId].frontObj.state = 'preFlop';
+	clients[socketId].frontObj.allPlayersNum = clients[socketId].frontObj.players.length;
+	clients[socketId].frontObj.playingPlayersNum = clients[socketId].frontObj.allPlayersNum;
+	for (var key in clients[socketId].frontObj.players) {
+		var player = clients[socketId].frontObj.players[key];
+		if (!player) continue;
+		var seatId = player.seatId;
+		clients[socketId].frontObj.players[seatId].isActive = true;
+		clients[socketId].frontObj.players[seatId].win = null;
+		clients[socketId].frontObj.players[seatId].tie = null;
 	}
+	getWinPerFromAPI(socketId, clients[socketId].frontObj);
 }
 
 // リセットゲームカードを受け取った時の処理。
@@ -162,7 +177,6 @@ function gotResetGame(socketId) {
 	clients[socketId].frontObj.allPlayersNum = 0;
 	clients[socketId].frontObj.playingPlayersNum = 0;
 	clients[socketId].frontObj.board = [];
-	clients[socketId].gotCards = [];
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
@@ -172,6 +186,8 @@ function gotResetGame(socketId) {
 		clients[socketId].frontObj.players[seatId].win = null;
 		clients[socketId].frontObj.players[seatId].tie = null;
 	}
+	clients[socketId].historyOfFrontObj = []; // 履歴情報リセット
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	sendTableInfo(socketId);
 }
 
@@ -204,6 +220,8 @@ function gotCardInStart(socketId, card) {
 		if (!player) continue;
 		checkingSeatId = findNextDealerButton(socketId, checkingSeatId);
 		if (!clients[socketId].frontObj.players[checkingSeatId].hand[0]) {
+			// 更新！
+			addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 			clients[socketId].frontObj.players[checkingSeatId].hand[0] = card;
 			clients[socketId].frontObj.players[checkingSeatId].isActive = true;
 			return;
@@ -219,6 +237,8 @@ function gotCardInStart(socketId, card) {
 		if (!player) continue;
 		checkingSeatId = findNextDealerButton(socketId, checkingSeatId);
 		if (!clients[socketId].frontObj.players[checkingSeatId].hand[1]) {
+			// 更新！
+			addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 			clients[socketId].frontObj.players[checkingSeatId].hand[1] = card;
 			if (lastSeatId == checkingSeatId) { // 最後の一人を配り終えたら
 				gotPreFlop(socketId); // プリフロップ開始だと分かる。
@@ -242,7 +262,8 @@ function gotCardInPreFlop(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 3) { // フロップに３枚が来たのを確認
 		clients[socketId].frontObj.state = 'flop'; // フロップになったことを認識
@@ -260,7 +281,8 @@ function gotCardInFlop(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 4) { // ターンになったことを認識
 		clients[socketId].frontObj.state = 'turn';
@@ -278,7 +300,8 @@ function gotCardInTurn(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 5) { // リバーになったことを認識
 		clients[socketId].frontObj.state = 'river';
@@ -342,6 +365,7 @@ function createTableInfoForDealer(originalSocketId) {
 	var players = tableInfo.players;
 	var board   = tableInfo.board;
 	for (var key in players) {
+		if (!players[key]) continue;
 		var player = players[key];
 		tableInfoForDealer.players[key] = {
 			name: player.name,
@@ -395,6 +419,12 @@ function getOriginalSocketIdByAssistantSocketId(assistantSocketId) {
 		}
 	}
 	return false; // 見つからなかったらfalseを返す。
+}
+
+// 対象socketIDの履歴にfrontObjを追加する。
+function addToHistoryOfFrontObj(socketId, frontObj) {
+	var historyLength = clients[socketId].historyOfFrontObj.length;
+	clients[socketId].historyOfFrontObj[historyLength] = JSON.parse(JSON.stringify(frontObj));
 }
 
 // オリジナルを削除
