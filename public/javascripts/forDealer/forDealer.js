@@ -221,7 +221,10 @@ function tapHoldHandler(event) {
 	);
 }
 
+var tapEventIgnore = false;
 function tapHandler(event) {
+	if (tapEventIgnore == true) return;
+	tapEventIgnore = true;
 	var id = event.target.id;
 	var seatId = id.substring(6, 7);
 	socket.emit(
@@ -231,6 +234,11 @@ function tapHandler(event) {
 			seatId: seatId
 		}
 	);
+	setTimeout("resetTapEventIgnore()", 100);
+}
+
+function resetTapEventIgnore() {
+	tapEventIgnore = false;
 }
 
 function showOption() {
