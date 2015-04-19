@@ -190,7 +190,7 @@ function setLayoutRound() {
 	}
 
 	// button
-	var buttonFontSize = parseInt(buttonHeight / 2);
+	var buttonFontSize = parseInt(buttonHeight / 3);
 	$('#nextButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 	$('#showOptionButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
 	$('#resetButton').css({width: buttonWidth+"px", height: buttonHeight+"px", font: buttonFontSize+"px Arial, sans-serif"});
@@ -206,7 +206,6 @@ function bindTapAndTapHold() {
 	for (var playerId = 0; playerId < 10; playerId++) {
 		$('#player'+playerId+'Box').bind("taphold", tapHoldHandler);
 		$('#player'+playerId+'Box').bind("tap", tapHandler);
-		//$('#player'+playerId+'Folded').bind("tap", tapHandler);
 	}
 }
 
