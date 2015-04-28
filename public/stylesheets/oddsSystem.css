@@ -259,3 +259,15 @@ a.mark {
 .playerBox .odds.win:before {
   content: "✔ ";
 }
+.centerAdvice {
+  display: none;
+  font-size: 22px;
+  padding: 8px 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(200,200,200,0.5);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
