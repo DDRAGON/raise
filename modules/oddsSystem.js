@@ -519,7 +519,7 @@ function getWinPerFromAPI(socketId, frontObj) {
 			if (error) {
 				console.log(error);
 			}
-			if (response.statusCode) {
+			if (response && response.statusCode) {
 				console.log('error: '+ response.statusCode);
 			}
 		}
