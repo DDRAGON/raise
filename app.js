@@ -38,14 +38,20 @@ app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
 app.get('/howToUseAllinJpPdf', justGet.justGet);
 
+// モジュールを呼び出す
+var modules = {
+	oddsSystem: require('./modules/oddsSystem.js')
+}
+
+// サーバーをたてる
 var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 var io = require('socket.io').listen(server);
 
 var createOddsSystemSocket = require("./socket/oddsSystemSocket");
-new createOddsSystemSocket(io);
+new createOddsSystemSocket(io, modules);
 var createQrCodeReaderSocket = require("./socket/qrCodeReaderSocket");
-new createQrCodeReaderSocket(io);
+new createQrCodeReaderSocket(io, modules);
 var createForDealerSocket = require("./socket/forDealerSocket");
-new createForDealerSocket(io);
+new createForDealerSocket(io, modules);
