@@ -1,10 +1,5 @@
-var socket = io.connect('http://'+hostAddress+'/forDealer');
 var password;
 
-socket.on('tableInfo', function(tableInfo) {
-	$('#debugWindow').html('tableInfo come');
-	drawTableInfo(tableInfo);
-});
 
 function sendPassword() {
 	password = $('#inputPasswordArea').val();
@@ -278,6 +273,9 @@ function toggleButtons() {
 	$('#undoButton').toggle();
 }
 
+function disConnected() {
+	alert("接続が切れました！\nディーラーページをリロードし再度設定してください。");
+}
 
 $(function(){
 	$('#canvas_pane').hide();
