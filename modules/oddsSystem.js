@@ -1,4 +1,3 @@
-var async = require('async');
 var request = require('request');
 Config = require('../config');
 
@@ -35,7 +34,7 @@ function gotImage(socketId, image)
 
 function updatePlayerName(socketId, seatId, name) {
 	if (!clients[socketId]) return;
-	if (typeof clients[socketId].frontObj.players[seatId] == 'undefined') {
+	if (typeof clients[socketId].frontObj.players[seatId] == "undefined") {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
 			hand: [],
@@ -365,8 +364,14 @@ function createTableInfoForDealer(originalSocketId) {
 	var players = tableInfo.players;
 	var board   = tableInfo.board;
 	for (var key in players) {
-		if (!players[key]) continue;
+		if (!players[key]) continue; // プレイヤーが存在しなかったら無視して次へ
 		var player = players[key];
+
+		// いずれかの要素が足りなかったら無視して次へ
+		if (typeof player.name     == "undefined") continue; // 名前が無かったら処理を進めないし。
+		if (typeof player.seatId   == "undefined") continue; // 座席IDが無かったら処理を進めないし。
+		if (typeof player.isActive == "undefined") continue; // アクティブフラグが無かったら処理を進めないし。
+
 		tableInfoForDealer.players[key] = {
 			name: player.name,
 			seatId: player.seatId,
@@ -511,7 +516,12 @@ function getWinPerFromAPI(socketId, frontObj) {
 			}
 			sendTableInfo(socketId);
 		} else {
-			console.log('error: '+ response.statusCode);
+			if (error) {
+				console.log(error);
+			}
+			if (response && response.statusCode) {
+				console.log('error: '+ response.statusCode);
+			}
 		}
 	});
 }

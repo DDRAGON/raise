@@ -132,8 +132,9 @@ function fullScreenMode() {
 	$('.navbar-wrapper').hide();
 	$('#footer_contents').hide();
 
-	// キャンバスサイズやカメラサイズ設定
-	setSizeToFullScreen();
+
+	setSizeToFullScreen(); // キャンバスサイズやカメラサイズ設定
+	$('#escKeyAdvice').show().fadeOut(5000); // フルクリーンは esc キーで解除できる文言を表示します。
 }
 
 function fullScreen169Mode() {
@@ -147,8 +148,8 @@ function fullScreen169Mode() {
 	$('.navbar-wrapper').hide();
 	$('#footer_contents').hide();
 
-	// キャンバスサイズやカメラサイズ設定
-	setSizeToFullScreen169();
+	setSizeToFullScreen169(); // キャンバスサイズやカメラサイズ設定
+	$('#escKeyAdvice').show().fadeOut(5000); // フルクリーンは esc キーで解除できる文言を表示します。
 }
 
 function setSizeToFullScreen() {
@@ -207,6 +208,10 @@ function displayUpdate() {
 	$('#canvas_pane').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
 	$('#canvasForVideo').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
 	$('#canvas').css({width: config.canvasWidth + 'px', height: config.canvasHeight + 'px'});
+	$('.centerAdvice').css({
+		width: config.canvasWidth*4/5 + 'px',
+		"margin-left": -config.canvasWidth*4/5/2 + 'px'
+	});
 	setLayoutRound();
 	if (config.background === 'camera') { // 背景カメラモードならカメラを描画
 		redrawCamera(
