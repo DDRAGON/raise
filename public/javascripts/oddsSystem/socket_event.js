@@ -30,3 +30,7 @@ function emitImageSendWithPassWord(image, password) {
 		passWord: password
 	});
 }
+
+socket.on('disconnect', function() {
+	disConnected();
+});

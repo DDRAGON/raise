@@ -189,3 +189,8 @@ function updateInputPlayerNames(players) {
 		}
 	}
 }
+d
+
+function disConnected() {
+	alert("接続が切れました！\nリロードし再度設定してください。");
+}
