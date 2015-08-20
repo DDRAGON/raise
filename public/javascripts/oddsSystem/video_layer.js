@@ -17,7 +17,8 @@ var config = {
 	videoDisplayHeight: DEFAULT_CANVAS_HEIGHT,
 	adjustToWindowResize: false,
 	isFullScreenMode: false,
-	isFullScreen169Mode: false
+	isFullScreen169Mode: false,
+	colorPattern: ''
 };
 
 $("#changeScreenSize").change(function(){
@@ -40,11 +41,25 @@ $("#changeScreenSize").change(function(){
 
 $("#changeBackground").change(function(){
 	config.background = $(this).val();
-	if (config.background === 'RGB(255,255,0)') {
-		$('#canvas_pane').attr('class', 'wall_yellow');
-	} else {
-		$('#canvas_pane').attr('class', 'wall_'+config.background);
+	switch ($(this).val()) {
+		case 'green':
+			$('#canvas_pane').attr('class', 'wall_green');
+			config.colorPattern = '2';
+			break;
+		case 'blue':
+			$('#canvas_pane').attr('class', 'wall_blue');
+			config.colorPattern = '2';
+			break;
+		case 'RGB(255,255,0)':
+			$('#canvas_pane').attr('class', 'wall_yellow');
+			config.colorPattern = '';
+			break;
+		default:
+			$('#canvas_pane').attr('class', 'wall_'+config.background);
+			config.colorPattern = '';
+			break;
 	}
+	drawTableInfo(lastTableInfo); // テーブル書き直し
 });
 
 // ビデオの描画

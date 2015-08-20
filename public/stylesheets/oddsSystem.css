@@ -125,6 +125,12 @@ a.mark {
 .wall_mat {
   background-image: url("/image/background/green_mat.jpg");
 }
+.wall_green {
+  background-color: #0f0;
+}
+.wall_blue {
+  background-color: #00f;
+}
 .wall_yellow {
   background-color: #ff0;
 }
@@ -155,6 +161,18 @@ a.mark {
 }
 .color_d {
   color: #6cf !important;
+}
+.color_c2 {
+  color: #fff !important;
+}
+.color_s2 {
+  color: #fff !important;
+}
+.color_h2 {
+  color: #f66 !important;
+}
+.color_d2 {
+  color: #f66 !important;
 }
 .mark_c:after {
   content: "♣";
