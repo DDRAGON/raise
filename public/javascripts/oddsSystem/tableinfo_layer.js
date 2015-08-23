@@ -71,11 +71,12 @@ function displayBoard(board) {
 	if (!board || board.length <= 0) {
 		// clear
 		$('.board').fadeOut(200, function() {
-			$('.board.card').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
+			$('.board.card').removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
 		});
 
 	} else {
 		// show
+		$('.board.card').removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
 		$('#board').show();
 		for (var boardNum=0; boardNum < 5; boardNum++) {
 			if (!board[boardNum]) { // undoの対応 送られてきたデータに次のボード情報が無いときは消す。
@@ -86,7 +87,7 @@ function displayBoard(board) {
 			$selector = $('#board'+boardNum);
 			$selector.fadeIn();
 			$selector.text(cardCode.charAt(0));
-			$selector.addClass('color_'+cardCode.charAt(1));
+			$selector.addClass('color_'+cardCode.charAt(1)+config.colorPattern);
 			$selector.addClass('mark_'+cardCode.charAt(1));
 		}
 	}
@@ -95,14 +96,14 @@ function displayBoard(board) {
 function displayHand(playerId, playerHands, isActive) {
 	$leftCard = $('#player'+playerId+'HandLeft');
 	$rightCard = $('#player'+playerId+'HandRight');
+	hideCard($leftCard);
+	hideCard($rightCard);
 	if (playerHands && playerHands[0]) {
 		if (isActive) {
 			displayCard($leftCard, playerHands[0]);
 		} else {
 			semitransparentDisplayCard($leftCard, playerHands[0]);
 		}
-	} else {
-		hideCard($leftCard);
 	}
 	if (playerHands && playerHands[1]) {
 		if (isActive) {
@@ -110,17 +111,15 @@ function displayHand(playerId, playerHands, isActive) {
 		} else {
 			semitransparentDisplayCard($rightCard, playerHands[1]);
 		}
-	} else {
-		hideCard($rightCard);
 	}
 }
 function hideCard($selector) {
 	$selector.hide();
-	$selector.removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
+	$selector.removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
 }
 function displayCard($selector, code) {
 	$selector.text(code.charAt(0));
-	$selector.addClass('color_'+code.charAt(1));
+	$selector.addClass('color_'+code.charAt(1)+config.colorPattern);
 	$selector.addClass('mark_'+code.charAt(1));
 	$selector.css({"opacity": 1});
 	$selector.fadeIn();
