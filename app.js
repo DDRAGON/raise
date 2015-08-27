@@ -37,6 +37,7 @@ app.get('/qrSheet', justGet.justGet);
 app.get('/structure', justGet.justGet);
 app.get('/QRCodeCards', justGet.justGet);
 app.get('/howToUseAllinJpPdf', justGet.justGet);
+app.get('/allinEvent2JOPT2015', justGet.justGet);
 
 // モジュールを呼び出す
 var modules = {
