@@ -36,8 +36,23 @@ function drawTableInfo(tableInfo) {
 
 	lastTableInfo = tableInfo;
 }
-
 addUpdateTableInfoListener(drawTableInfo);
+
+
+function hideTable() { // テーブル情報を消す関数
+	$('.board.card').removeClass(
+		'color_s color_h color_d color_c ' +
+		'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+		'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+		'mark_s mark_h mark_d mark_c'
+	).text('');
+	for (var playerId=0; playerId<10; playerId++) {
+		$leftCard = $('#player'+playerId+'HandLeft');
+		hideCard($leftCard);
+		$rightCard = $('#player'+playerId+'HandRight');
+		hideCard($rightCard);
+	}
+}
 
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
@@ -71,12 +86,16 @@ function displayBoard(board) {
 	if (!board || board.length <= 0) {
 		// clear
 		$('.board').fadeOut(200, function() {
-			$('.board.card').removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
+			$('.board.card').removeClass(
+				'color_s color_h color_d color_c ' +
+				'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+				'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+				'mark_s mark_h mark_d mark_c'
+			).text('');
 		});
 
 	} else {
 		// show
-		$('.board.card').removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
 		$('#board').show();
 		for (var boardNum=0; boardNum < 5; boardNum++) {
 			if (!board[boardNum]) { // undoの対応 送られてきたデータに次のボード情報が無いときは消す。
@@ -87,7 +106,11 @@ function displayBoard(board) {
 			$selector = $('#board'+boardNum);
 			$selector.fadeIn();
 			$selector.text(cardCode.charAt(0));
-			$selector.addClass('color_'+cardCode.charAt(1)+config.colorPattern);
+			switch (config.colorPattern) {
+				case '1': $selector.addClass('color_'+cardCode.charAt(1)); break;
+				case '2': $selector.addClass('color_'+cardCode.charAt(1)+'_for_blue_background'); break;
+				case '3': $selector.addClass('color_'+cardCode.charAt(1)+'_for_green_background'); break;
+			}
 			$selector.addClass('mark_'+cardCode.charAt(1));
 		}
 	}
@@ -96,14 +119,14 @@ function displayBoard(board) {
 function displayHand(playerId, playerHands, isActive) {
 	$leftCard = $('#player'+playerId+'HandLeft');
 	$rightCard = $('#player'+playerId+'HandRight');
-	hideCard($leftCard);
-	hideCard($rightCard);
 	if (playerHands && playerHands[0]) {
 		if (isActive) {
 			displayCard($leftCard, playerHands[0]);
 		} else {
 			semitransparentDisplayCard($leftCard, playerHands[0]);
 		}
+	} else {
+		hideCard($leftCard);
 	}
 	if (playerHands && playerHands[1]) {
 		if (isActive) {
@@ -111,15 +134,26 @@ function displayHand(playerId, playerHands, isActive) {
 		} else {
 			semitransparentDisplayCard($rightCard, playerHands[1]);
 		}
+	} else {
+		hideCard($rightCard);
 	}
 }
 function hideCard($selector) {
 	$selector.hide();
-	$selector.removeClass('color_s color_h color_d color_c color_s2 color_h2 color_d2 color_c2 mark_s mark_h mark_d mark_c').text('');
+	$selector.removeClass(
+		'color_s color_h color_d color_c ' +
+		'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+		'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+		'mark_s mark_h mark_d mark_c'
+	).text('');
 }
 function displayCard($selector, code) {
 	$selector.text(code.charAt(0));
-	$selector.addClass('color_'+code.charAt(1)+config.colorPattern);
+	switch (config.colorPattern) {
+		case '1': $selector.addClass('color_'+code.charAt(1)); break;
+		case '2': $selector.addClass('color_'+code.charAt(1)+'_for_blue_background'); break;
+		case '3': $selector.addClass('color_'+code.charAt(1)+'_for_green_background'); break;
+	}
 	$selector.addClass('mark_'+code.charAt(1));
 	$selector.css({"opacity": 1});
 	$selector.fadeIn();

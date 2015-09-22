@@ -121,10 +121,10 @@ a.mark
 
 /* board */
 .board
-	background-color rgba(200,200,200,0.6)
+	background-color rgba(200,200,200,0.9)
 
 .board .card
-	background-color rgba(0,0,0,0.8)
+	background-color rgba(255,255,255,1)
 	padding 12px 7px
 	width 39px
 	height 48px
@@ -136,22 +136,31 @@ a.mark
 	font 16pt Arial, sans-serif
 
 .color_c
-	color #6C6 !important
+	color #090 !important
 .color_s
-	color #FFF !important
+	color #000 !important
 .color_h
-	color #F66 !important
+	color #F00 !important
 .color_d
-	color #6CF !important
+	color #03F !important
 
-.color_c2
-	color #FFF !important
-.color_s2
-	color #FFF !important
-.color_h2
-	color #F66 !important
-.color_d2
-	color #F66 !important
+.color_c_for_blue_background
+	color #090 !important
+.color_s_for_blue_background
+	color #000 !important
+.color_h_for_blue_background
+	color #F22 !important
+.color_d_for_blue_background
+	color #b90 !important
+
+.color_c_for_green_background
+	color #a90 !important
+.color_s_for_green_background
+	color #000 !important
+.color_h_for_green_background
+	color #F22 !important
+.color_d_for_green_background
+	color #03F !important
 
 .mark_c:after
 	content "♣"
@@ -165,7 +174,7 @@ a.mark
 /* playerBox */
 .playerBox
 	font-size 10pt
-	background-color rgba(0,0,0,0.8)
+	background-color rgba(0,0,0,0.9)
 	color #EEE
 	width 85px
 	position absolute
@@ -180,13 +189,17 @@ a.mark
 
 .playerBox
 	.name
-		background-color rgba(0,0,0,0.4)
+		background-color rgba(0,0,0,0.9)
 		width 67px
 
 .handLeft
-	padding-left 10px
+	padding-left 5px
+	padding-right 5px
+	background-color rgba(255,255,255,1)
 .handRight
-	padding-right 10px
+	padding-left 5px
+	padding-right 5px
+	background-color rgba(255,255,255,1)
 
 .playerBox
 	.dealer
