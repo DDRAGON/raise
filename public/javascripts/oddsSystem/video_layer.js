@@ -18,7 +18,7 @@ var config = {
 	adjustToWindowResize: false,
 	isFullScreenMode: false,
 	isFullScreen169Mode: false,
-	colorPattern: ''
+	colorPattern: '1'
 };
 
 $("#changeScreenSize").change(function(){
@@ -44,7 +44,7 @@ $("#changeBackground").change(function(){
 	switch ($(this).val()) {
 		case 'green':
 			$('#canvas_pane').attr('class', 'wall_green');
-			config.colorPattern = '2';
+			config.colorPattern = '3';
 			break;
 		case 'blue':
 			$('#canvas_pane').attr('class', 'wall_blue');
@@ -52,13 +52,14 @@ $("#changeBackground").change(function(){
 			break;
 		case 'RGB(255,255,0)':
 			$('#canvas_pane').attr('class', 'wall_yellow');
-			config.colorPattern = '';
+			config.colorPattern = '1';
 			break;
 		default:
 			$('#canvas_pane').attr('class', 'wall_'+config.background);
-			config.colorPattern = '';
+			config.colorPattern = '1';
 			break;
 	}
+	hideTable(); // テーブル情報削除
 	drawTableInfo(lastTableInfo); // テーブル書き直し
 });
 
