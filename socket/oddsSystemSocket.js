@@ -27,6 +27,23 @@ var createOddsSystemSocket = function(io, modules) {
 			modules.oddsSystem.changeAssistantMode(socket, socket.id, assistantMode);
 		});
 
+		socket.on('updateCaptionMessage', function(data) {
+			var socketId = socket.id;
+			if (data.passWord) {
+				socketId = data.passWord;
+			}
+			modules.oddsSystem.updateCaptionMessage(socketId, data.captionMessage);
+		});
+
+		socket.on('updateDescriptionMessage', function(data) {
+			var socketId = socket.id;
+			if (data.passWord) {
+				socketId = data.passWord;
+			}
+			modules.oddsSystem.updateDescriptionMessage(socketId, data.descriptionMessage);
+		});
+
+
 		socket.on('disconnect', function() {
 			modules.oddsSystem.disconnect(socket.id);
 		});
