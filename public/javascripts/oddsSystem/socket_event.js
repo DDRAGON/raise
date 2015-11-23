@@ -31,6 +31,21 @@ function emitImageSendWithPassWord(image, password) {
 	});
 }
 
+function emitCaptionMessage(captionMessage, password) {
+	socket.emit('updateCaptionMessage', {
+		captionMessage: captionMessage,
+		passWord: password
+	});
+}
+
+function emitDescriptionMessage(descriptionMessage, password) {
+	socket.emit('updateDescriptionMessage', {
+		descriptionMessage: descriptionMessage,
+		passWord: password
+	});
+}
+
+
 socket.on('disconnect', function() {
 	disConnected();
 });

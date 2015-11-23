@@ -48,7 +48,22 @@ function updatePlayerName(socketId, seatId, name) {
 	sendTableInfo(socketId);
 }
 
-function foldPlayer(socketId, seatId) {
+function updateCaptionMessage(socketId, captionMessage)
+{
+	if (!clients[socketId]) return;
+	clients[socketId].frontObj.captionMessage = captionMessage;
+	sendTableInfo(socketId);
+}
+
+function updateDescriptionMessage(socketId, descriptionMessage)
+{
+	if (!clients[socketId]) return;
+	clients[socketId].frontObj.descriptionMessage = descriptionMessage;
+	sendTableInfo(socketId);
+}
+
+function foldPlayer(socketId, seatId)
+{
 	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
 	if (!clients[socketId].frontObj.players[seatId]) return; // プレイヤーがいない時は何もしない。
 	foldedAndRecalculation(socketId, seatId); // フォールドさせて勝率再計算
@@ -126,6 +141,8 @@ module.exports = {
 	connect: connect,
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
+	updateCaptionMessage: updateCaptionMessage,
+	updateDescriptionMessage: updateDescriptionMessage,
 	foldPlayer: foldPlayer,
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
@@ -145,7 +162,9 @@ function gotStart(socketId) {
 		playingPlayersNum: 0,
 		button: 0,
 		board: [],
-		players: []
+		players: [],
+		captionMessage: '',
+		descriptionMessage: ''
 	};
 	clients[socketId].historyOfFrontObj = [];
 	sendTableInfo(socketId);
@@ -343,7 +362,8 @@ function sendTableInfo(originalSocketId) {
 	sendTableInfoForDealer(originalSocketId);
 }
 
-function sendTableInfoForDealer(originalSocketId) {
+function sendTableInfoForDealer(originalSocketId)
+{
 	var tableInfoForDealer = createTableInfoForDealer(originalSocketId);
 	if (dealersMapByOriginalSocketId[originalSocketId]) {
 		for (var key in dealersMapByOriginalSocketId[originalSocketId]) {
@@ -351,7 +371,6 @@ function sendTableInfoForDealer(originalSocketId) {
 			assistant.socket.emit('tableInfo', tableInfoForDealer); // 送信
 		}
 	}
-
 }
 
 function createTableInfoForDealer(originalSocketId) {

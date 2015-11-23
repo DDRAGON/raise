@@ -5,6 +5,8 @@ var oddsList = [];
 function drawTableInfo(tableInfo) {
 	var players = tableInfo.players;
 	var board = tableInfo.board;
+	var captionMessage = tableInfo.captionMessage;
+	var descriptionMessage = tableInfo.descriptionMessage;
 
 	displayInit();
 
@@ -33,6 +35,8 @@ function drawTableInfo(tableInfo) {
 	}
 	calculateOddsStyle();
 	updateInputPlayerNames(players);
+	updateCaptionMessage(captionMessage);
+	updateDescriptionMessage(descriptionMessage);
 
 	lastTableInfo = tableInfo;
 }
@@ -57,8 +61,6 @@ function hideTable() { // テーブル情報を消す関数
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
 	$('#board').hide();
-	$('#caption').trigger('keyup');
-	$('#description').trigger('keyup');
 	$('.actionBox').removeClass('actionF actionC actionR actionA ');
 	$('.chipBox').removeClass('actionF actionC actionR actionA ');
 	$('.btn_action').removeClass('active');
@@ -222,6 +224,29 @@ function updateInputPlayerNames(players) {
 		}
 	}
 }
+
+function updateCaptionMessage(captionMessage) {
+	var box = $('#captionBox');
+	box.text(captionMessage);
+
+	if(box.text().length > 0) {
+		box.show();
+	} else {
+		box.hide();
+	}
+}
+
+function updateDescriptionMessage(descriptionMessage) {
+	var box = $('#descriptionBox');
+	box.text(descriptionMessage);
+
+	if(box.text().length > 0) {
+		box.show();
+	} else {
+		box.hide();
+	}
+}
+
 
 function disConnected() {
 	alert("接続が切れました！\nリロードし再度設定してください。");

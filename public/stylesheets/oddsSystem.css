@@ -101,7 +101,7 @@ a.mark {
   background-color: #e5e5e5;
 }
 #captionBox {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.9);
   color: #fff;
   font-size: 20px;
   padding: 5px 10px;
@@ -109,7 +109,7 @@ a.mark {
   min-width: 78px;
 }
 #descriptionBox {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.9);
   color: #fff;
   padding: 5px;
   min-height: 30px;
