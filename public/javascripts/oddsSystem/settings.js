@@ -9,14 +9,14 @@ function setLayoutRound() {
 	var displayAreaHeight = Number(config.canvasHeight);
 
 	// name
-	var fontSize        = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT);  // 10:360 = x:displayAreaHeight
-	var cardFontSize    = parseInt(displayAreaHeight*16 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
-	var foldFontSize    = parseInt(displayAreaHeight*12 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
-	var nameWidth       = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
-	var dealerWidth     = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
-	var foldPaddingLeft = parseInt(displayAreaHeight*20 / DEFAULT_CANVAS_WIDTH); // 10:640 = y:displayAreaWidth
-	var cardPaddingTop  = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
-	var foldPaddingTop  = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
+	var fontSize         = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT);  // 10:360 = x:displayAreaHeight
+	var cardFontSize     = parseInt(displayAreaHeight*16 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
+	var foldFontSize     = parseInt(displayAreaHeight*12 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
+	var nameWidth        = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
+	var dealerWidth      = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
+	var foldPaddingLeft  = parseInt(displayAreaHeight*20 / DEFAULT_CANVAS_WIDTH); // 10:640 = y:displayAreaWidth
+	var cardPaddingTop   = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
+	var foldPaddingTop   = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
 	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
 
 	// playerBox
@@ -145,22 +145,12 @@ $(function(){
 
 	// Caption,Description入力設定
 	$('#caption').on('keyup',function() {
-		var box = $('#captionBox')
-		box.text($(this).val());
-		if(box.text().length > 0) {
-			box.show();
-		} else {
-			box.hide();
-		}
+		var captionMessage = $(this).val();
+		emitCaptionMessage(captionMessage, $('#assistant_id').val());
 	});
 	$('#description').on('keyup',function() {
-		var box = $('#descriptionBox')
-		box.text($(this).val());
-		if(box.text().length > 0) {
-			box.show();
-		} else {
-			box.hide();
-		}
+		var descriptionMessage = $(this).val();
+		emitDescriptionMessage(descriptionMessage, $('#assistant_id').val());
 	});
 
 	// Main View レイアウト設定
