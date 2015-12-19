@@ -43,6 +43,14 @@ var createOddsSystemSocket = function(io, modules) {
 			modules.oddsSystem.updateDescriptionMessage(socketId, data.descriptionMessage);
 		});
 
+		socket.on('updateChipMany', function(data) {
+			var socketId = socket.id;
+			if (data.passWord) {
+				socketId = data.passWord;
+			}
+			modules.oddsSystem.updateChipMany(socketId, data.seatId, data.chipMany);
+		});
+
 
 		socket.on('disconnect', function() {
 			modules.oddsSystem.disconnect(socket.id);

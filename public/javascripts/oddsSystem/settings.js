@@ -12,16 +12,20 @@ function setLayoutRound() {
 	var fontSize         = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT);  // 10:360 = x:displayAreaHeight
 	var cardFontSize     = parseInt(displayAreaHeight*16 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
 	var foldFontSize     = parseInt(displayAreaHeight*12 / DEFAULT_CANVAS_HEIGHT);  // 16:360 = x:displayAreaHeight
-	var nameWidth        = parseInt(displayAreaWidth*67 / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
-	var dealerWidth      = parseInt(displayAreaWidth*18 / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
+	var nameWidth        = parseInt(displayAreaWidth*67  / DEFAULT_CANVAS_WIDTH);  // 67:640 = x:displayAreaWidth
+	var dealerWidth      = parseInt(displayAreaWidth*18  / DEFAULT_CANVAS_WIDTH);  // 18:640 = x:displayAreaWidth
 	var foldPaddingLeft  = parseInt(displayAreaHeight*20 / DEFAULT_CANVAS_WIDTH); // 10:640 = y:displayAreaWidth
-	var cardPaddingTop   = parseInt(displayAreaHeight*5 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
+	var cardPaddingTop   = parseInt(displayAreaHeight*5  / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
 	var foldPaddingTop   = parseInt(displayAreaHeight*10 / DEFAULT_CANVAS_HEIGHT); // 5:360 = y:displayAreaHeight
 	var cardHolderHeight = parseInt(displayAreaHeight*30 / DEFAULT_CANVAS_HEIGHT); // 30:360 = y:displayAreaHeight
+	var chipAreaHeight   = 0;
+	if (config.isDisplayChipBox == true) {
+		chipAreaHeight   = parseInt(displayAreaHeight*18 / DEFAULT_CANVAS_HEIGHT); // 18:360 = y:displayAreaHeight
+	}
 
 	// playerBox
 	var playerBoxWidth  = dealerWidth + nameWidth + 8;
-	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT);// 66:360 = y:displayAreaHeight
+	var playerBoxHeight = parseInt(displayAreaHeight*66 / DEFAULT_CANVAS_HEIGHT) + chipAreaHeight;// 66:360 = y:displayAreaHeight
 
 	$("#canvas_pane").css({"width": displayAreaWidth+"px" , "height": displayAreaHeight+"px"});
 
@@ -73,11 +77,12 @@ function deletePlayer(seatId) {
 }
 
 function changeChip(seatId) {
-	var chip = $('#inputChip'+seatId).val();
-	$('#player'+seatId+'Chip').text(chip);
+	var chipMany = $('#inputChip'+seatId).val();
+	emitChipUpdate(seatId, chipMany, $('#assistant_id').val());
 }
 
 function changeAction(seatId, action) {
+	/*
 	$('.player'+seatId+'.btn_action').removeClass('active');
 	$('#inputAction'+action+seatId).addClass('active');
 	var $actionBox = $('#player'+seatId+'Action');
@@ -88,13 +93,14 @@ function changeAction(seatId, action) {
 	$actionBox.addClass('action'+action);
 	$actionBox.text(action);
 	if(action == 'A') {
-		$('#inputChip'+seatId).val('All In');
-		$('#player'+seatId+'Chip').text('All In');
+		$('#inputChip'+seatId).val('AllIn');
+		$('#player'+seatId+'Chip').text('AllIn');
 	} else {
 		$('#inputChip'+seatId).val('');
 		$('#player'+seatId+'Chip').text('');
 	}
 	$('#inputChip'+seatId).focus();
+	*/
 }
 
 $(function(){
@@ -115,11 +121,18 @@ $(function(){
 
 	// プレイヤーアクション 入力表示切替
 	$('#showAdditionalForm').on('click', function(){
+		// config.isDisplayChipBox の判定をひっくり返す
+		if (config.isDisplayChipBox == false) {
+			config.isDisplayChipBox = true;
+		} else {
+			config.isDisplayChipBox = false;
+		}
+
+		setLayoutRound();
 		$('.actionBox').toggle();
 		$('.chipBox').toggle();
 		$('.action_form').toggle();
 		$('.chip_form').toggle();
-		setLayoutRound();
 	});
 
 	// メニューアコーディオン設定

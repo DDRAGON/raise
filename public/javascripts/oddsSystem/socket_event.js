@@ -45,6 +45,15 @@ function emitDescriptionMessage(descriptionMessage, password) {
 	});
 }
 
+function emitChipUpdate(seatId, chipMany, password) {
+	socket.emit('updateChipMany', {
+		seatId: seatId,
+		chipMany: chipMany,
+		passWord: password
+	});
+}
+
+
 
 socket.on('disconnect', function() {
 	disConnected();
