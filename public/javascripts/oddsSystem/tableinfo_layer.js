@@ -23,6 +23,10 @@ function drawTableInfo(tableInfo) {
 		displayName(player.seatId, player.name);
 		displayHand(player.seatId, player.hand, player.isActive);
 		displayOdds(player.seatId, player.win, player.tie);
+		if (config.isDisplayChipBox == true) {
+			displayChipMany(player.seatId, player.chipMany);
+		}
+
 
 		if (
 			lastTableInfo.players &&
@@ -61,11 +65,6 @@ function hideTable() { // テーブル情報を消す関数
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
 	$('#board').hide();
-	$('.actionBox').removeClass('actionF actionC actionR actionA ');
-	$('.chipBox').removeClass('actionF actionC actionR actionA ');
-	$('.btn_action').removeClass('active');
-	$('.chipBox').text('');
-	$('.chip_form').children().val('');
 }
 
 function resetPlayerBox(seatId) {
@@ -177,7 +176,7 @@ function displayFold(seatId) {
 		.textillate({
 			in: { effect: 'swing' },
 			callback: function() {
-				$('#player'+seatId+'Box').stop().animate({ opacity: "0.5"}, 600);
+				$('#player'+seatId+'Box').stop().animate({ opacity: "0.8"}, 600);
 			}
 		})
 		.textillate('start');
@@ -203,6 +202,11 @@ function displayOdds(seatId, winPer, tiePer) {
 			.show()
 	}
 }
+
+function displayChipMany(seatId, chipMany) {
+	$('#player'+seatId+'Chip').text(chipMany);
+}
+
 
 function calculateOddsStyle() {
 	var $odds = $('.odds');

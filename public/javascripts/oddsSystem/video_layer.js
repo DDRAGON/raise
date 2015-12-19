@@ -18,7 +18,8 @@ var config = {
 	adjustToWindowResize: false,
 	isFullScreenMode: false,
 	isFullScreen169Mode: false,
-	colorPattern: '1'
+	colorPattern: '1',
+	isDisplayChipBox: false
 };
 
 $("#changeScreenSize").change(function(){

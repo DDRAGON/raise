@@ -38,7 +38,8 @@ function updatePlayerName(socketId, seatId, name) {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
 			hand: [],
-			isActive: true
+			isActive: true,
+			chipMany: ''
 		};
 	}
 	clients[socketId].frontObj.players[seatId].name = name;
@@ -50,15 +51,23 @@ function updatePlayerName(socketId, seatId, name) {
 
 function updateCaptionMessage(socketId, captionMessage)
 {
-	if (!clients[socketId]) return;
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
 	clients[socketId].frontObj.captionMessage = captionMessage;
 	sendTableInfo(socketId);
 }
 
 function updateDescriptionMessage(socketId, descriptionMessage)
 {
-	if (!clients[socketId]) return;
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
 	clients[socketId].frontObj.descriptionMessage = descriptionMessage;
+	sendTableInfo(socketId);
+}
+
+function updateChipMany(socketId, seatId, chipMany)
+{
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	if (!clients[socketId].frontObj.players[seatId]) return; // プレイヤーがいない時は何もしない。
+	clients[socketId].frontObj.players[seatId].chipMany = chipMany;
 	sendTableInfo(socketId);
 }
 
@@ -143,6 +152,7 @@ module.exports = {
 	updatePlayerName: updatePlayerName,
 	updateCaptionMessage: updateCaptionMessage,
 	updateDescriptionMessage: updateDescriptionMessage,
+	updateChipMany: updateChipMany,
 	foldPlayer: foldPlayer,
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
@@ -203,6 +213,7 @@ function gotResetGame(socketId) {
 		clients[socketId].frontObj.players[seatId].isActive = true;
 		clients[socketId].frontObj.players[seatId].win = null;
 		clients[socketId].frontObj.players[seatId].tie = null;
+		clients[socketId].frontObj.players[seatId].chipMany = '';
 	}
 	clients[socketId].historyOfFrontObj = []; // 履歴情報リセット
 	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
@@ -480,6 +491,7 @@ function foldedAndRecalculation(socketId, seatId) {
 		clients[socketId].frontObj.players[seatId].isActive = false;
 		clients[socketId].frontObj.players[seatId].win = 0;
 		clients[socketId].frontObj.players[seatId].tie = 0;
+		clients[socketId].frontObj.players[seatId].chipMany = '';
 		clients[socketId].frontObj.playingPlayersNum -= 1;
 		getWinPerFromAPI(socketId, clients[socketId].frontObj);
 		return;
