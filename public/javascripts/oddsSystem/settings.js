@@ -62,6 +62,7 @@ function setLayoutRound() {
 		$('#player'+seatId+'Dealer').css({width: dealerWidth+"px", 'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Box').css({'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Odds').css({'font-size': fontSize+"pt"});
+		$('#player'+seatId+'Chip').css({'font-size': fontSize+"pt"});
 		$('#player'+seatId+'Folded').css({'font-size': foldFontSize+"pt", 'padding-left': foldPaddingLeft+"px", 'padding-left': "-5px"});
 	}
 }
