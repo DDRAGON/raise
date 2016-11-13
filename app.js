@@ -7,6 +7,8 @@ var express = require('express')
 	, forDealer = require('./routes/forDealer')
 	, justGet = require('./routes/justGet')
 	, http = require('http')
+   , https = require('https')
+   , fs = require('fs')
 	, path = require('path');
 
 var app = express();
@@ -44,8 +46,17 @@ var modules = {
 	oddsSystem: require('./modules/oddsSystem.js')
 }
 
+// https キーの設定
+var options = {
+   key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.key'),
+   cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.cert')
+};
+
 // サーバーをたてる
-var server = http.createServer(app).listen(app.get('port'), function(){
+//var httpServer = http.createServer(app).listen(app.get('port'), function(){
+   //console.log('Express server listening on port ' + app.get('port'));
+//});
+var server = https.createServer(options, app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 var io = require('socket.io').listen(server);
