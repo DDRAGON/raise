@@ -1,4 +1,4 @@
-var socket = io.connect('http://'+hostAddress+'/oddsSystem');
+var socket = io.connect('https://'+hostAddress+'/oddsSystem');
 
 function addUpdateTableInfoListener(listener) {
 	socket.on('tableInfo', listener);

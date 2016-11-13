@@ -1,4 +1,4 @@
-var hostAddress = '127.0.0.1';
+var hostAddress = 'localhost';
 var winAPIHostAddress = '157.7.200.60';
 
 

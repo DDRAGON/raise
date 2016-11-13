@@ -59,7 +59,9 @@ var options = {
 var server = https.createServer(options, app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server, options);
+var io = require('socket.io').listen(server, options);
+
 
 var createOddsSystemSocket = require("./socket/oddsSystemSocket");
 new createOddsSystemSocket(io, modules);
