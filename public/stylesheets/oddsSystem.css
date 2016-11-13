@@ -101,15 +101,15 @@ a.mark {
   background-color: #e5e5e5;
 }
 #captionBox {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.9);
   color: #fff;
-  font-size: 20px;
+  font-size: 24px;
   padding: 5px 10px;
   min-height: 38px;
   min-width: 78px;
 }
 #descriptionBox {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.9);
   color: #fff;
   padding: 5px;
   min-height: 30px;
@@ -125,12 +125,21 @@ a.mark {
 .wall_mat {
   background-image: url("/image/background/green_mat.jpg");
 }
+.wall_green {
+  background-color: #0f0;
+}
+.wall_blue {
+  background-color: #00f;
+}
+.wall_yellow {
+  background-color: #ff0;
+}
 /* board */
 .board {
-  background-color: rgba(200,200,200,0.4);
+  background-color: rgba(200,200,200,0.9);
 }
 .board .card {
-  background-color: rgba(0,0,0,0.6);
+  background-color: #fff;
   padding: 12px 7px;
   width: 39px;
   height: 48px;
@@ -142,16 +151,40 @@ a.mark {
   font: 16pt Arial, sans-serif;
 }
 .color_c {
-  color: #6c6 !important;
+  color: #090 !important;
 }
 .color_s {
-  color: #fff !important;
+  color: #000 !important;
 }
 .color_h {
-  color: #f66 !important;
+  color: #f00 !important;
 }
 .color_d {
-  color: #6cf !important;
+  color: #03f !important;
+}
+.color_c_for_blue_background {
+  color: #090 !important;
+}
+.color_s_for_blue_background {
+  color: #000 !important;
+}
+.color_h_for_blue_background {
+  color: #f22 !important;
+}
+.color_d_for_blue_background {
+  color: #b90 !important;
+}
+.color_c_for_green_background {
+  color: #a90 !important;
+}
+.color_s_for_green_background {
+  color: #000 !important;
+}
+.color_h_for_green_background {
+  color: #f22 !important;
+}
+.color_d_for_green_background {
+  color: #03f !important;
 }
 .mark_c:after {
   content: "♣";
@@ -167,10 +200,10 @@ a.mark {
 }
 /* playerBox */
 .playerBox {
-  font-size: 9pt;
-  background-color: rgba(0,0,0,0.4);
+  font-size: 10pt;
+  background-color: rgba(0,0,0,0.9);
   color: #eee;
-  width: 80px;
+  width: 85px;
   position: absolute;
 }
 .playerBox .cardHolder {
@@ -180,18 +213,22 @@ a.mark {
   font-size: 16pt;
 }
 .playerBox .name {
-  background-color: rgba(0,0,0,0.4);
-  width: 64px;
+  background-color: rgba(0,0,0,0.9);
+  width: 67px;
 }
 .handLeft {
-  padding-left: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: #fff;
 }
 .handRight {
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: #fff;
 }
 .playerBox .dealer {
-  width: 16px;
-  font-size: 9pt;
+  width: 18px;
+  font-size: 10pt;
   color: rgba(255,255,255,0);
   background-color: rgba(0,0,0,0.6);
 }
@@ -200,53 +237,53 @@ a.mark {
   background-color: #d96;
 }
 .playerBox .actionBox {
-  width: 16px;
-  font-size: 9pt;
+  width: 18px;
+  font-size: 10pt;
   color: rgba(255,255,255,0);
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.9);
 }
 .playerBox .actionBox.actionF {
   color: #fff;
-  background-color: rgba(50,150,200,0.5);
+  background-color: rgba(50,150,200,0.9);
 }
 .playerBox .actionBox.actionC {
   color: #fff;
-  background-color: rgba(100,200,50,0.5);
+  background-color: rgba(100,200,50,0.9);
 }
 .playerBox .actionBox.actionR {
   color: #fff;
-  background-color: rgba(250,50,100,0.5);
+  background-color: rgba(250,50,100,0.9);
 }
 .playerBox .actionBox.actionA {
   color: #fff;
-  background-color: rgba(250,50,100,0.5);
+  background-color: rgba(250,50,100,0.9);
 }
 .playerBox .chipBox {
-  background-color: rgba(0,0,0,0.3);
-  width: 64px;
-  height: 17px;
+  background-color: rgba(0,0,0,0.7);
+  width: 6px;
+  height: 18px;
 }
 .playerBox .chipBox.actionF {
   color: #fff;
-  background-color: rgba(25,75,100,0.5);
+  background-color: rgba(25,75,100,0.9);
 }
 .playerBox .chipBox.actionC {
   color: #fff;
-  background-color: rgba(50,100,25,0.5);
+  background-color: rgba(50,100,25,0.9);
 }
 .playerBox .chipBox.actionR {
   color: #fff;
-  background-color: rgba(125,25,50,0.5);
+  background-color: rgba(125,25,50,0.9);
 }
 .playerBox .chipBox.actionA {
   color: #fff;
-  background-color: rgba(125,25,50,0.5);
+  background-color: rgba(125,25,50,0.9);
 }
 .playerBox .odds.withTie {
-  font-size: 11px;
+  font-size: 10px;
 }
 .playerBox .odds {
-  color: #6cf;
+  color: #cff;
   font-weight: bold;
 }
 .playerBox .odds.max {
@@ -255,4 +292,16 @@ a.mark {
 }
 .playerBox .odds.win:before {
   content: "✔ ";
+}
+.centerAdvice {
+  display: none;
+  font-size: 22px;
+  padding: 8px 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgba(200,200,200,0.5);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
 }

@@ -5,6 +5,8 @@ var oddsList = [];
 function drawTableInfo(tableInfo) {
 	var players = tableInfo.players;
 	var board = tableInfo.board;
+	var captionMessage = tableInfo.captionMessage;
+	var descriptionMessage = tableInfo.descriptionMessage;
 
 	displayInit();
 
@@ -21,8 +23,11 @@ function drawTableInfo(tableInfo) {
 		displayName(player.seatId, player.name);
 		displayHand(player.seatId, player.hand, player.isActive);
 		displayOdds(player.seatId, player.win, player.tie);
+		if (config.isDisplayChipBox == true) {
+			displayChipMany(player.seatId, player.chipMany);
+		}
 
-		// FOLD検知
+
 		if (
 			lastTableInfo.players &&
 			lastTableInfo.players[key] &&
@@ -34,21 +39,32 @@ function drawTableInfo(tableInfo) {
 	}
 	calculateOddsStyle();
 	updateInputPlayerNames(players);
+	updateCaptionMessage(captionMessage);
+	updateDescriptionMessage(descriptionMessage);
 
 	lastTableInfo = tableInfo;
 }
-
 addUpdateTableInfoListener(drawTableInfo);
+
+
+function hideTable() { // テーブル情報を消す関数
+	$('.board.card').removeClass(
+		'color_s color_h color_d color_c ' +
+		'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+		'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+		'mark_s mark_h mark_d mark_c'
+	).text('');
+	for (var playerId=0; playerId<10; playerId++) {
+		$leftCard = $('#player'+playerId+'HandLeft');
+		hideCard($leftCard);
+		$rightCard = $('#player'+playerId+'HandRight');
+		hideCard($rightCard);
+	}
+}
 
 function displayInit() {
 	$('.playerBox').hide(); // 名前を消したプレイヤーのplayerBoxを表示しないための初期化
-	$('#caption').trigger('keyup');
-	$('#description').trigger('keyup');
-	$('.actionBox').removeClass('actionF actionC actionR actionA ');
-	$('.chipBox').removeClass('actionF actionC actionR actionA ');
-	$('.btn_action').removeClass('active');
-	$('.chipBox').text('');
-	$('.chip_form').children().val('');
+	$('#board').hide();
 }
 
 function resetPlayerBox(seatId) {
@@ -71,18 +87,31 @@ function displayBoard(board) {
 	if (!board || board.length <= 0) {
 		// clear
 		$('.board').fadeOut(200, function() {
-			$('.board.card').removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
+			$('.board.card').removeClass(
+				'color_s color_h color_d color_c ' +
+				'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+				'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+				'mark_s mark_h mark_d mark_c'
+			).text('');
 		});
 
 	} else {
 		// show
 		$('#board').show();
-		for (var key in board) {
-			var cardCode = board[key];
-			$selector = $('#board'+key);
+		for (var boardNum=0; boardNum < 5; boardNum++) {
+			if (!board[boardNum]) { // undoの対応 送られてきたデータに次のボード情報が無いときは消す。
+				$('#board'+boardNum).hide();
+				continue;
+			}
+			var cardCode = board[boardNum];
+			$selector = $('#board'+boardNum);
 			$selector.fadeIn();
 			$selector.text(cardCode.charAt(0));
-			$selector.addClass('color_'+cardCode.charAt(1));
+			switch (config.colorPattern) {
+				case '1': $selector.addClass('color_'+cardCode.charAt(1)); break;
+				case '2': $selector.addClass('color_'+cardCode.charAt(1)+'_for_blue_background'); break;
+				case '3': $selector.addClass('color_'+cardCode.charAt(1)+'_for_green_background'); break;
+			}
 			$selector.addClass('mark_'+cardCode.charAt(1));
 		}
 	}
@@ -91,31 +120,48 @@ function displayBoard(board) {
 function displayHand(playerId, playerHands, isActive) {
 	$leftCard = $('#player'+playerId+'HandLeft');
 	$rightCard = $('#player'+playerId+'HandRight');
-	if (!isActive) {
-		hideCard($leftCard);
-		hideCard($rightCard);
-		return;
-	}
 	if (playerHands && playerHands[0]) {
-		displayCard($leftCard, playerHands[0]);
+		if (isActive) {
+			displayCard($leftCard, playerHands[0]);
+		} else {
+			semitransparentDisplayCard($leftCard, playerHands[0]);
+		}
 	} else {
 		hideCard($leftCard);
 	}
 	if (playerHands && playerHands[1]) {
-		displayCard($rightCard, playerHands[1]);
+		if (isActive) {
+			displayCard($rightCard, playerHands[1]);
+		} else {
+			semitransparentDisplayCard($rightCard, playerHands[1]);
+		}
 	} else {
 		hideCard($rightCard);
 	}
 }
 function hideCard($selector) {
 	$selector.hide();
-	$selector.removeClass('color_s color_h color_d color_c mark_s mark_h mark_d mark_c').text('');
+	$selector.removeClass(
+		'color_s color_h color_d color_c ' +
+		'color_s_for_blue_background color_h_for_blue_background color_d_for_blue_background color_c_for_blue_background ' +
+		'color_s_for_green_background color_h_for_green_background color_d_for_green_background color_c_for_green_background ' +
+		'mark_s mark_h mark_d mark_c'
+	).text('');
 }
 function displayCard($selector, code) {
 	$selector.text(code.charAt(0));
-	$selector.addClass('color_'+code.charAt(1));
+	switch (config.colorPattern) {
+		case '1': $selector.addClass('color_'+code.charAt(1)); break;
+		case '2': $selector.addClass('color_'+code.charAt(1)+'_for_blue_background'); break;
+		case '3': $selector.addClass('color_'+code.charAt(1)+'_for_green_background'); break;
+	}
 	$selector.addClass('mark_'+code.charAt(1));
+	$selector.css({"opacity": 1});
 	$selector.fadeIn();
+}
+
+function semitransparentDisplayCard($selector, code) {
+	$selector.css({"opacity": 0.4});
 }
 
 function displayName(seatId, playerName) {
@@ -130,7 +176,7 @@ function displayFold(seatId) {
 		.textillate({
 			in: { effect: 'swing' },
 			callback: function() {
-				$('#player'+seatId+'Box').stop().animate({ opacity: "0.5"}, 600);
+				$('#player'+seatId+'Box').stop().animate({ opacity: "0.8"}, 600);
 			}
 		})
 		.textillate('start');
@@ -144,28 +190,23 @@ function displayOdds(seatId, winPer, tiePer) {
 
 	} else {
 		//show
-		var win = createWinOdds(winPer);
-		var tie = createTieOdds(tiePer);
-		if(tie) { $playerOdds.addClass('withTie'); } else { $playerOdds.removeClass('withTie'); }
+		var win = Number(winPer.replace('%',''));
+		if(tiePer) {
+			win += Number(tiePer.replace('%',''));
+		}
+		win = Math.round(win);
 		oddsList.push(win);
 		$playerOdds
 			.attr('data-win', win)
-			.text(win + tie + '%')
+			.text(win + '%')
 			.show()
 	}
 }
-function createWinOdds(winPer) {
-	return roundOdds(winPer);
+
+function displayChipMany(seatId, chipMany) {
+	$('#player'+seatId+'Chip').text(chipMany);
 }
-function createTieOdds(tiePer) {
-	var tie = roundOdds(tiePer);
-	if (tie < 5) return "";
-	return '(' + tie +')';
-}
-function roundOdds(odds) {
-	if(!odds) return;
-	return (Math.round(Number(odds.replace('%','')) * 10 ) / 10);
-}
+
 
 function calculateOddsStyle() {
 	var $odds = $('.odds');
@@ -186,4 +227,31 @@ function updateInputPlayerNames(players) {
 			$('#inputPlayer'+seatId).val('');
 		}
 	}
+}
+
+function updateCaptionMessage(captionMessage) {
+	var box = $('#captionBox');
+	box.text(captionMessage);
+
+	if(box.text().length > 0) {
+		box.show();
+	} else {
+		box.hide();
+	}
+}
+
+function updateDescriptionMessage(descriptionMessage) {
+	var box = $('#descriptionBox');
+	box.text(descriptionMessage);
+
+	if(box.text().length > 0) {
+		box.show();
+	} else {
+		box.hide();
+	}
+}
+
+
+function disConnected() {
+	alert("接続が切れました！\nリロードし再度設定してください。");
 }

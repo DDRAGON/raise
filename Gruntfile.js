@@ -19,6 +19,10 @@ module.exports = function(grunt){
 					"public/javascripts/qrCodeReader/ugly.min.js" : [
 						"public/javascripts/qrCodeReader/video.js",
 						"public/javascripts/qrCodeReader/client.js"
+					],
+					"public/javascripts/forDealer/ugly.min.js" : [
+						"public/javascripts/forDealer/socket_event.js",
+						"public/javascripts/forDealer/forDealer.js"
 					]
 				}
 			}

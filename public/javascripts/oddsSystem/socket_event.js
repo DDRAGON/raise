@@ -30,3 +30,31 @@ function emitImageSendWithPassWord(image, password) {
 		passWord: password
 	});
 }
+
+function emitCaptionMessage(captionMessage, password) {
+	socket.emit('updateCaptionMessage', {
+		captionMessage: captionMessage,
+		passWord: password
+	});
+}
+
+function emitDescriptionMessage(descriptionMessage, password) {
+	socket.emit('updateDescriptionMessage', {
+		descriptionMessage: descriptionMessage,
+		passWord: password
+	});
+}
+
+function emitChipUpdate(seatId, chipMany, password) {
+	socket.emit('updateChipMany', {
+		seatId: seatId,
+		chipMany: chipMany,
+		passWord: password
+	});
+}
+
+
+
+socket.on('disconnect', function() {
+	disConnected();
+});

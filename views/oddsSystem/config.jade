@@ -23,11 +23,18 @@ div(class="setting_wrap")
 			div(style="float:left; padding-left:5px;")
 				button(id="layoutSetDefault" class="btn btn-default btn-sm" type="button") Reset
 
+		// screen size
+		div(class="stripe_a text-left")
+			div screenSize
+			select(class="selectpicker" data-width="113px" id="changeScreenSize")
+				for value, key in ['defaultSize', 'camera', 'fullScreen', '16:9_fullScreen']
+					option(value='#{value}') #{value}
+
 		// background
 		div(class="stripe_a text-left")
 			div Background
 			select(class="selectpicker" data-width="80px" id="changeBackground")
-				for value, key in ['camera','wood','mat']
+				for value, key in ['camera','wood','mat', 'green', 'blue', 'RGB(255,255,0)']
 					option #{value}
 
 		// QR sheet

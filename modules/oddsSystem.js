@@ -1,4 +1,3 @@
-var async = require('async');
 var request = require('request');
 Config = require('../config');
 
@@ -6,6 +5,7 @@ var ASSISTANT_MODE_ORIGINAL = 'Original';
 var ASSISTANT_MODE_ASSISTANT = 'Assistant';
 var clients = {};
 var assistantsMapByOriginalSocketId = {};
+var dealersMapByOriginalSocketId = {};
 
 
 function connect(socket)
@@ -34,10 +34,12 @@ function gotImage(socketId, image)
 
 function updatePlayerName(socketId, seatId, name) {
 	if (!clients[socketId]) return;
-	if (typeof clients[socketId].frontObj.players[seatId] == 'undefined') {
+	if (typeof clients[socketId].frontObj.players[seatId] == "undefined") {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
-			hand: []
+			hand: [],
+			isActive: true,
+			chipMany: ''
 		};
 	}
 	clients[socketId].frontObj.players[seatId].name = name;
@@ -45,6 +47,36 @@ function updatePlayerName(socketId, seatId, name) {
 		delete clients[socketId].frontObj.players[seatId];
 	}
 	sendTableInfo(socketId);
+}
+
+function updateCaptionMessage(socketId, captionMessage)
+{
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	clients[socketId].frontObj.captionMessage = captionMessage;
+	sendTableInfo(socketId);
+}
+
+function updateDescriptionMessage(socketId, descriptionMessage)
+{
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	clients[socketId].frontObj.descriptionMessage = descriptionMessage;
+	sendTableInfo(socketId);
+}
+
+function updateChipMany(socketId, seatId, chipMany)
+{
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	if (!clients[socketId].frontObj.players[seatId]) return; // プレイヤーがいない時は何もしない。
+	clients[socketId].frontObj.players[seatId].chipMany = chipMany;
+	sendTableInfo(socketId);
+}
+
+function foldPlayer(socketId, seatId)
+{
+	if (!clients[socketId]) return; // 部屋が無い時は何もしない。
+	if (!clients[socketId].frontObj.players[seatId]) return; // プレイヤーがいない時は何もしない。
+	foldedAndRecalculation(socketId, seatId); // フォールドさせて勝率再計算
+	sendTableInfo(socketId); // テーブル情報送信
 }
 
 // アシスタントパスワードの変更
@@ -75,10 +107,39 @@ function changeAssistantMode(socket, socketId, assistantMode) {
 	}
 }
 
+// forDealerのパスワード変更
+function dealerChangePassword(socket, socketId, dealerPassword) {
+	if (clients[dealerPassword]) { // オリジナルが見つかっ場合、ディーラーの作成
+		if (!dealersMapByOriginalSocketId[dealerPassword]) {
+			dealersMapByOriginalSocketId[dealerPassword] = [];
+		}
+		dealersMapByOriginalSocketId[dealerPassword].push ({
+			socketId: socketId,
+			socket: socket,
+			originalSocketId: dealerPassword
+		});
+		sendTableInfoForDealer(dealerPassword); // ディーラーを作ったら現在のテーブル情報を送る。
+	}
+}
+
+// 対象socketIDのfrontObjを１つ前の状態にし、最新の履歴情報を消します。
+function undoFrontObj(socketId) {
+	if (!clients[socketId]) return; // そんなテーブル無いときは無視。
+	var historyLength = clients[socketId].historyOfFrontObj.length;
+	if (historyLength === 0) return; // 履歴が無いときは何もしない。
+	var latestHistory = clients[socketId].historyOfFrontObj[(historyLength - 1)]; // 最新の履歴
+	clients[socketId].frontObj = JSON.parse(JSON.stringify(latestHistory)); // 最新の履歴に書き換える。
+	if (historyLength > 1) { // 1はstartの状態なので、これは消さない。
+		clients[socketId].historyOfFrontObj.splice((historyLength - 1), 1);
+	}
+	sendTableInfo(socketId);
+}
+
 // 接続切断
 function disconnect(socketId) {
 	if (clients[socketId]) { // オリジナルが切断したとき。
 		deleteOriginal(socketId);
+		deleteDealers(socketId);
 		return;
 	}
 	// オリジナルでない時はアシスタントを探し、いいたら削除する。
@@ -89,8 +150,14 @@ module.exports = {
 	connect: connect,
 	gotImage: gotImage,
 	updatePlayerName: updatePlayerName,
+	updateCaptionMessage: updateCaptionMessage,
+	updateDescriptionMessage: updateDescriptionMessage,
+	updateChipMany: updateChipMany,
+	foldPlayer: foldPlayer,
 	updateAssistantPassword: updateAssistantPassword,
 	changeAssistantMode: changeAssistantMode,
+	dealerChangePassword: dealerChangePassword,
+	undoFrontObj: undoFrontObj,
 	disconnect: disconnect
 };
 
@@ -105,28 +172,30 @@ function gotStart(socketId) {
 		playingPlayersNum: 0,
 		button: 0,
 		board: [],
-		players: []
+		players: [],
+		captionMessage: '',
+		descriptionMessage: ''
 	};
-	clients[socketId].gotCards = [];
+	clients[socketId].historyOfFrontObj = [];
 	sendTableInfo(socketId);
 }
 
 // プリフロップカードを受け取った時の処理。
 function gotPreFlop(socketId) {
-	if (clients[socketId].frontObj.state === 'start') {
-		clients[socketId].frontObj.state = 'preFlop';
-		clients[socketId].frontObj.allPlayersNum = clients[socketId].gotCards.length/2;
-		clients[socketId].frontObj.playingPlayersNum = clients[socketId].frontObj.allPlayersNum;
-		for (var key in clients[socketId].frontObj.players) {
-			var player = clients[socketId].frontObj.players[key];
-			if (!player) continue;
-			var seatId = player.seatId;
-			clients[socketId].frontObj.players[seatId].isActive = true;
-			clients[socketId].frontObj.players[seatId].win = null;
-			clients[socketId].frontObj.players[seatId].tie = null;
-		}
-		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	if (clients[socketId].frontObj.state !== 'start') return;
+
+	clients[socketId].frontObj.state = 'preFlop';
+	clients[socketId].frontObj.allPlayersNum = clients[socketId].frontObj.players.length;
+	clients[socketId].frontObj.playingPlayersNum = clients[socketId].frontObj.allPlayersNum;
+	for (var key in clients[socketId].frontObj.players) {
+		var player = clients[socketId].frontObj.players[key];
+		if (!player) continue;
+		var seatId = player.seatId;
+		clients[socketId].frontObj.players[seatId].isActive = true;
+		clients[socketId].frontObj.players[seatId].win = null;
+		clients[socketId].frontObj.players[seatId].tie = null;
 	}
+	getWinPerFromAPI(socketId, clients[socketId].frontObj);
 }
 
 // リセットゲームカードを受け取った時の処理。
@@ -136,7 +205,6 @@ function gotResetGame(socketId) {
 	clients[socketId].frontObj.allPlayersNum = 0;
 	clients[socketId].frontObj.playingPlayersNum = 0;
 	clients[socketId].frontObj.board = [];
-	clients[socketId].gotCards = [];
 	for (var key in clients[socketId].frontObj.players) {
 		var player = clients[socketId].frontObj.players[key];
 		if (!player) continue;
@@ -145,7 +213,10 @@ function gotResetGame(socketId) {
 		clients[socketId].frontObj.players[seatId].isActive = true;
 		clients[socketId].frontObj.players[seatId].win = null;
 		clients[socketId].frontObj.players[seatId].tie = null;
+		clients[socketId].frontObj.players[seatId].chipMany = '';
 	}
+	clients[socketId].historyOfFrontObj = []; // 履歴情報リセット
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	sendTableInfo(socketId);
 }
 
@@ -178,6 +249,8 @@ function gotCardInStart(socketId, card) {
 		if (!player) continue;
 		checkingSeatId = findNextDealerButton(socketId, checkingSeatId);
 		if (!clients[socketId].frontObj.players[checkingSeatId].hand[0]) {
+			// 更新！
+			addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 			clients[socketId].frontObj.players[checkingSeatId].hand[0] = card;
 			clients[socketId].frontObj.players[checkingSeatId].isActive = true;
 			return;
@@ -193,6 +266,8 @@ function gotCardInStart(socketId, card) {
 		if (!player) continue;
 		checkingSeatId = findNextDealerButton(socketId, checkingSeatId);
 		if (!clients[socketId].frontObj.players[checkingSeatId].hand[1]) {
+			// 更新！
+			addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 			clients[socketId].frontObj.players[checkingSeatId].hand[1] = card;
 			if (lastSeatId == checkingSeatId) { // 最後の一人を配り終えたら
 				gotPreFlop(socketId); // プリフロップ開始だと分かる。
@@ -216,7 +291,8 @@ function gotCardInPreFlop(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 3) { // フロップに３枚が来たのを確認
 		clients[socketId].frontObj.state = 'flop'; // フロップになったことを認識
@@ -234,7 +310,8 @@ function gotCardInFlop(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 4) { // ターンになったことを認識
 		clients[socketId].frontObj.state = 'turn';
@@ -252,7 +329,8 @@ function gotCardInTurn(socketId, card) {
 			return;
 		}
 	}
-	// 同じカードがない場合
+	// 同じカードがない場合 更新！
+	addToHistoryOfFrontObj(socketId, clients[socketId].frontObj); // 履歴情報追加
 	addCardToBoard(socketId, card);
 	if (clients[socketId].frontObj.board.length == 5) { // リバーになったことを認識
 		clients[socketId].frontObj.state = 'river';
@@ -291,6 +369,58 @@ function sendTableInfo(originalSocketId) {
 			assistant.socket.emit('tableInfo', tableInfo); // 送信
 		}
 	}
+	// ディーラーへの送信
+	sendTableInfoForDealer(originalSocketId);
+}
+
+function sendTableInfoForDealer(originalSocketId)
+{
+	var tableInfoForDealer = createTableInfoForDealer(originalSocketId);
+	if (dealersMapByOriginalSocketId[originalSocketId]) {
+		for (var key in dealersMapByOriginalSocketId[originalSocketId]) {
+			var assistant = dealersMapByOriginalSocketId[originalSocketId][key];
+			assistant.socket.emit('tableInfo', tableInfoForDealer); // 送信
+		}
+	}
+}
+
+function createTableInfoForDealer(originalSocketId) {
+	var tableInfo = clients[originalSocketId].frontObj;
+	var tableInfoForDealer = {
+		players: [],
+		board: [],
+		button: tableInfo.button
+	};
+	var players = tableInfo.players;
+	var board   = tableInfo.board;
+	for (var key in players) {
+		if (!players[key]) continue; // プレイヤーが存在しなかったら無視して次へ
+		var player = players[key];
+
+		// いずれかの要素が足りなかったら無視して次へ
+		if (typeof player.name     == "undefined") continue; // 名前が無かったら処理を進めないし。
+		if (typeof player.seatId   == "undefined") continue; // 座席IDが無かったら処理を進めないし。
+		if (typeof player.isActive == "undefined") continue; // アクティブフラグが無かったら処理を進めないし。
+
+		tableInfoForDealer.players[key] = {
+			name: player.name,
+			seatId: player.seatId,
+			isActive: player.isActive,
+			hand: []
+		};
+		for (var handKey in player.hand) {
+			if (player.hand[handKey]) {
+				tableInfoForDealer.players[key].hand[handKey] = true;
+			}
+		}
+	}
+	for (var key in board)  {
+		if (board[key]) {
+			tableInfoForDealer.board[key] = true;
+		}
+	}
+
+	return tableInfoForDealer;
 }
 
 // ディーラーボタンを移動する
@@ -326,6 +456,12 @@ function getOriginalSocketIdByAssistantSocketId(assistantSocketId) {
 	return false; // 見つからなかったらfalseを返す。
 }
 
+// 対象socketIDの履歴にfrontObjを追加する。
+function addToHistoryOfFrontObj(socketId, frontObj) {
+	var historyLength = clients[socketId].historyOfFrontObj.length;
+	clients[socketId].historyOfFrontObj[historyLength] = JSON.parse(JSON.stringify(frontObj));
+}
+
 // オリジナルを削除
 function deleteOriginal(socketId) {
 	delete clients[socketId];
@@ -345,14 +481,28 @@ function deleteAssistant(assistantSocketId) {
 	}
 }
 
+function deleteDealers(socketId) {
+	delete dealersMapByOriginalSocketId[socketId];
+}
+
 // 降りたプレーヤーが出た時に勝率を再計算する。
 function foldedAndRecalculation(socketId, seatId) {
-	if (clients[socketId].frontObj.players[seatId].isActive == false) return;
-	clients[socketId].frontObj.players[seatId].isActive = false;
-	clients[socketId].frontObj.players[seatId].win = 0;
-	clients[socketId].frontObj.players[seatId].tie = 0;
-	clients[socketId].frontObj.playingPlayersNum -= 1;
-	getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	if (clients[socketId].frontObj.players[seatId].isActive == true) {
+		clients[socketId].frontObj.players[seatId].isActive = false;
+		clients[socketId].frontObj.players[seatId].win = 0;
+		clients[socketId].frontObj.players[seatId].tie = 0;
+		clients[socketId].frontObj.players[seatId].chipMany = '';
+		clients[socketId].frontObj.playingPlayersNum -= 1;
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+		return;
+	}
+
+	// 降りたプライヤーをサイドタップすると生き返る！
+	if (clients[socketId].frontObj.players[seatId].isActive == false) {
+		clients[socketId].frontObj.players[seatId].isActive = true;
+		clients[socketId].frontObj.playingPlayersNum += 1;
+		getWinPerFromAPI(socketId, clients[socketId].frontObj);
+	}
 }
 
 function getWinPerFromAPI(socketId, frontObj) {
@@ -397,7 +547,12 @@ function getWinPerFromAPI(socketId, frontObj) {
 			}
 			sendTableInfo(socketId);
 		} else {
-			console.log('error: '+ response.statusCode);
+			if (error) {
+				console.log(error);
+			}
+			if (response && response.statusCode) {
+				console.log('error: '+ response.statusCode);
+			}
 		}
 	});
 }

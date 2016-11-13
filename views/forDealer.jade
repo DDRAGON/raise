@@ -1,0 +1,71 @@
+extends layout
+
+block append css
+	link(rel="stylesheet" href="/assets/bootstrap-select/bootstrap-select.min.css")
+	link(rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css")
+	link(rel="stylesheet" href="/stylesheets/oddsSystem.css")
+	link(rel="stylesheet" href="/stylesheets/forDealer.css")
+
+block append headContents
+
+block content
+
+	div(id="canvas_pane")
+
+		// Board
+		div(id="board" class="draggable border_radius board" style="display:none; position: absolute;")
+			div(style="overflow:hidden; margin: 5px 5px;")
+				for boardId, key in [0,1,2,3,4]
+					div(id="board#{boardId}" class="border_radius board card" style="float:left; display:none;")
+
+		// PlayerBox
+		for seatId, key in [0,1,2,3,4,5,6,7,8,9]
+			div(id="player#{seatId}Box" class="playerBox draggable border_radius" data-active="false" style="display:none;")
+				div(id="player#{seatId}Hand" class="cardHolder")
+					div(id="player#{seatId}HandLeft" class="card handLeft" style="float:left;")
+					div(id="player#{seatId}HandRight" class="card handRight" style="float:right;")
+					div(id="player#{seatId}Folded" class="folded" style="display:none;") Folded
+				div(style="display:table;")
+					div(id="player#{seatId}Dealer" class="dealer" style="float:left;") D
+					div(id="player#{seatId}Name" class="name" style="float:left;") player#{seatId+1}
+				div(style="display:table;")
+					div(id="player#{seatId}Action" class="actionBox" style="float:left; display:none;") C
+					div(id="player#{seatId}Chip" class="chipBox" style="float:left; display:none;")
+				div(style="clear:both; display:inline-block;")
+					div(id="player#{seatId}Odds" class="odds")
+
+	// パスワードエリア
+	div(id='passwordArea' style='font-size:32px')
+		text password
+		input(type="password" id="inputPasswordArea")
+		<input type="button" value="send" onClick="sendPassword();" />
+
+	// 操作ボタン
+	div(id='controlButton')
+		div(style="float:left;")
+			button(type='button', onClick="sendNextGame();", id='nextButton' style="display:none;") Next
+		div(style="float:left;")
+			test 　
+			button(type='button', onClick="showOption();", id='showOptionButton' style="display:none;") Option
+			test 　
+		div(style="float:left;")
+			button(type='button', onClick="sendResetGame();", id='resetButton' style="display:none;") Reset
+			test 　
+		div(style="float:left;")
+			button(type='button', onClick="sendUndo();", id='undoButton' style="display:none;") Undo
+
+
+	script.
+		var hostAddress = "#{hostAddress}";
+
+block append afterScripts
+	script(type='text/javascript', src='/socket.io/socket.io.js')
+	script(src="/assets/bootstrap/js/bootstrap.min.js")
+	//script(src="/assets/jquery.mobile-1.4.5.min.js")
+	script(src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
+	script(src='/assets/textillate/assets/jquery.fittext.js')
+	script(src='/assets/textillate/assets/jquery.lettering.js')
+	script(src='/assets/textillate/jquery.textillate.js')
+	script(src="/assets/bootstrap-select/bootstrap-select.min.js")
+	script(src="/assets/jquery.balloon.min.js")
+	script(src="/javascripts/forDealer/ugly.min.js")

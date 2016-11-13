@@ -34,7 +34,7 @@ block content
 			include ./oddsSystem/cardSelector.jade
 
 		// footer
-		div(style="clear:both;")
+		div(id="footer_contents" style="clear:both;")
 			footer
 				hr(class="featurette-divider")
 				div(style="float:left")
@@ -43,15 +43,18 @@ block content
 				p(class="pull-right")
 					a(href="#") Back to top
 				p
-					text &copy; 2014 DWPC Tech. &middot;
+					text &copy; 2014-2015 DWPC Tech. &middot;
 					a(href="#") Privacy
 					text &middot;
 					a(href="#") Terms
 					text &middot;
-					a(href="https://github.com/DDRAGON/raise") Github
 
 		// hidden
 		video(id="myVideo" style="visibility:hidden; display:none;" autoplay="1")
+		// hidden Advice
+		div(id="escKeyAdvice" class="centerAdvice")
+			b esc
+			text 　キーでフルスクリーンモードを終了します。
 
 	script.
 		var hostAddress = "#{hostAddress}";
@@ -62,6 +65,7 @@ block append afterScripts
 	script(type='text/javascript', src='/socket.io/socket.io.js')
 	script(src="/assets/bootstrap/js/bootstrap.min.js")
 	script(src="/assets/jquery-ui.min.js")
+	script(src="/assets/jquery.ui.touch-punch.min.js")
 	script(src='/assets/textillate/assets/jquery.fittext.js')
 	script(src='/assets/textillate/assets/jquery.lettering.js')
 	script(src='/assets/textillate/jquery.textillate.js')
