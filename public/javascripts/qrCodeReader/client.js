@@ -1,4 +1,4 @@
-var socket = io.connect('http://'+hostAddress+'/qrCodeReader');
+var socket = io.connect('https://'+hostAddress+':443/qrCodeReader');
 var config = {
 	canvasWidth:  400,
 	canvasHeight: 300

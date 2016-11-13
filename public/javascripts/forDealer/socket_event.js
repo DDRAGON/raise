@@ -1,4 +1,4 @@
-var socket = io.connect('http://'+hostAddress+'/forDealer');
+var socket = io.connect('https://'+hostAddress+'/forDealer');
 
 socket.on('tableInfo', function(tableInfo) {
 	drawTableInfo(tableInfo);
