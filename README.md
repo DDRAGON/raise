@@ -62,4 +62,8 @@ service iptables restart
 /root/raise/httpsKeys/LETSENCRYPT1106445.cert
 /root/raise/httpsKeys/LETSENCRYPT1106445.key
 
+本番サーバーでの config 設定
+var hostAddress = 'allin.jp';
+var winAPIHostAddress = '10.0.0.13';
+
 
