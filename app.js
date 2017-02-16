@@ -1,15 +1,14 @@
-
-var express = require('express')
-	, routes = require('./routes')
-	, oddsSystem = require('./routes/oddsSystem')
-	, qrCodeReader = require('./routes/qrCodeReader')
-	, howToUse = require('./routes/howToUse')
-	, forDealer = require('./routes/forDealer')
-	, justGet = require('./routes/justGet')
-	, http = require('http')
-   , https = require('https')
-   , fs = require('fs')
-	, path = require('path');
+var express = require('express'),
+    routes = require('./routes'),
+    oddsSystem = require('./routes/oddsSystem'),
+    qrCodeReader = require('./routes/qrCodeReader'),
+    howToUse = require('./routes/howToUse'),
+    forDealer = require('./routes/forDealer'),
+    justGet = require('./routes/justGet'),
+    http = require('http'),
+    https = require('https'),
+    fs = require('fs'),
+    path = require('path');
 
 var app = express();
 
@@ -27,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 }
 
 app.get('/', routes.index);
@@ -43,21 +42,22 @@ app.get('/allinEvent2JOPT2015', justGet.justGet);
 
 // モジュールを呼び出す
 var modules = {
-	oddsSystem: require('./modules/oddsSystem.js')
+    oddsSystem: require('./modules/oddsSystem.js')
 }
 
 // https キーの設定
 var options = {
-   key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.key'),
-   cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.cert')
+    key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.key'),
+    cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.cert'),
+    ca: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445Int.cert'),
 };
 
 // サーバーをたてる
 //var httpServer = http.createServer(app).listen(app.get('port'), function(){
-   //console.log('Express server listening on port ' + app.get('port'));
+//console.log('Express server listening on port ' + app.get('port'));
 //});
-var server = https.createServer(options, app).listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+var server = https.createServer(options, app).listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + app.get('port'));
 });
 //var io = require('socket.io').listen(server, options);
 var io = require('socket.io').listen(server, options);
