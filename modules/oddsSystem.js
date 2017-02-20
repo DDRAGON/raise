@@ -34,14 +34,28 @@ function gotImage(socketId, image)
 
 function updatePlayerName(socketId, seatId, name) {
 	if (!clients[socketId]) return;
+
+   // 空っぽ確認
 	if (typeof clients[socketId].frontObj.players[seatId] == "undefined") {
 		clients[socketId].frontObj.players[seatId] = {
 			seatId: seatId,
 			hand: [],
 			isActive: true,
-			chipMany: ''
+			chipMany: '',
+         name: ''
 		};
 	}
+   // エラーが出たので、念のため二重確認
+   if (!clients[socketId].frontObj.players[seatId]) {
+      clients[socketId].frontObj.players[seatId] = {
+         seatId: seatId,
+         hand: [],
+         isActive: true,
+         chipMany: '',
+         name: ''
+      };
+   }
+
 	clients[socketId].frontObj.players[seatId].name = name;
 	if (name == "") {
 		delete clients[socketId].frontObj.players[seatId];
