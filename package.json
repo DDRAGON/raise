@@ -10,7 +10,7 @@
     "express": "3.2.6",
     "grunt-contrib-uglify": "^0.1.2",
     "jade": "*",
-    "socket.io": "~0.9.16",
+    "socket.io": "^0.9.19",
     "stylus": "*",
     "uglify-js": "^2.7.4"
   },
