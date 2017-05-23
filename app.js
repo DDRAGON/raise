@@ -49,7 +49,7 @@ var modules = {
 var options = {
     key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.key'),
     cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445.cert'),
-    ca: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445Int.cert'),
+    ca: fs.readFileSync('./httpsKeys/LETSENCRYPT1106445Int.cert')
 };
 
 // サーバーをたてる
