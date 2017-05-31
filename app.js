@@ -47,9 +47,8 @@ var modules = {
 
 // https キーの設定
 var options = {
-    key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106446.key'),
-    cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106446.cert'),
-    ca: fs.readFileSync('./httpsKeys/LETSENCRYPT1106446Int.cert')
+    key: fs.readFileSync('./httpsKeys/LETSENCRYPT1106446.key').toString(),
+    cert: fs.readFileSync('./httpsKeys/LETSENCRYPT1106446.cert').toString()
 };
 
 // サーバーをたてる
