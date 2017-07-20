@@ -89,13 +89,13 @@ function changeForDisplay(cardData){
    var returnText = "";
    for(var j = 0; j < cardData.length; j++) {
       if (cardData.charAt(j) == 's') {
-         returnText += '♠';
+         returnText += '♠︎';
       } else if (cardData.charAt(j) == 'h') {
          returnText += '♡';
       } else if (cardData.charAt(j) == 'd') {
          returnText += '♢';
       } else if (cardData.charAt(j) == 'c') {
-         returnText += '♣';
+         returnText += '♣︎';
       } else {
          returnText += cardData.charAt(j);
       }
