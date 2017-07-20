@@ -91,9 +91,9 @@ function changeForDisplay(cardData){
       if (cardData.charAt(j) == 's') {
          returnText += '♠️';
       } else if (cardData.charAt(j) == 'h') {
-         returnText += '♡';
+         returnText += '♡️';
       } else if (cardData.charAt(j) == 'd') {
-         returnText += '♢';
+         returnText += '♢️';
       } else if (cardData.charAt(j) == 'c') {
          returnText += '♣️';
       } else {
