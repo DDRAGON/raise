@@ -28,6 +28,9 @@ exports.index = function(req, res){
          'Ad','2d','3d','4d','5d','6d','7d','8d','9d','Td','Jd','Qd','Kd',
          'Ac','2c','3c','4c','5c','6c','7c','8c','9c','Tc','Jc','Qc','Kc'
       ];
+      var pokerObject = {};
+      pokerObject.players = {};
+      pokerObject.board = [];
       var description = "";
 
       var playersObj = [];
@@ -45,15 +48,15 @@ exports.index = function(req, res){
 
          description += changeForDisplay(hands[0])+changeForDisplay(hands[1]) + '\n';
 
-         var playerObj = {
+         pokerObject.players[key] = {
             name: name,
-            hands: hands
+            hand: hands,
+            isActive: true
          };
-         playersObj.push(playerObj);
       });
 
       description += '\n';
-      description += 'board: ';
+      description += 'board:[ ';
 
       var boards = [];
       for(var i = 0; i < 5; i++) {
@@ -62,6 +65,19 @@ exports.index = function(req, res){
          trumps.splice(cardPosition, 1);
          description += changeForDisplay(boards[i]) + " ";
       }
+      description += ' ]\n';
+      pokerObject.board = boards;
+
+      // 勝者を求める
+      getWinPer.getPlayersPointAndKicker(pokerObject);
+      var winPlayers = getWinPer.getWinPlayer(pokerObject);
+
+      winPlayers.forEach(function (player, key){
+         description += player.name + ' ';
+      });
+      description += 'の勝利です！';
+
+
 
       res.render('index', { title: 'allin.jp', description: description});
    }
@@ -73,13 +89,13 @@ function changeForDisplay(cardData){
    var returnText = "";
    for(var j = 0; j < cardData.length; j++) {
       if (cardData.charAt(j) == 's') {
-         returnText += '♠︎';
+         returnText += '♠️';
       } else if (cardData.charAt(j) == 'h') {
-         returnText += '♡︎';
+         returnText += '♡';
       } else if (cardData.charAt(j) == 'd') {
-         returnText += '♢︎';
+         returnText += '♢';
       } else if (cardData.charAt(j) == 'c') {
-         returnText += '♣︎︎';
+         returnText += '♣️';
       } else {
          returnText += cardData.charAt(j);
       }
