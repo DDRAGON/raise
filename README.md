@@ -48,20 +48,39 @@ $ grunt
 で圧縮
 
 
+### nginx について
+
+nginxの設定ファイルを編集
+sudo vim /etc/nginx/nginx.conf
+
+nginxの起動
+sudo service nginx start
+再起動
+nginx -s reload
+停止
+nginx -s stop
+
 nginxのインストールについて
 http://nomnel.net/blog/install-nginx-in-centos6-using-yum/
 http://qiita.com/n0bisuke/items/1b3b4bf95b5fdfce90f8
 
 
-iptables
+### iptables
 /etc/sysconfig/iptables
 service iptables restart
 
 
+### https 証明書
 
+#### 更新のしかた
+ファイルを更新したら、 nginx を再起動しよう！
+
+#### 場所
 /root/raise/httpsKeys/LETSENCRYPT1106445.cert
 /root/raise/httpsKeys/LETSENCRYPT1106445.key
 
+
+### config 設定
 本番サーバーでの config 設定
 var hostAddress = 'allin.jp';
 var winAPIHostAddress = '10.0.0.13';

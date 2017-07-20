@@ -4,6 +4,9 @@ html
 		block title
 			if title
 				title= title
+		block description
+			if description
+				meta(name="description", content="#{description}")
 		block css
 			link(rel='stylesheet', href='/stylesheets/style.css')
 
