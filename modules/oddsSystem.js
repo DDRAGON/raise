@@ -1,5 +1,6 @@
 var request = require('request');
 Config = require('../config');
+var getWinPer = require('./getWinPer');
 
 var ASSISTANT_MODE_ORIGINAL = 'Original';
 var ASSISTANT_MODE_ASSISTANT = 'Assistant';
@@ -525,7 +526,7 @@ function getWinPerFromAPI(socketId, frontObj) {
 	var ActiveCount = 0;
 	for (var key in frontObj.players) {
 		var player = frontObj.players[key];
-		if(!player) continue;
+		if(!player || player.isActive === false) continue;
 		playerForSend[count] = player;
 		playerForSend[count].id = player.seatId;
 		if (player.isActive == true) ActiveCount += 1;
@@ -540,6 +541,24 @@ function getWinPerFromAPI(socketId, frontObj) {
 		"board": frontObj.board,
 		"players": playerForSend
 	};
+
+	// ここからローカル計算処理に切り替え
+	var body = getWinPer.getWinPer(sendJson);
+	var players = body.players;
+	console.log(players);
+	console.log('-------------------');
+	console.log(frontObj.players);
+	for (var key in players) {
+		var player = players[key];
+		if (frontObj.players[Number(player.id)].isActive == true) {
+			frontObj.players[Number(player.id)].win = player.win + '%';
+			frontObj.players[Number(player.id)].tie = player.tie + '%';
+		}
+	}
+	sendTableInfo(socketId);
+	return; 
+	// ここまで
+
 	var url = 'http://'+Config.getWinAPIHostAddress()+':9000/odds';
 	var options = {
 		url: url,

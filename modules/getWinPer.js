@@ -4,13 +4,13 @@ var DEBUG_MODE = false;
 function getWinPer(obj) {
 	var boardLength = getBoardLegth(obj.board);
 	if (boardLength < 3 || hasRandomHand(obj.players)) {
-		calculateByMonteCarloLoop(obj); // フロップがないときはモンテカルロで確率を求める。
+		return calculateByMonteCarloLoop(obj); // フロップがないときはモンテカルロで確率を求める。
 	} else if (boardLength == 3) {
-		calculateByAllPatternsAddingTurnAndRiver(obj); // ターンとリバーを追加する全パターン計算。
+		return calculateByAllPatternsAddingTurnAndRiver(obj); // ターンとリバーを追加する全パターン計算。
 	} else if (boardLength == 4) {
-		calculateByAllPatternsAddingRiver(obj); // リバーを追加する全パターン計算。
+		return calculateByAllPatternsAddingRiver(obj); // リバーを追加する全パターン計算。
 	} else if (boardLength == 5) {
-		calculateByAllPatternsWithoutAdding(obj); // 何も追加しない。
+		return calculateByAllPatternsWithoutAdding(obj); // 何も追加しない。
 	}
 }
 
@@ -85,6 +85,8 @@ function calculateByMonteCarloLoop(obj) {
 	for (var key in obj.players) {
 		obj.players[key].hand = originalHand[obj.players[key].id];
 	}
+
+	return obj;
 }
 
 /**
@@ -142,6 +144,8 @@ function calculateByAllPatternsAddingTurnAndRiver(obj)
 
 	// 勝率計算が終わった後の処理
 	obj.board = originalBoard;
+
+	return obj;
 }
 
 /**
@@ -194,6 +198,8 @@ function calculateByAllPatternsAddingRiver(obj) {
 
 	// 勝率計算が終わった後の処理
 	obj.board = originalBoard;
+
+	return obj;
 }
 
 /**
@@ -218,6 +224,8 @@ function calculateByAllPatternsWithoutAdding(obj) {
 			}
 		}
 	}
+
+	return obj;
 }
 
 function makeDeck(board, players) {
@@ -744,5 +752,6 @@ function getBoardLegth(board)
 
 module.exports = {
 	getWinPlayer: getWinPlayer,
-	getPlayersPointAndKicker: getPlayersPointAndKicker
+	getPlayersPointAndKicker: getPlayersPointAndKicker,
+	getWinPer: getWinPer
 }
