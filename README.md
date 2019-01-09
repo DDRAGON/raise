@@ -56,9 +56,9 @@ sudo vim /etc/nginx/nginx.conf
 nginxの起動
 sudo service nginx start
 再起動
-nginx -s reload
+sudo nginx -s reload
 停止
-nginx -s stop
+sudo nginx -s stop
 
 nginxのインストールについて
 http://nomnel.net/blog/install-nginx-in-centos6-using-yum/
@@ -84,5 +84,3 @@ service iptables restart
 本番サーバーでの config 設定
 var hostAddress = 'allin.jp';
 var winAPIHostAddress = '10.0.0.13';
-
-
