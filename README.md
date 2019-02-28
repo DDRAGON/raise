@@ -84,3 +84,59 @@ service iptables restart
 本番サーバーでの config 設定
 var hostAddress = 'allin.jp';
 var winAPIHostAddress = '10.0.0.13';
+
+### nginx の設定内容
+
+sudo cat /etc/nginx/nginx.conf
+
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+         listen      80;
+         server_name allin.jp;
+         return 301 https://allin.jp$request_uri;
+#        location / {
+#            proxy_pass https://allin.jp:3000;
+#        }
+    }
+    server {
+        listen 443 default ssl;
+        ssl on;
+        ssl_certificate      /home/davide/raise/httpsKeys/LETSENCRYPT1106445.cert;
+        ssl_certificate_key  /home/davide/raise/httpsKeys/LETSENCRYPT1106445.key;
+        server_name  allin.jp;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        location / {
+            proxy_pass https://allin.jp:3000;
+        }
+    }
+}
